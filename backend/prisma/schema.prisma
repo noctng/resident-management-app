@@ -1,0 +1,1057 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model activity_logs {
+  id          String    @id @db.VarChar(255)
+  user_id     String?   @db.VarChar(255)
+  username    String?   @db.VarChar(255)
+  action      String?   @db.VarChar(50)
+  target_type String?   @db.VarChar(50)
+  target_id   String?   @db.VarChar(255)
+  target_name String?   @db.VarChar(255)
+  details     String?
+  ip_address  String?   @db.VarChar(45)
+  http_method String?   @db.VarChar(10)
+  http_path   String?   @db.VarChar(500)
+  status_code Int?
+  old_value   Json?
+  new_value   Json?
+  user_agent  String?   @db.VarChar(255)
+  created_at  DateTime? @default(now()) @db.Timestamptz(6)
+
+  @@index([user_id])
+  @@index([created_at])
+  @@index([action])
+  @@index([target_type])
+}
+
+model amenity_usage {
+  id           String       @id @db.VarChar(255)
+  apartment_id String       @db.VarChar(255)
+  amenity      amenity_type
+  usage_date   DateTime     @default(dbgenerated("CURRENT_DATE")) @db.Date
+  start_time   DateTime?    @db.Timestamp(6)
+  end_time     DateTime?    @db.Timestamp(6)
+  booking_code String?      @db.VarChar(50)
+  status       String?      @default("pending") @db.VarChar(20)
+  resident_id  String?      @db.VarChar(255)
+  apartments   apartments   @relation(fields: [apartment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  residents    residents?   @relation(fields: [resident_id], references: [id], onUpdate: NoAction, map: "fk_amenity_resident")
+
+  @@index([apartment_id, usage_date], map: "idx_amenity_usage_apartment_date")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model apartments {
+  id                            String              @id @default(dbgenerated("('apt_'::text || lpad((nextval('apartments_id_seq'::regclass))::text, 4, '0'::text))")) @db.VarChar(255)
+  house_type                    String              @db.VarChar(50)
+  code                          String              @unique @db.VarChar(255)
+  floor                         Int
+  area                          Decimal             @db.Decimal(10, 2)
+  electricity_type              String              @default("RESIDENTIAL") @db.VarChar(20)
+  phase_code                    String?             @default("CANTATA") @db.VarChar(50)
+  block_code                    String?             @db.VarChar(50)
+  lot_number                    String?             @db.VarChar(50)
+  land_area                     Decimal?            @db.Decimal(10, 2)
+  construction_area             Decimal?            @db.Decimal(10, 2)
+  usable_area                   Decimal?            @db.Decimal(10, 2)
+  certificate_area              Decimal?            @db.Decimal(10, 2)
+  land_price_before_vat         Decimal?            @default(0) @db.Decimal(15, 2)
+  construction_price_before_vat Decimal?            @default(0) @db.Decimal(15, 2)
+  vat_rate                      Decimal?            @default(8.00) @db.Decimal(5, 2)
+  maintenance_fee_2pct          Decimal?            @default(0) @db.Decimal(15, 2)
+  sales_status                  String?             @default("AVAILABLE") @db.VarChar(50)
+  direction                     String?             @db.VarChar(50)
+  view_description              String?             @db.VarChar(255)
+  bedroom_count                 Int?                @default(3)
+  bathroom_count                Int?                @default(3)
+  svg_coordinates               String?             @db.VarChar(100)
+  amenity_usage                 amenity_usage[]
+  contracts                     contracts[]
+  management_fees               management_fees[]
+  occupancies                   occupancies[]
+  resident_feedback             resident_feedback[]
+  utility_records               utility_records[]
+  vehicles                      vehicles[]
+  push_subscriptions            push_subscriptions[]
+  crm_opportunities             crm_opportunities[]
+  sales_bookings                sales_bookings[]
+  deposit_receipts              deposit_receipts[]
+  sales_cart_items              sales_cart_items[]
+  snag_items                    snag_items[]
+  pricebook_items               pricebook_items[]
+  contract_documents            contract_documents[]
+  warranty_claims               warranty_claims[]
+  construction_registrations    construction_registrations[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model occupancies {
+  apartment_id String     @db.VarChar(255)
+  resident_id  String     @db.VarChar(255)
+  apartments   apartments @relation(fields: [apartment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  residents    residents  @relation(fields: [resident_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([apartment_id, resident_id])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pricing_config_history {
+  id                 Int       @id @default(autoincrement())
+  config_data        Json
+  changed_at         DateTime? @default(now()) @db.Timestamptz(6)
+  changed_by_user_id String    @db.VarChar(255)
+  users              users     @relation(fields: [changed_by_user_id], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "fk_user")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model resident_accounts {
+  resident_id   String    @id @db.VarChar(255)
+  password_hash String    @db.VarChar(255)
+  created_at    DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime? @default(now()) @db.Timestamptz(6)
+  residents     residents @relation(fields: [resident_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model resident_feedback {
+  id                        String     @id @db.VarChar(255)
+  resident_id               String     @db.VarChar(255)
+  apartment_id              String     @db.VarChar(255)
+  content                   String
+  image_data                String[]
+  status                    String     @default("SUBMITTED") @db.VarChar(50)
+  submitted_at              DateTime   @default(now()) @db.Timestamptz(6)
+  admin_response_content    String?
+  admin_response_image_data String[]
+  resolved_by_user_id       String?    @db.VarChar(255)
+  resolved_at               DateTime?  @db.Timestamptz(6)
+  apartments                apartments @relation(fields: [apartment_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  residents                 residents  @relation(fields: [resident_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users                     users?     @relation(fields: [resolved_by_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([apartment_id], map: "idx_resident_feedback_apartment_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model residents {
+  id                  String              @id @db.VarChar(255)
+  name                String?             @db.VarChar(255)
+  dob                 DateTime?           @db.Date
+  id_number           String?             @unique @db.VarChar(255)
+  zalo_id             String?             @db.VarChar(255)
+  phone_number        String?             @db.VarChar(20)
+  is_active           Boolean?            @default(true)
+  zalo_name           String?
+  email               String?             @db.VarChar(255)
+  relationship_status String              @default("FAMILY") @db.VarChar(50)
+  can_use_amenities   Boolean             @default(true)
+  company_name        String?             @db.VarChar(255)
+  buyer_name          String?             @db.VarChar(255)
+  tax_code            String?             @db.VarChar(50)
+  invoice_address     String?             @db.Text
+  amenity_usage       amenity_usage[]
+  occupancies         occupancies[]
+  resident_accounts   resident_accounts?
+  resident_feedback   resident_feedback[]
+
+  @@index([phone_number])
+  @@index([email])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model users {
+  id                     String                   @id @db.VarChar(255)
+  username               String                   @unique @db.VarChar(255)
+  password_hash          String                   @db.VarChar(255)
+  role                   Int                      @default(1)
+  created_at             DateTime                 @default(now()) @db.Timestamptz(6)
+  permissions            Json?                    @default("[]")
+  fee_config             fee_config[]
+  management_fees        management_fees[]
+  pricing_config_history pricing_config_history[]
+  resident_feedback      resident_feedback[]
+  announcements          announcements[]
+
+  @@index([permissions], map: "idx_users_permissions", type: Gin)
+}
+
+model announcements {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title        String    @db.VarChar(500)
+  content      String    @db.Text
+  summary      String?   @db.VarChar(1000)
+  category     String?   @default("general") @db.VarChar(50)
+  cover_image  String?   @db.Text
+  media_urls   String[]  @default([])
+  is_pinned    Boolean   @default(false)
+  is_published Boolean   @default(false)
+  published_at DateTime? @db.Timestamptz(6)
+  scheduled_at DateTime? @db.Timestamptz(6)
+  created_by   String    @db.VarChar(255)
+  created_at   DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime  @default(now()) @db.Timestamptz(6)
+
+  users        users     @relation(fields: [created_by], references: [id], onDelete: Cascade)
+
+  @@index([is_published, published_at(sort: Desc)])
+  @@index([is_pinned])
+  @@index([created_by])
+}
+
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model utility_records {
+  id                      String     @id @db.VarChar(255)
+  apartment_id            String     @db.VarChar(255)
+  month                   Int
+  year                    Int
+  electricity_old_reading Decimal    @db.Decimal(10, 2)
+  electricity_new_reading Decimal    @db.Decimal(10, 2)
+  electricity_consumption Decimal?   @default(dbgenerated("(electricity_new_reading - electricity_old_reading)")) @db.Decimal(10, 2)
+  water_old_reading       Decimal    @db.Decimal(10, 2)
+  water_new_reading       Decimal    @db.Decimal(10, 2)
+  water_consumption       Decimal?   @default(dbgenerated("(water_new_reading - water_old_reading)")) @db.Decimal(10, 2)
+  electricity_cost        Decimal    @default(0) @db.Decimal(12, 2)
+  water_cost              Decimal    @default(0) @db.Decimal(12, 2)
+  pricing_snapshot        Json?      // Snapshot of pricing config at time of record creation
+  paid_date               DateTime?  @db.Date
+  payment_status          String     @default("UNPAID") @db.VarChar(20)
+  email_sent_at           DateTime?  @db.Timestamptz(6)
+  vnpt_status             String?    @default("DRAFT") @db.VarChar(20)
+  vnpt_fkey               String?    @db.VarChar(100)
+  vnpt_invoice_no         String?    @db.VarChar(50)
+  vnpt_mccqt              String?    @db.VarChar(100)
+  vnpt_publish_date       DateTime?  @db.Timestamptz(6)
+  apartments              apartments @relation(fields: [apartment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([apartment_id, month, year])
+}
+
+model customers {
+  id             String               @id @db.VarChar(255)
+  name           String               @db.VarChar(255)
+  phone_number   String               @db.VarChar(20)
+  email          String?              @db.VarChar(255)
+  address        String?
+  id_number      String?              @db.VarChar(255)
+  created_at     DateTime?            @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime?            @default(now()) @db.Timestamptz(6)
+  notes          String?
+  transfers_to   contract_transfers[] @relation("NewCustomer")
+  transfers_from contract_transfers[] @relation("OldCustomer")
+  contracts      contracts[]
+}
+
+model contracts {
+  id                        String                      @id @db.VarChar(255)
+  contract_code             String                      @unique @db.VarChar(100)
+  customer_id               String                      @db.VarChar(255)
+  apartment_id              String                      @db.VarChar(255)
+  contract_type             String?                     @default("FUTURE_HOUSING") @db.VarChar(50)
+  total_value               Decimal                     @db.Decimal(15, 2)
+  land_price                Decimal?                    @default(0) @db.Decimal(15, 2)
+  construction_price        Decimal?                    @default(0) @db.Decimal(15, 2)
+  vat_rate                  Decimal?                    @default(8.00) @db.Decimal(5, 2)
+  vat_amount                Decimal                     @default(0) @db.Decimal(15, 2)
+  maintenance_fee           Decimal                     @default(0) @db.Decimal(15, 2)
+  deposit_deducted_amount   Decimal?                    @default(0) @db.Decimal(15, 2)
+  clause_18_status          String?                     @default("NORMAL") @db.VarChar(50)
+  clause_18_deadline        DateTime?                   @db.Timestamptz(6)
+  certificate_number        String?                     @db.VarChar(100)
+  handover_deadline         DateTime?                   @db.Date
+  finish_standard           String?                     @default("STANDARD") @db.VarChar(50)
+  status                    contract_status             @default(DEPOSIT)
+  signed_date               DateTime?                   @db.Date
+  handover_date             DateTime?                   @db.Date
+  created_at                DateTime?                   @default(now()) @db.Timestamptz(6)
+  updated_at                DateTime?                   @default(now()) @db.Timestamptz(6)
+  handover_completed        Boolean?                    @default(false)
+  title_deed_issued         Boolean?                    @default(false)
+  title_deed_date           DateTime?                   @db.Timestamptz(6)
+  handover_date_actual      DateTime?                   @db.Timestamptz(6)
+  approval_workflows        approval_workflows[]
+  contract_documents        contract_documents[]
+  contract_lifecycle_events contract_lifecycle_events[]
+  contract_payments         contract_payments[]
+  contract_transfers        contract_transfers[]
+  apartments                apartments                  @relation(fields: [apartment_id], references: [id])
+  customers                 customers                   @relation(fields: [customer_id], references: [id])
+  handover_checklists       handover_checklists[]
+  payment_schedules         payment_schedules[]
+  snag_items                snag_items[]
+  contract_promotions       contract_promotions[]
+  commissions               commissions[]
+  warranty_claims           warranty_claims[]
+  construction_registrations construction_registrations[]
+
+  @@index([customer_id])
+  @@index([apartment_id])
+}
+
+model contract_transfers {
+  id                    String    @id @db.VarChar(255)
+  contract_id           String    @db.VarChar(255)
+  old_customer_id       String    @db.VarChar(255)
+  new_customer_id       String    @db.VarChar(255)
+  transfer_date         DateTime  @db.Date
+  notary_office         String?   @db.VarChar(255)
+  notary_number         String?   @db.VarChar(100)
+  notary_date           DateTime? @db.Date
+  tax_clearance_date    DateTime? @db.Date
+  tax_receipt_number    String?   @db.VarChar(100)
+  transfer_code         String?   @db.VarChar(100)
+  inherited_paid_amount Decimal?  @default(0) @db.Decimal(15, 2)
+  remaining_debt_amount Decimal?  @default(0) @db.Decimal(15, 2)
+  approval_status       String?   @default("APPROVED") @db.VarChar(50)
+  document_urls         Json?
+  notes                 String?
+  created_at            DateTime? @default(now()) @db.Timestamptz(6)
+  contracts             contracts @relation(fields: [contract_id], references: [id], onDelete: Cascade)
+  new_customer          customers @relation("NewCustomer", fields: [new_customer_id], references: [id])
+  old_customer          customers @relation("OldCustomer", fields: [old_customer_id], references: [id])
+
+  @@index([contract_id])
+  @@index([old_customer_id])
+  @@index([new_customer_id])
+}
+
+model contract_payments {
+  id                     String             @id @db.VarChar(255)
+  contract_id            String             @db.VarChar(255)
+  installment            Int
+  description            String?            @db.VarChar(255)
+  milestone_event        String?            @db.VarChar(255)
+  base_amount            Decimal?           @default(0) @db.Decimal(15, 2)
+  percentage             Decimal?           @default(10.00) @db.Decimal(5, 2)
+  due_date               DateTime           @db.Date
+  amount                 Decimal            @db.Decimal(15, 2)
+  paid_amount            Decimal            @default(0) @db.Decimal(15, 2)
+  payment_date           DateTime?          @db.Date
+  status                 payment_status     @default(PENDING)
+  created_at             DateTime?          @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime?          @default(now()) @db.Timestamptz(6)
+  late_days              Int?               @default(0)
+  late_penalty_rate      Decimal?           @default(0.0005) @db.Decimal(6, 4)
+  late_penalty_amount    Decimal?           @default(0) @db.Decimal(15, 2)
+  qr_payment_memo        String?            @db.VarChar(100)
+  sepay_transaction_id   String?            @db.VarChar(100)
+  late_fee               Decimal?           @default(0) @db.Decimal(15, 2)
+  days_overdue           Int?               @default(0)
+  reminder_sent_at       DateTime?          @db.Timestamptz(6)
+  auto_calculated        Boolean?           @default(false)
+  payment_schedule_id    String?            @db.VarChar(255)
+  early_payment_discount Decimal?           @default(0) @db.Decimal(5, 2)
+  is_early_payment       Boolean?           @default(false)
+  contracts              contracts          @relation(fields: [contract_id], references: [id], onDelete: Cascade)
+  payment_schedules      payment_schedules? @relation(fields: [payment_schedule_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([contract_id])
+  @@index([status, due_date], map: "idx_payments_status_due")
+}
+
+model contract_documents {
+  id            String      @id @db.VarChar(255)
+  contract_id   String?     @db.VarChar(255)
+  apartment_id  String?     @db.VarChar(255)
+  document_name String      @db.VarChar(255)
+  file_url      String
+  file_size     Int?        @default(0)
+  mime_type     String?     @default("application/pdf") @db.VarChar(100)
+  doc_type      String?     @default("HDMB_SCAN") @db.VarChar(50) // HDMB_SCAN, DEPOSIT_RECEIPT_SCAN, TRANSFER_AGREEMENT_SCAN, CUSTOMER_ID_SCAN, TAX_RECEIPT_SCAN, TITLE_DEED_SCAN, HANDOVER_MINUTES_SCAN, AMENDMENT_SCAN, OTHER
+  uploaded_by   String?     @db.VarChar(255)
+  notes         String?
+  uploaded_at   DateTime?   @default(now()) @db.Timestamptz(6)
+  contracts     contracts?  @relation(fields: [contract_id], references: [id], onDelete: Cascade)
+  apartments    apartments? @relation(fields: [apartment_id], references: [id], onDelete: Cascade)
+
+  @@index([contract_id])
+  @@index([apartment_id])
+  @@index([doc_type])
+}
+
+model system_settings {
+  key         String   @id @db.VarChar(50)
+  value       String?
+  description String?
+  updated_at  DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+}
+
+model email_templates {
+  code       String   @id @db.VarChar(50)
+  name       String   @db.VarChar(100)
+  subject    String
+  body       String
+  variables  Json?
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+}
+
+model contract_lifecycle_events {
+  id           String    @id @db.VarChar(255)
+  contract_id  String    @db.VarChar(255)
+  event_type   String    @db.VarChar(50)
+  event_date   DateTime? @default(now()) @db.Timestamptz(6)
+  performed_by String?   @db.VarChar(255)
+  notes        String?
+  metadata     Json?
+  created_at   DateTime? @default(now()) @db.Timestamptz(6)
+  contracts    contracts @relation(fields: [contract_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([contract_id], map: "idx_lifecycle_contract")
+  @@index([event_type], map: "idx_lifecycle_type")
+}
+
+model payment_schedules {
+  id                String              @id @db.VarChar(255)
+  contract_id       String              @db.VarChar(255)
+  schedule_name     String?             @db.VarChar(255)
+  policy_type       String?             @db.VarChar(50)
+  late_fee_rate     Decimal?            @default(0) @db.Decimal(5, 2)
+  grace_period_days Int?                @default(0)
+  created_at        DateTime?           @default(now()) @db.Timestamptz(6)
+  created_by        String?             @db.VarChar(255)
+  contract_payments contract_payments[]
+  contracts         contracts           @relation(fields: [contract_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([contract_id], map: "idx_payment_schedule_contract")
+}
+
+model handover_checklists {
+  id                     String    @id @db.VarChar(255)
+  contract_id            String    @db.VarChar(255)
+  item_name              String    @db.VarChar(255)
+  item_order             Int?      @default(0)
+  is_required            Boolean?  @default(true)
+  is_completed           Boolean?  @default(false)
+  completed_at           DateTime? @db.Timestamptz(6)
+  completed_by           String?   @db.VarChar(255)
+  notes                  String?
+  room_area              String?   @default("CHUNG") @db.VarChar(100)
+  inspection_passed      Boolean?  @default(true)
+  customer_signature     String?   @db.Text
+  handover_minutes_code  String?   @db.VarChar(100)
+  created_at             DateTime? @default(now()) @db.Timestamptz(6)
+  contracts              contracts @relation(fields: [contract_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([contract_id], map: "idx_handover_contract")
+}
+
+model snag_items {
+  id                   String    @id @db.VarChar(255)
+  contract_id          String    @db.VarChar(255)
+  apartment_id         String    @db.VarChar(255)
+  room_area            String?   @default("PHÒNG KHÁCH") @db.VarChar(100)
+  category             String?   @default("KỸ THUẬT") @db.VarChar(100)
+  description          String    @db.Text
+  severity             String?   @default("MINOR") @db.VarChar(50)
+  status               String?   @default("OPEN") @db.VarChar(50)
+  photo_urls           String[]  @default([])
+  assigned_contractor  String?   @db.VarChar(255)
+  sla_deadline         DateTime? @db.Date
+  resolved_at          DateTime? @db.Timestamptz(6)
+  resolved_by          String?   @db.VarChar(255)
+  verified_by_customer Boolean?  @default(false)
+  created_at           DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime? @default(now()) @db.Timestamptz(6)
+  contracts            contracts @relation(fields: [contract_id], references: [id], onDelete: Cascade)
+  apartments           apartments @relation(fields: [apartment_id], references: [id], onDelete: Cascade)
+
+  @@index([contract_id])
+  @@index([apartment_id])
+  @@index([status])
+}
+
+model approval_workflows {
+  id               String     @id @db.VarChar(255)
+  request_type     String     @db.VarChar(50)
+  contract_id      String?    @db.VarChar(255)
+  requested_by     String     @db.VarChar(255)
+  requested_at     DateTime?  @default(now()) @db.Timestamptz(6)
+  status           String?    @default("PENDING") @db.VarChar(20)
+  approver_id      String?    @db.VarChar(255)
+  approved_at      DateTime?  @db.Timestamptz(6)
+  rejection_reason String?
+  request_data     Json?
+  created_at       DateTime?  @default(now()) @db.Timestamptz(6)
+  contracts        contracts? @relation(fields: [contract_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([contract_id], map: "idx_approval_contract")
+  @@index([status], map: "idx_approval_status")
+  @@index([request_type], map: "idx_approval_type")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model electricity_pricing {
+  id            Int       @id @default(autoincrement())
+  tier          Int       @unique
+  min_kwh       Int
+  max_kwh       Int?
+  price_per_kwh Decimal   @db.Decimal(10, 2)
+  created_at    DateTime? @default(now()) @db.Timestamptz(6)
+
+  @@index([tier], map: "idx_electricity_pricing_tier")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model fee_config {
+  id                     Int       @id @default(autoincrement())
+  management_fee_per_sqm Decimal   @default(0) @db.Decimal(10, 2)
+  internet_fee           Decimal   @default(0) @db.Decimal(10, 2)
+  cable_tv_fee           Decimal   @default(0) @db.Decimal(10, 2)
+  parking_car_fee        Decimal   @default(0) @db.Decimal(10, 2)
+  parking_motorbike_fee  Decimal   @default(0) @db.Decimal(10, 2)
+  effective_from         DateTime  @default(dbgenerated("CURRENT_DATE")) @db.Date
+  created_by             String?   @db.VarChar(255)
+  created_at             DateTime? @default(now()) @db.Timestamptz(6)
+  security_fee           Decimal   @default(0) @db.Decimal(10, 2)
+  cleaning_fee           Decimal   @default(0) @db.Decimal(10, 2)
+  enabled_fees           Json?     @default("{\"cable_tv\": true, \"cleaning\": true, \"internet\": true, \"security\": true, \"management\": true, \"parking_car\": true, \"parking_motorbike\": true}")
+  users                  users?    @relation(fields: [created_by], references: [id], onUpdate: NoAction)
+
+  @@index([effective_from(sort: Desc)], map: "idx_fee_config_effective_from")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model management_fees {
+  id                         String     @id @db.VarChar(255)
+  apartment_id               String     @db.VarChar(255)
+  month                      Int
+  year                       Int
+  area                       Decimal    @default(0) @db.Decimal(10, 2)
+  management_fee_per_sqm     Decimal    @default(0) @db.Decimal(10, 2)
+  management_fee             Decimal    @default(0) @db.Decimal(10, 2)
+  internet_fee               Decimal    @default(0) @db.Decimal(10, 2)
+  cable_tv_fee               Decimal    @default(0) @db.Decimal(10, 2)
+  parking_car_quantity       Int        @default(0)
+  parking_car_fee            Decimal    @default(0) @db.Decimal(10, 2)
+  parking_motorbike_quantity Int        @default(0)
+  parking_motorbike_fee      Decimal    @default(0) @db.Decimal(10, 2)
+  other_fees                 Json?      @default("[]")
+  total_amount               Decimal    @default(0) @db.Decimal(12, 2)
+  status                     String     @default("PENDING") @db.VarChar(20)
+  payment_date               DateTime?  @db.Timestamptz(6)
+  payment_method             String?    @db.VarChar(50)
+  note                       String?
+  created_at                 DateTime?  @default(now()) @db.Timestamptz(6)
+  updated_at                 DateTime?  @default(now()) @db.Timestamptz(6)
+  created_by                 String?    @db.VarChar(255)
+  security_fee               Decimal    @default(0) @db.Decimal(10, 2)
+  cleaning_fee               Decimal    @default(0) @db.Decimal(10, 2)
+  vnpt_status                String?    @default("DRAFT") @db.VarChar(20)
+  vnpt_fkey                  String?    @db.VarChar(100)
+  vnpt_invoice_no            String?    @db.VarChar(50)
+  vnpt_mccqt                 String?    @db.VarChar(100)
+  vnpt_publish_date          DateTime?  @db.Timestamptz(6)
+  apartments                 apartments @relation(fields: [apartment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users                      users?     @relation(fields: [created_by], references: [id], onUpdate: NoAction)
+
+  @@unique([apartment_id, month, year], map: "unique_apartment_month_year")
+  @@index([apartment_id], map: "idx_management_fees_apartment")
+  @@index([created_at(sort: Desc)], map: "idx_management_fees_created_at")
+  @@index([payment_date], map: "idx_management_fees_payment_date")
+  @@index([status], map: "idx_management_fees_status")
+  @@index([year(sort: Desc), month(sort: Desc)], map: "idx_management_fees_year_month")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model water_pricing {
+  id           Int       @id @default(autoincrement())
+  tier         Int       @unique
+  min_m3       Int
+  max_m3       Int?
+  price_per_m3 Decimal   @db.Decimal(10, 2)
+  created_at   DateTime? @default(now()) @db.Timestamptz(6)
+
+  @@index([tier], map: "idx_water_pricing_tier")
+}
+
+enum amenity_type {
+  GOLF_3D
+  HORSE_RIDING
+  MUSEUM
+  ZEN_GARDEN
+  GYM
+  YOGA
+  SAUNA
+  ARCHERY
+}
+
+enum contract_status {
+  DEPOSIT
+  SIGNED
+  PAYING
+  COMPLETED
+  CANCELLED
+}
+
+enum payment_status {
+  PENDING
+  PAID
+  OVERDUE
+}
+
+enum vehicle_type {
+  CAR
+  MOTORBIKE
+}
+
+model vehicles {
+  id           String      @id @default(dbgenerated("('vcl_'::text || lpad((nextval('vehicles_id_seq'::regclass))::text, 4, '0'::text))")) @db.VarChar(255)
+  apartment_id String      @db.VarChar(255)
+  vehicle_type vehicle_type
+  license_plate String     @unique @db.VarChar(20)
+  created_at   DateTime?   @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime?   @default(now()) @db.Timestamptz(6)
+  apartments   apartments  @relation(fields: [apartment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([apartment_id])
+}
+
+model push_subscriptions {
+  id           String   @id @default(uuid()) @db.Uuid
+  user_id      String   @db.VarChar(255)
+  user_type    String   @default("resident") @db.VarChar(20)
+  endpoint     String   @unique @db.Text
+  p256dh       String   @db.Text
+  auth         String   @db.Text
+  apartment_id String?  @db.VarChar(255)
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+
+  apartments apartments? @relation(fields: [apartment_id], references: [id], onDelete: SetNull)
+
+  @@index([user_id])
+  @@index([user_type])
+  @@index([apartment_id])
+}
+
+model crm_leads {
+  id                String              @id @db.VarChar(255)
+  name              String              @db.VarChar(255)
+  phone_number      String              @db.VarChar(20)
+  email             String?             @db.VarChar(255)
+  source            String?             @default("WALK_IN") @db.VarChar(50)
+  phase_interest    String?             @default("TESLA") @db.VarChar(50)
+  budget_range      String?             @db.VarChar(100)
+  status            String?             @default("NEW") @db.VarChar(50)
+  lead_score        String?             @default("WARM") @db.VarChar(20)
+  assigned_to       String?             @db.VarChar(255)
+  notes             String?
+  last_contact_at   DateTime?           @db.Timestamptz(6)
+  reassign_deadline DateTime?           @db.Timestamptz(6)
+  created_at        DateTime?           @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime?           @default(now()) @db.Timestamptz(6)
+  crm_opportunities crm_opportunities[]
+
+  @@index([status])
+  @@index([assigned_to])
+  @@index([phase_interest])
+}
+
+model crm_opportunities {
+  id                    String            @id @db.VarChar(255)
+  lead_id               String?           @db.VarChar(255)
+  customer_id           String?           @db.VarChar(255)
+  apartment_id          String?           @db.VarChar(255)
+  title                 String            @db.VarChar(255)
+  stage                 String?           @default("PROSPECT") @db.VarChar(50)
+  estimated_value       Decimal?          @default(0) @db.Decimal(15, 2)
+  expected_close_date   DateTime?         @db.Date
+  payment_method_intent String?           @default("DIRECT") @db.VarChar(50)
+  assigned_to           String?           @db.VarChar(255)
+  lost_reason           String?
+  created_at            DateTime?         @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime?         @default(now()) @db.Timestamptz(6)
+  apartments            apartments?       @relation(fields: [apartment_id], references: [id], onDelete: SetNull)
+  crm_leads             crm_leads?        @relation(fields: [lead_id], references: [id], onDelete: SetNull)
+
+  @@index([stage])
+  @@index([apartment_id])
+}
+
+model sales_cart_items {
+  id                String      @id @db.VarChar(255)
+  sales_person_id   String      @db.VarChar(255)
+  sales_person_name String?     @db.VarChar(255)
+  apartment_id      String      @db.VarChar(255)
+  lead_id           String?     @db.VarChar(255)
+  customer_id       String?     @db.VarChar(255)
+  notes             String?
+  expires_at        DateTime    @db.Timestamptz(6)
+  created_at        DateTime?   @default(now()) @db.Timestamptz(6)
+  apartments        apartments  @relation(fields: [apartment_id], references: [id], onDelete: Cascade)
+
+  @@index([sales_person_id])
+  @@index([apartment_id])
+}
+
+model sales_bookings {
+  id                    String      @id @db.VarChar(255)
+  booking_code          String      @unique @db.VarChar(100)
+  apartment_id          String      @db.VarChar(255)
+  customer_id           String?     @db.VarChar(255)
+  customer_name         String?     @db.VarChar(255)
+  customer_phone        String?     @db.VarChar(20)
+  lead_id               String?     @db.VarChar(255)
+  opportunity_id        String?     @db.VarChar(255)
+  sales_person_id       String?     @db.VarChar(255)
+  booking_fee           Decimal?    @default(0) @db.Decimal(15, 2)
+  deposit_intent_amount Decimal?    @default(100000000) @db.Decimal(15, 2)
+  status                String?     @default("ACTIVE") @db.VarChar(50)
+  expires_at            DateTime    @db.Timestamptz(6)
+  extension_count       Int?        @default(0)
+  released_at           DateTime?   @db.Timestamptz(6)
+  release_reason        String?     @db.VarChar(255)
+  notes                 String?
+  created_at            DateTime?   @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime?   @default(now()) @db.Timestamptz(6)
+  apartments            apartments  @relation(fields: [apartment_id], references: [id], onDelete: Cascade)
+
+  @@index([apartment_id])
+  @@index([status])
+}
+
+model deposit_receipts {
+  id                    String      @id @db.VarChar(255)
+  deposit_code          String      @unique @db.VarChar(100)
+  apartment_id          String      @db.VarChar(255)
+  customer_id           String      @db.VarChar(255)
+  customer_name         String?     @db.VarChar(255)
+  customer_phone        String?     @db.VarChar(20)
+  customer_id_number    String?     @db.VarChar(50)
+  opportunity_id        String?     @db.VarChar(255)
+  booking_id            String?     @db.VarChar(255)
+  sales_person_id       String?     @db.VarChar(255)
+  deposit_amount        Decimal     @db.Decimal(15, 2)
+  paid_amount           Decimal?    @default(0) @db.Decimal(15, 2)
+  topup_amount          Decimal?    @default(0) @db.Decimal(15, 2)
+  payment_method        String?     @default("BANK_TRANSFER") @db.VarChar(50)
+  payment_reference     String?     @db.VarChar(100)
+  status                String?     @default("ACTIVE") @db.VarChar(50)
+  deadline_date         DateTime?   @db.Date
+  payment_confirmed_by  String?     @db.VarChar(255)
+  payment_confirmed_at  DateTime?   @db.Timestamptz(6)
+  transferred_from_apt_id String?   @db.VarChar(255)
+  transferred_to_apt_id   String?   @db.VarChar(255)
+  refund_reason         String?
+  refund_approved_by    String?     @db.VarChar(255)
+  refund_approved_at    DateTime?   @db.Timestamptz(6)
+  notes                 String?
+  created_at            DateTime?   @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime?   @default(now()) @db.Timestamptz(6)
+  apartments            apartments  @relation(fields: [apartment_id], references: [id], onDelete: Cascade)
+
+  @@index([apartment_id])
+  @@index([customer_id])
+}
+
+// ─────────────────────────────────────────────────────────────
+// PHẦN B.9: CHÍNH SÁCH GIÁ, CHIẾT KHẤU, ƯU ĐÃI & HOA HỒNG
+// ─────────────────────────────────────────────────────────────
+
+model pricebooks {
+  id               String            @id @db.VarChar(255)
+  code             String            @unique @db.VarChar(100)
+  name             String            @db.VarChar(255)
+  phase_code       String?           @default("ALL") @db.VarChar(50)
+  version          Int               @default(1)
+  status           String?           @default("DRAFT") @db.VarChar(50) // DRAFT, PENDING_APPROVAL, APPROVED, ACTIVE, ARCHIVED
+  effective_from   DateTime          @db.Date
+  effective_to     DateTime?         @db.Date
+  description      String?
+  created_by       String?           @db.VarChar(255)
+  approved_by      String?           @db.VarChar(255)
+  approved_at      DateTime?         @db.Timestamptz(6)
+  created_at       DateTime?         @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime?         @default(now()) @db.Timestamptz(6)
+  pricebook_items  pricebook_items[]
+
+  @@index([phase_code])
+  @@index([status])
+}
+
+model pricebook_items {
+  id                            String      @id @db.VarChar(255)
+  pricebook_id                  String      @db.VarChar(255)
+  apartment_id                  String      @db.VarChar(255)
+  land_price_before_vat         Decimal     @default(0) @db.Decimal(15, 2)
+  construction_price_before_vat Decimal     @default(0) @db.Decimal(15, 2)
+  vat_rate                      Decimal?    @default(8.00) @db.Decimal(5, 2)
+  total_price_before_vat        Decimal     @default(0) @db.Decimal(15, 2)
+  total_price_after_vat         Decimal     @default(0) @db.Decimal(15, 2)
+  maintenance_fee_2percent      Decimal?    @default(0) @db.Decimal(15, 2)
+  notes                         String?
+  created_at                    DateTime?   @default(now()) @db.Timestamptz(6)
+  pricebooks                    pricebooks  @relation(fields: [pricebook_id], references: [id], onDelete: Cascade)
+  apartments                    apartments  @relation(fields: [apartment_id], references: [id], onDelete: Cascade)
+
+  @@unique([pricebook_id, apartment_id])
+  @@index([pricebook_id])
+  @@index([apartment_id])
+}
+
+model promotions {
+  id                             String                @id @db.VarChar(255)
+  code                           String                @unique @db.VarChar(100)
+  name                           String                @db.VarChar(255)
+  promo_type                     String                @default("DIRECT_DISCOUNT") @db.VarChar(50) // DIRECT_DISCOUNT, EARLY_PAYMENT, GIFT_PACKAGE, AGENCY_CHANNEL, COMBO
+  discount_type                  String                @default("PERCENTAGE") @db.VarChar(50) // PERCENTAGE, FIXED_AMOUNT, GIFT
+  discount_value                 Decimal               @default(0) @db.Decimal(15, 2)
+  gift_description               String?
+  applies_to_phase               String?               @default("ALL") @db.VarChar(50)
+  min_units_required             Int?                  @default(1)
+  max_discount_cap_percent       Decimal?              @default(10.00) @db.Decimal(5, 2)
+  requires_approval_above_percent Decimal?             @default(2.00) @db.Decimal(5, 2)
+  status                         String?               @default("ACTIVE") @db.VarChar(50) // ACTIVE, INACTIVE, EXPIRED
+  start_date                     DateTime              @db.Date
+  end_date                       DateTime?             @db.Date
+  terms_conditions               String?
+  created_by                     String?               @db.VarChar(255)
+  created_at                     DateTime?             @default(now()) @db.Timestamptz(6)
+  updated_at                     DateTime?             @default(now()) @db.Timestamptz(6)
+  contract_promotions            contract_promotions[]
+
+  @@index([promo_type])
+  @@index([status])
+  @@index([applies_to_phase])
+}
+
+model contract_promotions {
+  id                     String      @id @db.VarChar(255)
+  contract_id            String      @db.VarChar(255)
+  promotion_id           String?     @db.VarChar(255)
+  promo_code             String      @db.VarChar(100)
+  promo_name             String      @db.VarChar(255)
+  promo_type             String      @db.VarChar(50)
+  discount_applied_amount Decimal    @default(0) @db.Decimal(15, 2)
+  gift_provided          Boolean?    @default(false)
+  approved_by            String?     @db.VarChar(255)
+  notes                  String?
+  created_at             DateTime?   @default(now()) @db.Timestamptz(6)
+  contracts              contracts   @relation(fields: [contract_id], references: [id], onDelete: Cascade)
+  promotions             promotions? @relation(fields: [promotion_id], references: [id], onDelete: SetNull)
+
+  @@index([contract_id])
+  @@index([promotion_id])
+}
+
+model commission_policies {
+  id                    String        @id @db.VarChar(255)
+  policy_code           String        @unique @db.VarChar(100)
+  policy_name           String        @db.VarChar(255)
+  beneficiary_type      String        @default("INTERNAL_SALE") @db.VarChar(50) // INTERNAL_SALE, AGENCY, FREELANCER
+  phase_code            String?       @default("ALL") @db.VarChar(50)
+  commission_rate       Decimal       @default(1.50) @db.Decimal(5, 2)
+  commission_fixed_amount Decimal?    @default(0) @db.Decimal(15, 2)
+  trigger_milestone     String        @default("ON_CONTRACT_SIGNED") @db.VarChar(50) // ON_CONTRACT_SIGNED, ON_FIRST_INSTALLMENT, ON_HANDOVER, STAGED
+  staged_percentages    Json?
+  status                String?       @default("ACTIVE") @db.VarChar(50) // ACTIVE, INACTIVE
+  description           String?
+  created_by            String?       @db.VarChar(255)
+  created_at            DateTime?     @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime?     @default(now()) @db.Timestamptz(6)
+  commissions           commissions[]
+
+  @@index([beneficiary_type])
+  @@index([status])
+}
+
+model commissions {
+  id                      String                @id @db.VarChar(255)
+  contract_id             String                @db.VarChar(255)
+  policy_id               String?               @db.VarChar(255)
+  beneficiary_type        String                @default("INTERNAL_SALE") @db.VarChar(50) // INTERNAL_SALE, AGENCY
+  beneficiary_id          String?               @db.VarChar(255)
+  beneficiary_name        String                @db.VarChar(255)
+  beneficiary_phone       String?               @db.VarChar(20)
+  beneficiary_bank_account String?              @db.VarChar(100)
+  beneficiary_bank_name   String?               @db.VarChar(100)
+  total_contract_value    Decimal               @db.Decimal(15, 2)
+  commission_rate         Decimal               @db.Decimal(5, 2)
+  total_commission_amount Decimal               @db.Decimal(15, 2)
+  paid_amount             Decimal?              @default(0) @db.Decimal(15, 2)
+  remaining_amount        Decimal?              @default(0) @db.Decimal(15, 2)
+  status                  String?               @default("PENDING_APPROVAL") @db.VarChar(50) // PENDING_APPROVAL, APPROVED, PARTIALLY_PAID, COMPLETED, CANCELLED_DUE_TO_CONTRACT
+  approval_notes          String?
+  approved_by             String?               @db.VarChar(255)
+  approved_at             DateTime?             @db.Timestamptz(6)
+  created_at              DateTime?             @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime?             @default(now()) @db.Timestamptz(6)
+  contracts               contracts             @relation(fields: [contract_id], references: [id], onDelete: Cascade)
+  commission_policies     commission_policies?  @relation(fields: [policy_id], references: [id], onDelete: SetNull)
+  commission_payouts      commission_payouts[]
+
+  @@index([contract_id])
+  @@index([policy_id])
+  @@index([beneficiary_type])
+  @@index([status])
+}
+
+model commission_payouts {
+  id              String      @id @db.VarChar(255)
+  commission_id   String      @db.VarChar(255)
+  payout_code     String      @unique @db.VarChar(100)
+  amount          Decimal     @db.Decimal(15, 2)
+  payout_date     DateTime    @db.Date
+  payment_method  String      @default("BANK_TRANSFER") @db.VarChar(50) // BANK_TRANSFER, CASH
+  reference_doc   String?     @db.VarChar(100)
+  created_by      String?     @db.VarChar(255)
+  notes           String?
+  created_at      DateTime?   @default(now()) @db.Timestamptz(6)
+  commissions     commissions @relation(fields: [commission_id], references: [id], onDelete: Cascade)
+
+  @@index([commission_id])
+}
+
+model contractors {
+  id              String            @id @db.VarChar(255)
+  code            String            @unique @db.VarChar(50)
+  name            String            @db.VarChar(255)
+  contact_person  String?           @db.VarChar(255)
+  phone           String?           @db.VarChar(50)
+  email           String?           @db.VarChar(255)
+  trade_type      String?           @default("GENERAL") @db.VarChar(100) // ME, ALUMINUM_GLASS, PAINTING, WATERPROOFING, INTERIOR, GENERAL
+  rating          Decimal?          @default(5.00) @db.Decimal(3, 2)
+  is_active       Boolean           @default(true)
+  created_at      DateTime?         @default(now()) @db.Timestamptz(6)
+  warranty_claims warranty_claims[]
+
+  @@index([trade_type])
+  @@index([is_active])
+}
+
+model warranty_claims {
+  id                 String       @id @db.VarChar(255)
+  claim_code         String       @unique @db.VarChar(100)
+  apartment_id       String       @db.VarChar(255)
+  contract_id        String?      @db.VarChar(255)
+  contractor_id      String?      @db.VarChar(255)
+  category           String       @default("KY_THUAT") @db.VarChar(100) // DIEN_NUOC, KET_CAU_THAM, CUA_KHOA, NOI_THAT, SON_BA, THIET_BI
+  location_detail    String?      @db.VarChar(255) // Phòng khách, Ban công, WC chính...
+  description        String       @db.Text
+  severity           String       @default("NORMAL") @db.VarChar(50) // CRITICAL (SLA 4h), HIGH (SLA 24h), NORMAL (SLA 48h)
+  status             String       @default("REPORTED") @db.VarChar(50) // REPORTED, ASSIGNED, IN_PROGRESS, COMPLETED, CANCELLED
+  is_under_warranty  Boolean      @default(true)
+  sla_deadline       DateTime?    @db.Timestamptz(6)
+  scheduled_at       DateTime?    @db.Timestamptz(6)
+  completed_at       DateTime?    @db.Timestamptz(6)
+  photo_urls         String[]     @default([])
+  resolution_notes   String?      @db.Text
+  customer_signature String?      @db.Text
+  customer_rating    Int?         @default(5)
+  notes              String?
+  created_by         String?      @db.VarChar(255)
+  created_at         DateTime?    @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime?    @default(now()) @db.Timestamptz(6)
+  apartments         apartments   @relation(fields: [apartment_id], references: [id], onDelete: Cascade)
+  contracts          contracts?   @relation(fields: [contract_id], references: [id], onDelete: Cascade)
+  contractors        contractors? @relation(fields: [contractor_id], references: [id], onDelete: SetNull)
+
+  @@index([apartment_id])
+  @@index([contract_id])
+  @@index([contractor_id])
+  @@index([status])
+  @@index([severity])
+}
+
+model construction_registrations {
+  id                      String                    @id @db.VarChar(255)
+  reg_code                String                    @unique @db.VarChar(100)
+  apartment_id            String                    @db.VarChar(255)
+  contract_id             String?                   @db.VarChar(255)
+  contractor_name         String                    @db.VarChar(255)
+  contact_person          String?                   @db.VarChar(255)
+  phone                   String?                   @db.VarChar(50)
+  start_date              DateTime                  @db.Date
+  end_date                DateTime                  @db.Date
+  handover_date           DateTime?                 @db.Date
+  deadline_6m             DateTime?                 @db.Date
+  deposit_amount          Decimal                   @default(100000000.00) @db.Decimal(15, 2)
+  deposit_status          String                    @default("PENDING_DEPOSIT") @db.VarChar(50) // PENDING_DEPOSIT, DEPOSITED, REFUNDED, PARTIAL_REFUNDED
+  deposit_payment_ref     String?                   @db.VarChar(100)
+  deposit_date            DateTime?                 @db.Timestamptz(6)
+  refund_amount           Decimal?                  @default(0) @db.Decimal(15, 2)
+  refund_date             DateTime?                 @db.Timestamptz(6)
+  status                  String                    @default("PENDING_REVIEW") @db.VarChar(50) // PENDING_REVIEW, APPROVED, REJECTED, CONSTRUCTING, INSPECTION_PENDING, SETTLED
+  drawings_url            String?
+  scope_description       String?                   @db.Text
+  approved_by             String?                   @db.VarChar(255)
+  approved_at             DateTime?                 @db.Timestamptz(6)
+  inspection_notes        String?                   @db.Text
+  notes                   String?
+  created_at              DateTime?                 @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime?                 @default(now()) @db.Timestamptz(6)
+  apartments              apartments                @relation(fields: [apartment_id], references: [id], onDelete: Cascade)
+  contracts               contracts?                @relation(fields: [contract_id], references: [id], onDelete: Cascade)
+  construction_workers    construction_workers[]
+  construction_violations construction_violations[]
+
+  @@index([apartment_id])
+  @@index([contract_id])
+  @@index([status])
+  @@index([deposit_status])
+}
+
+model construction_workers {
+  id                         String                     @id @db.VarChar(255)
+  registration_id            String                     @db.VarChar(255)
+  full_name                  String                     @db.VarChar(255)
+  id_number                  String?                    @db.VarChar(50)
+  phone                      String?                    @db.VarChar(50)
+  pass_code                  String                     @unique @db.VarChar(100)
+  role                       String?                    @default("THO_CHINH") @db.VarChar(100) // CHI_HUY, THO_DIEN, THO_NUOC, THO_NE, THO_SON, THO_MOC
+  photo_url                  String?
+  valid_from                 DateTime                   @db.Date
+  valid_to                   DateTime                   @db.Date
+  status                     String                     @default("ACTIVE") @db.VarChar(50) // ACTIVE, REVOKED, EXPIRED
+  created_at                 DateTime?                  @default(now()) @db.Timestamptz(6)
+  construction_registrations construction_registrations @relation(fields: [registration_id], references: [id], onDelete: Cascade)
+
+  @@index([registration_id])
+  @@index([pass_code])
+  @@index([status])
+}
+
+model construction_violations {
+  id                         String                     @id @db.VarChar(255)
+  registration_id            String                     @db.VarChar(255)
+  violation_code             String                     @unique @db.VarChar(100)
+  violation_type             String                     @db.VarChar(100) // SAI_HANG_MUC, THIEU_PCCC, CAU_MAC_DIEN, KHONG_BAO_HO, KHONG_GIAM_SAT, HAN_KHONG_PHEP, TIENG_ON_NGOAI_GIO, VI_PHAM_KHAC
+  fine_amount                Decimal                    @default(0) @db.Decimal(15, 2)
+  penalty_date               DateTime                   @default(now()) @db.Timestamptz(6)
+  description                String                     @db.Text
+  photo_urls                 String[]                   @default([])
+  recorded_by                String?                    @db.VarChar(255)
+  deducted                   Boolean                    @default(true)
+  notes                      String?
+  created_at                 DateTime?                  @default(now()) @db.Timestamptz(6)
+  construction_registrations construction_registrations @relation(fields: [registration_id], references: [id], onDelete: Cascade)
+
+  @@index([registration_id])
+  @@index([violation_type])
+}
+
+model project_phases {
+  id            String      @id @db.VarChar(255)
+  phase_code    String      @unique @db.VarChar(50)
+  phase_name    String      @db.VarChar(255)
+  description   String?     @db.Text
+  total_units   Int?        @default(0)
+  display_order Int?        @default(0)
+  is_active     Boolean     @default(true)
+  created_at    DateTime?   @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime?   @default(now()) @db.Timestamptz(6)
+
+  @@index([phase_code])
+  @@index([is_active])
+}
+

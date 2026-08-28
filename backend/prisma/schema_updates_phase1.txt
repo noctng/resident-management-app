@@ -1,0 +1,98 @@
+-- Update Prisma Schema for CRM Phase 1
+// Add to schema.prisma after existing models
+
+model contract_lifecycle_events {
+  id           String    @id @db.VarChar(255)
+  contract_id  String    @db.VarChar(255)
+  event_type   String    @db.VarChar(50)
+  event_date   DateTime  @default(now()) @db.Timestamptz(6)
+  performed_by String?   @db.VarChar(255)
+  notes        String?   @db.Text
+  metadata     Json?
+  created_at   DateTime  @default(now()) @db.Timestamptz(6)
+  
+  contracts    contracts @relation(fields: [contract_id], references: [id], onDelete: Cascade)
+  
+  @@index([contract_id])
+  @@index([event_type])
+}
+
+model payment_schedules {
+  id                 String              @id @db.VarChar(255)
+  contract_id        String              @db.VarChar(255)
+  schedule_name      String?             @db.VarChar(255)
+  policy_type        String?             @db.VarChar(50)
+  late_fee_rate      Decimal             @default(0) @db.Decimal(5, 2)
+  grace_period_days  Int                 @default(0)
+  created_at         DateTime            @default(now()) @db.Timestamptz(6)
+  created_by         String?             @db.VarChar(255)
+  
+  contracts          contracts           @relation(fields: [contract_id], references: [id], onDelete: Cascade)
+  contract_payments  contract_payments[]
+  
+  @@index([contract_id])
+}
+
+model handover_checklists {
+  id            String    @id @db.VarChar(255)
+  contract_id   String    @db.VarChar(255)
+  item_name     String    @db.VarChar(255)
+  item_order    Int       @default(0)
+  is_required   Boolean   @default(true)
+  is_completed  Boolean   @default(false)
+  completed_at  DateTime? @db.Timestamptz(6)
+  completed_by  String?   @db.VarChar(255)
+  notes         String?   @db.Text
+  created_at    DateTime  @default(now()) @db.Timestamptz(6)
+  
+  contracts     contracts @relation(fields: [contract_id], references: [id], onDelete: Cascade)
+  
+  @@index([contract_id])
+}
+
+model approval_workflows {
+  id               String    @id @db.VarChar(255)
+  request_type     String    @db.VarChar(50)
+  contract_id      String?   @db.VarChar(255)
+  requested_by     String    @db.VarChar(255)
+  requested_at     DateTime  @default(now()) @db.Timestamptz(6)
+  status           String    @default("PENDING") @db.VarChar(20)
+  approver_id      String?   @db.VarChar(255)
+  approved_at      DateTime? @db.Timestamptz(6)
+  rejection_reason String?   @db.Text
+  request_data     Json?
+  created_at       DateTime  @default(now()) @db.Timestamptz(6)
+  
+  contracts        contracts? @relation(fields: [contract_id], references: [id], onDelete: Cascade)
+  
+  @@index([status])
+  @@index([contract_id])
+  @@index([request_type])
+}
+
+// Update existing models
+model contracts {
+  // ... existing fields ...
+  handover_completed      Boolean?                    @default(false)
+  handover_date           DateTime?                   @db.Timestamptz(6)
+  title_deed_issued       Boolean?                    @default(false)
+  title_deed_date         DateTime?                   @db.Timestamptz(6)
+  
+  // ... existing relations ...
+  contract_lifecycle_events contract_lifecycle_events[]
+  payment_schedules         payment_schedules[]
+  handover_checklists       handover_checklists[]
+  approval_workflows        approval_workflows[]
+}
+
+model contract_payments {
+  // ... existing fields ...
+  late_fee             Decimal  @default(0) @db.Decimal(15, 2)
+  days_overdue         Int      @default(0)
+  reminder_sent_at     DateTime? @db.Timestamptz(6)
+  auto_calculated      Boolean  @default(false)
+  payment_schedule_id  String?  @db.VarChar(255)
+  
+  // ... existing relations ...
+  payment_schedules    payment_schedules? @relation(fields: [payment_schedule_id], references: [id])
+}

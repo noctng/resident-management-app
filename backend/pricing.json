@@ -1,0 +1,43 @@
+{
+  "residentialElectricity": [
+    {
+      "limit": 50,
+      "rate": 1984
+    },
+    {
+      "limit": 100,
+      "rate": 2050
+    },
+    {
+      "limit": 200,
+      "rate": 2380
+    },
+    {
+      "limit": 300,
+      "rate": 2998
+    },
+    {
+      "limit": 400,
+      "rate": 3350
+    },
+    {
+      "limit": null,
+      "rate": 3460
+    }
+  ],
+  "businessElectricity": {
+    "normalRate": 3152,
+    "offPeakRate": 1918,
+    "peakRate": 5422,
+    "averageRate": 3497
+  },
+  "water": {
+    "residentialRate": 14900,
+    "businessRate": 17140
+  },
+  "vat": {
+    "electricity": 8,
+    "water": 5
+  },
+  "n8nWebhookUrl": ""
+}

@@ -1,0 +1,5 @@
+{
+  "name": "Resident Management App",
+  "description": "An application to manage residents and apartments, handling the many-to-many relationship where a resident can live in multiple apartments and an apartment can have multiple residents.",
+  "requestFramePermissions": ["camera"]
+}

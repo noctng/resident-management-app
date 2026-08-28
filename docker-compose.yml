@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n_app
+    restart: always
+    ports:
+      - '6789:5678'
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+      - GENERIC_TIME_ZONE=Asia/Ho_Chi_Minh
+      - N8N_HOST=ai.n8ntng.xyz
+      - N8N_PROTOCOL=https
+      - WEBHOOK_URL=https://ai.n8ntng.xyz/
+      # Quản lý đăng nhập (User Management)
+      - N8N_BASIC_AUTH_ACTIVE=true
+      # Nếu bạn muốn n8n chạy mượt hơn trên máy Windows
+      - NODE_FUNCTION_ALLOW_EXTERNAL=moment,lodash
+    volumes:
+      - D:/n8n_tng:/home/node/.n8n

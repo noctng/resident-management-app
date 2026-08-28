@@ -1,0 +1,15 @@
+{
+  "name": "vnpt-einvoice-sdk",
+  "version": "1.0.0",
+  "description": "Module tích hợp phát hành Hóa Đơn Điện Tử VNPT (Thông tư 78/2021/TT-BTC) chuẩn SOAP/ASMX WebService",
+  "main": "index.js",
+  "keywords": [
+    "vnpt",
+    "einvoice",
+    "hoa-don-dien-tu",
+    "tt78",
+    "publish-service"
+  ],
+  "author": "Development Team",
+  "license": "MIT"
+}

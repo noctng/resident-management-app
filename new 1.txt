@@ -1,0 +1,13 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    './index.html',
+    './**/*.{js,ts,jsx,tsx}',   // ✅ quét tất cả file React/TSX trong dự án
+    '!./node_modules/**/*',     // 🚫 loại bỏ node_modules
+    '!./dist/**/*'              // 🚫 loại bỏ thư mục build
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}

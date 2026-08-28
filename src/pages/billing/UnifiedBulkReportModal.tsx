@@ -1,0 +1,100 @@
+import React from 'react';
+import { CheckCircleIcon } from '../../components/icons';
+
+interface BulkReport {
+  total: number;
+  success: number;
+  failed: number;
+  details: any[];
+}
+
+interface UnifiedBulkReportModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  report: BulkReport | null;
+}
+
+export const UnifiedBulkReportModal: React.FC<UnifiedBulkReportModalProps> = ({
+  isOpen,
+  onClose,
+  report,
+}) => {
+  if (!isOpen || !report) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in">
+      <div className="bg-surface w-full max-w-lg rounded-2xl shadow-xl overflow-hidden border border-brand-border animate-slide-up">
+        <div className="p-5 border-b border-brand-border flex justify-between items-center">
+          <h3 className="text-base font-bold text-ink flex items-center gap-2">
+            <CheckCircleIcon className="w-5 h-5 text-brand-success" />
+            Kết Quả Gửi Email Hóa Đơn Tổng Hợp
+          </h3>
+          <button
+            onClick={onClose}
+            className="p-1 rounded-lg text-ink-faint hover:text-ink-soft transition-colors"
+          >
+            <span className="text-xl">&times;</span>
+          </button>
+        </div>
+        <div className="p-5 space-y-4">
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div className="bg-brand-teal-soft p-3 rounded-xl border border-brand-border">
+              <p className="text-xs text-ink-soft">Tổng cộng</p>
+              <p className="text-xl font-bold text-brand-teal mt-0.5">
+                {report.total}
+              </p>
+            </div>
+            <div className="bg-brand-success-soft p-3 rounded-xl border border-brand-border">
+              <p className="text-xs text-ink-soft">Thành công</p>
+              <p className="text-xl font-bold text-brand-success mt-0.5">
+                {report.success}
+              </p>
+            </div>
+            <div className="bg-brand-danger-soft p-3 rounded-xl border border-brand-border">
+              <p className="text-xs text-ink-soft">Thất bại</p>
+              <p className="text-xl font-bold text-brand-danger mt-0.5">
+                {report.failed}
+              </p>
+            </div>
+          </div>
+
+          {report.failed > 0 && (
+            <div className="mt-4">
+              <p className="text-xs font-semibold text-ink mb-2">
+                Chi tiết lỗi:
+              </p>
+              <div className="max-h-40 overflow-y-auto custom-scrollbar border border-brand-border rounded-xl p-2.5 bg-surface-alt text-xs">
+                {report.details
+                  .filter((d: any) => d.status !== 'Sent')
+                  .map((d: any, idx: number) => (
+                    <div
+                      key={idx}
+                      className="flex justify-between py-1.5 border-b last:border-0 border-brand-border"
+                    >
+                      <span className="font-semibold text-ink">
+                        {d.apartment}
+                      </span>
+                      <span className="text-brand-danger font-medium">{d.status}</span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="p-4 bg-surface-alt border-t border-brand-border flex justify-end">
+          <button
+            onClick={() => {
+              onClose();
+              window.location.reload();
+            }}
+            className="px-4 py-2 bg-accent hover:bg-accent-hover text-white rounded-xl text-sm font-medium transition-colors"
+          >
+            Đóng & Làm mới
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UnifiedBulkReportModal;

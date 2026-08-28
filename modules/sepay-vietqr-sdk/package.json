@@ -1,0 +1,16 @@
+{
+  "name": "sepay-vietqr-sdk",
+  "version": "1.0.0",
+  "description": "Bộ SDK độc lập tích hợp Cổng thanh toán Tự động SePay Webhook và Tạo mã VietQR động",
+  "main": "index.js",
+  "keywords": [
+    "sepay",
+    "vietqr",
+    "webhook",
+    "payment",
+    "banking",
+    "vietnam"
+  ],
+  "author": "Antigravity",
+  "license": "MIT"
+}

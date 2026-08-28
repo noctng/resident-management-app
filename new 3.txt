@@ -1,0 +1,951 @@
+
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const bcrypt = require('bcrypt');
+const fs = require('fs');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+const db = require('./db');
+
+const app = express();
+const port = process.env.PORT || 3002;
+
+const SALT_ROUNDS = 10;
+const generateRandomId = () => Math.floor(10000 + Math.random() * 90000).toString();
+
+// --- JWT Configuration ---
+// IMPORTANT: These secrets should be long, random strings and stored securely in your .env file
+const JWT_ADMIN_SECRET = process.env.JWT_ADMIN_SECRET || 'default-super-secret-admin-key-change-me';
+const JWT_RESIDENT_SECRET = process.env.JWT_RESIDENT_SECRET || 'default-super-secret-resident-key-change-me';
+const TOKEN_COOKIE_NAME = 'auth_token';
+const COOKIE_OPTIONS = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+    sameSite: 'strict',
+    path: '/',
+};
+
+// --- DYNAMIC PRICING CONFIGURATION ---
+const PRICING_CONFIG_PATH = path.join(__dirname, 'pricing.json');
+let pricingConfig = {};
+
+const loadPricingConfig = () => {
+    try {
+        const rawData = fs.readFileSync(PRICING_CONFIG_PATH);
+        pricingConfig = JSON.parse(rawData);
+        console.log('Pricing configuration loaded successfully.');
+    } catch (error) {
+        console.error('FATAL: Could not load pricing configuration from pricing.json. Shutting down.', error);
+        process.exit(1); // Exit if config is essential and fails to load
+    }
+};
+
+// --- UTILITY CALCULATION HELPERS ---
+
+const calculateTieredCost = (consumption, tiers) => {
+    let cost = 0;
+    let remainingConsumption = consumption;
+    let lastLimit = 0;
+
+    for (const tier of tiers) {
+        if (remainingConsumption <= 0) break;
+
+        const tierConsumptionLimit = tier.limit === null ? Infinity : tier.limit - lastLimit;
+        const consumptionInTier = Math.min(remainingConsumption, tierConsumptionLimit);
+        
+        cost += consumptionInTier * tier.rate;
+        remainingConsumption -= consumptionInTier;
+        lastLimit = tier.limit === null ? lastLimit : tier.limit;
+    }
+    return cost;
+};
+
+
+const calculateWaterCost = (consumption) => {
+    if (consumption <= 0) return 0;
+    const { tiers } = pricingConfig.water;
+    const rawCost = calculateTieredCost(consumption, tiers);
+    return Math.round(rawCost);
+};
+
+const calculateResidentialElectricityCost = (consumption) => {
+    if (consumption <= 0) return 0;
+    const cost = calculateTieredCost(consumption, pricingConfig.residentialElectricity);
+    return Math.round(cost);
+};
+
+const calculateBusinessElectricityCost = (consumption) => {
+    if (consumption <= 0) return 0;
+    return Math.round(consumption * pricingConfig.businessElectricity.normalRate);
+};
+
+
+// Middleware CORS
+const allowedOrigins = (
+  process.env.CORS_ALLOWED_ORIGINS ||
+  'http://localhost:5173,http://127.0.0.1:5173,https://dangky.atsoft.online,https://www.dangky.atsoft.online'
+).split(',');
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      console.log('🟡 Incoming Origin:', origin);
+      // Cho phép request không có Origin (Postman, mobile app)
+      if (!origin) return callback(null, true);
+
+      // Chuẩn hóa origin (bỏ dấu "/" cuối)
+      const normalizedOrigin = origin.replace(/\/$/, '');
+      const isAllowed = allowedOrigins.some(
+        (o) => o.replace(/\/$/, '') === normalizedOrigin
+      );
+
+      if (isAllowed) {
+        return callback(null, true);
+      } else {
+        console.error('❌ Blocked by CORS:', origin);
+        const msg =
+          'The CORS policy for this site does not allow access from the specified Origin.';
+        return callback(new Error(msg), false);
+      }
+    },
+    credentials: true,
+  })
+);
+app.use(cookieParser());
+// Increase limit for base64 images to prevent "413 Payload Too Large"
+app.use(express.json({ limit: '100mb' })); 
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
+
+
+// --- Static file serving for feedback pictures ---
+// Hardcoded path for Nginx deployment as requested by the user.
+// Using forward slashes for better cross-platform compatibility in Node.js.
+const feedbackPictureDir = 'D:/nginx/nginx-1.28.0/html/dist/picture_feedback';
+
+if (!fs.existsSync(feedbackPictureDir)) {
+    // Ensure the directory exists.
+    fs.mkdirSync(feedbackPictureDir, { recursive: true });
+}
+// This static serving is mainly for development (via Vite proxy) or if Node serves all files.
+// In a typical production setup, Nginx will handle serving the entire `dist` directory.
+app.use('/picture_feedback', express.static(feedbackPictureDir));
+
+
+const createDefaultAdmin = async () => {
+    try {
+        const { rows } = await db.query('SELECT * FROM users');
+        if (rows.length === 0) {
+            console.log('No users found. Creating default admin user...');
+            const username = 'admin';
+            const password = 'password';
+            const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+            const newId = `user_${generateRandomId()}`;
+            await db.query(
+                'INSERT INTO users (id, username, password_hash, role) VALUES ($1, $2, $3, $4)',
+                [newId, username, passwordHash, 0] // role 0 for Admin
+            );
+            console.log('Default admin user created. Username: admin, Password: password');
+        }
+    } catch (err) {
+        // This might fail if the table doesn't exist yet, which is fine on first-ever run.
+        if (err.code !== '42P01') { // 42P01 is undefined_table
+           console.error('Error creating default admin:', err);
+        }
+    }
+};
+
+// --- AUTH MIDDLEWARE ---
+const authenticateToken = (req, res, next) => {
+    const token = req.cookies[TOKEN_COOKIE_NAME];
+    if (!token) return res.sendStatus(401);
+
+    jwt.verify(token, JWT_ADMIN_SECRET, (err, user) => {
+        if (!err && (user.type === 'admin')) {
+            req.user = user;
+            return next();
+        }
+
+        jwt.verify(token, JWT_RESIDENT_SECRET, (err, resident) => {
+            if (!err && resident.type === 'resident') {
+                req.resident = resident;
+                return next();
+            }
+            return res.status(403).json({ message: 'Token không hợp lệ.' });
+        });
+    });
+};
+
+const isAdmin = (req, res, next) => {
+    if (req.user && req.user.role === 0) {
+        return next();
+    }
+    return res.status(403).json({ message: 'Quyền truy cập bị từ chối.' });
+};
+
+const isManagerOrAdmin = (req, res, next) => {
+    if (req.user && (req.user.role === 0 || req.user.role === 1)) {
+        return next();
+    }
+    return res.status(403).json({ message: 'Quyền truy cập bị từ chối.' });
+};
+
+
+// --- API ROUTES ---
+
+// --- NEW AUTH ROUTES ---
+app.get('/api/auth/session', authenticateToken, async (req, res) => {
+    if (req.user) { // Admin/Manager
+        try {
+            const { rows } = await db.query('SELECT id, username, role FROM users WHERE id = $1', [req.user.id]);
+            if (rows.length > 0) return res.json({ user: rows[0], userType: 'admin' });
+        } catch (e) {
+            return res.status(500).json({ message: 'Lỗi máy chủ' });
+        }
+    } else if (req.resident) { // Resident
+        try {
+            const resResult = await db.query('SELECT id, name FROM residents WHERE id = $1', [req.resident.id]);
+            const occResult = await db.query('SELECT apartment_id FROM occupancies WHERE resident_id = $1', [req.resident.id]);
+            const aptResult = await db.query('SELECT id, code FROM apartments WHERE id = ANY($1::varchar[]) ORDER BY code', [occResult.rows.map(o => o.apartment_id)]);
+
+            if (resResult.rows.length > 0) {
+                return res.json({ user: { resident: resResult.rows[0], apartments: aptResult.rows }, userType: 'resident' });
+            }
+        } catch (e) {
+            return res.status(500).json({ message: 'Lỗi máy chủ' });
+        }
+    }
+    res.status(404).json({ message: 'Tài khoản không tồn tại.' });
+});
+
+app.post('/api/auth/logout', (req, res) => {
+    res.clearCookie(TOKEN_COOKIE_NAME, COOKIE_OPTIONS);
+    res.status(200).json({ message: 'Đăng xuất thành công.' });
+});
+
+
+// --- CONFIGURATION ENDPOINTS ---
+app.get('/api/config/pricing', authenticateToken, (req, res) => {
+    res.json(pricingConfig);
+});
+
+app.put('/api/config/pricing', [authenticateToken, isAdmin], async (req, res) => {
+    try {
+        const { config, userId } = req.body;
+        if (!config || !userId || userId !== req.user.id) {
+            return res.status(400).json({ message: 'Cấu hình và ID người dùng hợp lệ là bắt buộc.' });
+        }
+        
+        await db.query(
+            'INSERT INTO pricing_config_history (config_data, changed_by_user_id) VALUES ($1, $2)',
+            [JSON.stringify(config), userId]
+        );
+
+        fs.writeFileSync(PRICING_CONFIG_PATH, JSON.stringify(config, null, 2), 'utf-8');
+        pricingConfig = config;
+        
+        res.status(200).json({ message: 'Bảng giá đã được cập nhật và lưu vào lịch sử thành công.' });
+    } catch (error) {
+        console.error('Error updating pricing configuration:', error);
+        res.status(500).json({ message: 'Lỗi khi lưu bảng giá mới.' });
+    }
+});
+
+app.get('/api/config/pricing/history', [authenticateToken, isAdmin], async (req, res) => {
+    try {
+        const query = `
+            SELECT h.id, h.config_data, h.changed_at, u.username AS changed_by_username
+            FROM pricing_config_history h
+            LEFT JOIN users u ON h.changed_by_user_id = u.id
+            ORDER BY h.changed_at DESC;
+        `;
+        const { rows } = await db.query(query);
+        res.json(rows);
+    } catch (err) {
+        console.error('Get pricing history error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+
+// --- USER AUTH & MANAGEMENT ---
+
+app.post('/api/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        if (!username || !password) return res.status(400).json({ message: 'Tên đăng nhập và mật khẩu là bắt buộc.' });
+        
+        const { rows } = await db.query('SELECT * FROM users WHERE username = $1', [username]);
+        if (rows.length === 0) return res.status(401).json({ message: 'Tên đăng nhập hoặc mật khẩu không chính xác.' });
+
+        const user = rows[0];
+        const isMatch = await bcrypt.compare(password, user.password_hash);
+
+        if (isMatch) {
+            const userPayload = { id: user.id, username: user.username, role: user.role, type: 'admin' };
+            const token = jwt.sign(userPayload, JWT_ADMIN_SECRET, { expiresIn: '1d' });
+            res.cookie(TOKEN_COOKIE_NAME, token, { ...COOKIE_OPTIONS, maxAge: 24 * 60 * 60 * 1000 });
+
+            res.json({
+                message: 'Đăng nhập thành công.',
+                user: { id: user.id, username: user.username, role: user.role }
+            });
+        } else {
+            res.status(401).json({ message: 'Tên đăng nhập hoặc mật khẩu không chính xác.' });
+        }
+    } catch (err) {
+        console.error('Login error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.get('/api/users', [authenticateToken, isAdmin], async (req, res) => {
+    try {
+        const { rows } = await db.query('SELECT id, username, role, created_at FROM users ORDER BY created_at DESC');
+        res.json(rows);
+    } catch (err) {
+        console.error('Get users error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.post('/api/users', [authenticateToken, isAdmin], async (req, res) => {
+    try {
+        const { username, password, role } = req.body;
+        if (!username || !password || role === undefined) return res.status(400).json({ message: 'Username, password, and role are required.' });
+
+        const existingUser = await db.query('SELECT * FROM users WHERE username = $1', [username]);
+        if (existingUser.rows.length > 0) return res.status(409).json({ message: 'Username đã tồn tại.' });
+
+        const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+        const newId = `user_${generateRandomId()}`;
+
+        const { rows } = await db.query(
+            'INSERT INTO users (id, username, password_hash, role) VALUES ($1, $2, $3, $4) RETURNING id, username, role, created_at',
+            [newId, username, passwordHash, role]
+        );
+        res.status(201).json(rows[0]);
+    } catch (err) {
+        console.error('Add user error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.put('/api/users/:id/role', [authenticateToken, isAdmin], async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { role } = req.body;
+        const { rows } = await db.query(
+            'UPDATE users SET role = $1 WHERE id = $2 RETURNING id, username, role',
+            [role, id]
+        );
+        if (rows.length === 0) return res.status(404).json({ message: 'User not found.' });
+        res.json(rows[0]);
+    } catch (err) {
+        console.error('Update user role error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.delete('/api/users/:id', [authenticateToken, isAdmin], async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await db.query('DELETE FROM users WHERE id = $1', [id]);
+        if (result.rowCount === 0) return res.status(404).send('User not found.');
+        res.status(204).send();
+    } catch (err) {
+        console.error('Delete user error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.post('/api/users/:id/reset-password', [authenticateToken, isAdmin], async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userResult = await db.query('SELECT username FROM users WHERE id = $1', [id]);
+        if (userResult.rowCount === 0) return res.status(404).json({ message: 'Không tìm thấy người dùng.' });
+        if (userResult.rows[0].username === 'admin') return res.status(403).json({ message: 'Không thể reset mật khẩu cho tài khoản admin mặc định.' });
+
+        const defaultPassword = 'Mk@12345';
+        const passwordHash = await bcrypt.hash(defaultPassword, SALT_ROUNDS);
+        
+        await db.query('UPDATE users SET password_hash = $1 WHERE id = $2', [passwordHash, id]);
+        res.status(200).json({ message: `Mật khẩu cho ${userResult.rows[0].username} đã được reset.` });
+    } catch (err) {
+        console.error('Reset user password error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ khi reset mật khẩu.' });
+    }
+});
+
+app.post('/api/users/change-password', authenticateToken, async (req, res) => {
+    try {
+        const { userId, currentPassword, newPassword } = req.body;
+        if (!req.user || userId !== req.user.id) return res.status(403).json({ message: 'Hành động không được phép.' });
+
+        const userResult = await db.query('SELECT * FROM users WHERE id = $1', [userId]);
+        if (userResult.rowCount === 0) return res.status(404).json({ message: 'Không tìm thấy tài khoản.' });
+        const user = userResult.rows[0];
+
+        const isMatch = await bcrypt.compare(currentPassword, user.password_hash);
+        if (!isMatch) return res.status(403).json({ message: 'Mật khẩu hiện tại không chính xác.' });
+
+        const newPasswordHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+        await db.query('UPDATE users SET password_hash = $1 WHERE id = $2', [newPasswordHash, userId]);
+        res.status(200).json({ message: 'Đổi mật khẩu thành công.' });
+    } catch (err) {
+        console.error('Change user password error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ khi đổi mật khẩu.' });
+    }
+});
+
+app.get('/api/apartments', authenticateToken, async (req, res) => {
+    try {
+        const { rows } = await db.query('SELECT * FROM apartments ORDER BY code');
+        res.json(rows.map(apt => ({
+            id: apt.id, houseType: apt.house_type, code: apt.code, floor: apt.floor,
+            area: parseFloat(apt.area), electricityType: apt.electricity_type,
+        })));
+    } catch (err) {
+        console.error('Get apartments error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.post('/api/apartments', [authenticateToken, isAdmin], async (req, res) => {
+    try {
+        const { houseType, code, floor, area, electricityType } = req.body;
+        const { rows } = await db.query(
+            'INSERT INTO apartments (house_type, code, floor, area, electricity_type) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [houseType, code, floor, area, electricityType]
+        );
+        const newApt = rows[0];
+        res.status(201).json({
+            id: newApt.id, houseType: newApt.house_type, code: newApt.code, floor: newApt.floor,
+            area: parseFloat(newApt.area), electricityType: newApt.electricity_type,
+        });
+    } catch (err) {
+        console.error('Add apartment error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.put('/api/apartments/:id', [authenticateToken, isAdmin], async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { houseType, code, floor, area, electricityType } = req.body;
+        const { rows } = await db.query(
+            'UPDATE apartments SET house_type = $1, code = $2, floor = $3, area = $4, electricity_type = $5 WHERE id = $6 RETURNING *',
+            [houseType, code, floor, area, electricityType, id]
+        );
+        if (rows.length === 0) return res.status(404).json({ message: 'Apartment not found.' });
+        const updatedApt = rows[0];
+        res.json({
+            id: updatedApt.id, houseType: updatedApt.house_type, code: updatedApt.code, floor: updatedApt.floor,
+            area: parseFloat(updatedApt.area), electricityType: updatedApt.electricity_type,
+        });
+    } catch (err) {
+        console.error('Update apartment error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.get('/api/residents', authenticateToken, async (req, res) => {
+    try {
+        const { rows } = await db.query('SELECT * FROM residents ORDER BY name');
+        res.json(rows.map(r => ({
+            id: r.id, name: r.name, dob: r.dob, idNumber: r.id_number,
+            zaloId: r.zalo_id, phoneNumber: r.phone_number, isActive: r.is_active,
+        })));
+    } catch (err) {
+        console.error('Get residents error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.post('/api/residents', [authenticateToken, isAdmin], async (req, res) => {
+    try {
+        const { name, dob, idNumber, zaloId, phoneNumber, isActive } = req.body;
+        const newId = `res_${generateRandomId()}`;
+        const { rows } = await db.query(
+            'INSERT INTO residents (id, name, dob, id_number, zalo_id, phone_number, is_active) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+            [newId, name, dob, idNumber, zaloId || null, phoneNumber || null, isActive !== false]
+        );
+        const newRes = rows[0];
+        
+        if (newRes.phone_number) {
+            const defaultPassword = 'Abc@12345';
+            const passwordHash = await bcrypt.hash(defaultPassword, SALT_ROUNDS);
+            await db.query(
+                'INSERT INTO resident_accounts (resident_id, password_hash) VALUES ($1, $2) ON CONFLICT (resident_id) DO NOTHING',
+                [newRes.id, passwordHash]
+            );
+        }
+
+        res.status(201).json({
+            id: newRes.id, name: newRes.name, dob: newRes.dob, idNumber: newRes.id_number,
+            zaloId: newRes.zalo_id, phoneNumber: newRes.phone_number, isActive: newRes.is_active,
+        });
+    } catch (err) {
+        console.error('Add resident error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.put('/api/residents/:id', [authenticateToken, isAdmin], async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, dob, idNumber, phoneNumber, zaloId } = req.body;
+        const { rows } = await db.query(
+            `UPDATE residents SET name = $1, dob = $2, id_number = $3, phone_number = $4, zalo_id = $5 WHERE id = $6 RETURNING *`,
+            [name, dob, idNumber, phoneNumber || null, zaloId || null, id]
+        );
+        if (rows.length === 0) return res.status(404).json({ message: 'Resident not found.' });
+        const updatedRes = rows[0];
+
+        if (updatedRes.phone_number) {
+            const defaultPassword = 'Abc@12345';
+            const passwordHash = await bcrypt.hash(defaultPassword, SALT_ROUNDS);
+            await db.query(
+                'INSERT INTO resident_accounts (resident_id, password_hash) VALUES ($1, $2) ON CONFLICT (resident_id) DO NOTHING',
+                [updatedRes.id, passwordHash]
+            );
+        }
+
+        res.json({
+            id: updatedRes.id, name: updatedRes.name, dob: updatedRes.dob, idNumber: updatedRes.id_number,
+            zaloId: updatedRes.zalo_id, phoneNumber: updatedRes.phone_number, isActive: updatedRes.is_active,
+        });
+    } catch (err) {
+        console.error('Update resident error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.put('/api/residents/:id/status', [authenticateToken, isAdmin], async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { isActive } = req.body;
+        const { rows } = await db.query(
+            'UPDATE residents SET is_active = $1 WHERE id = $2 RETURNING id, is_active',
+            [isActive, id]
+        );
+        if (rows.length === 0) return res.status(404).json({ message: 'Resident not found.' });
+        res.json(rows[0]);
+    } catch (err) {
+        console.error('Update resident status error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.get('/api/occupancies', authenticateToken, async (req, res) => {
+    try {
+        const { rows } = await db.query('SELECT * FROM occupancies');
+        res.json(rows.map(o => ({ apartmentId: o.apartment_id, residentId: o.resident_id })));
+    } catch (err) {
+        console.error('Get occupancies error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.post('/api/occupancies', [authenticateToken, isAdmin], async (req, res) => {
+    try {
+        const { apartmentId, residentId } = req.body;
+        await db.query('INSERT INTO occupancies (apartment_id, resident_id) VALUES ($1, $2)', [apartmentId, residentId]);
+        res.status(201).json({ apartmentId, residentId });
+    } catch (err) {
+        console.error('Add occupancy error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.delete('/api/occupancies/:apartmentId/:residentId', [authenticateToken, isAdmin], async (req, res) => {
+    try {
+        const { apartmentId, residentId } = req.params;
+        const result = await db.query('DELETE FROM occupancies WHERE apartment_id = $1 AND resident_id = $2', [apartmentId, residentId]);
+        if (result.rowCount === 0) return res.status(404).send('Occupancy record not found.');
+        res.status(204).send();
+    } catch (err) {
+        console.error('Delete occupancy error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.get('/api/amenity-usage', authenticateToken, async (req, res) => {
+    try {
+        const query = `
+            SELECT au.id, au.apartment_id, au.resident_id, r.name as resident_name, au.amenity, au.usage_date,
+                   au.start_time, au.end_time, au.booking_code, au.status
+            FROM amenity_usage au LEFT JOIN residents r ON au.resident_id = r.id
+            ORDER BY au.usage_date DESC, au.start_time DESC
+        `;
+        const { rows } = await db.query(query);
+        const formatTime = (dateString) => dateString ? new Date(dateString).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : null;
+        res.json(rows.map(u => ({
+            id: u.id, apartmentId: u.apartment_id, amenity: u.amenity, usageDate: u.usage_date,
+            startTime: formatTime(u.start_time), endTime: formatTime(u.end_time),
+            bookingCode: u.booking_code, status: u.status, residentId: u.resident_id, residentName: u.resident_name,
+        })));
+    } catch (err) {
+        console.error('Get amenity usage error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+const AMENITY_CODE_MAP = {
+  GOLF_3D: 'GOLF3D', HORSE_RIDING: 'NGUA', MUSEUM: 'BAOTANG', ZEN_GARDEN: 'VUONZEN',
+  SAUNA: 'XONGHOI', ARCHERY: 'BANCUNG', GYM: 'GYM', YOGA: 'YOGA',
+};
+const generateBookingCode = (amenity) => `BK-${AMENITY_CODE_MAP[amenity] || 'TIENICH'}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+
+app.post('/api/amenity-usage', authenticateToken, async (req, res) => {
+    try {
+        const { apartmentId, residentId, amenity, usageDate, startTime, endTime } = req.body;
+        if (!apartmentId || !amenity || !usageDate || !startTime || !endTime) return res.status(400).json({ message: 'Vui lòng cung cấp đầy đủ thông tin đặt lịch.' });
+
+        const startTimestamp = `${usageDate}T${startTime}`;
+        const endTimestamp = `${usageDate}T${endTime}`;
+        
+        if (amenity === 'GOLF_3D') {
+            const { rows } = await db.query(
+                `SELECT COUNT(*) FROM amenity_usage WHERE amenity = 'GOLF_3D' AND usage_date = $1 AND status != 'CANCELLED' AND start_time < $2 AND end_time > $3`,
+                [usageDate, endTimestamp, startTimestamp]
+            );
+            if (parseInt(rows[0].count, 10) >= 4) return res.status(409).json({ message: 'Đã hết máy Golf 3D trong khoảng thời gian này. Vui lòng chọn giờ khác.' });
+        }
+
+        const newId = `amenity_${generateRandomId()}`;
+        const bookingCode = generateBookingCode(amenity);
+        
+        const { rows } = await db.query(
+            `INSERT INTO amenity_usage (id, apartment_id, resident_id, amenity, usage_date, start_time, end_time, booking_code, status) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'PENDING') RETURNING *`,
+            [newId, apartmentId, residentId || null, amenity, usageDate, startTimestamp, endTimestamp, bookingCode]
+        );
+        const newUsage = rows[0];
+
+        let residentName = null;
+        if (newUsage.resident_id) {
+            const resResult = await db.query('SELECT name FROM residents WHERE id = $1', [newUsage.resident_id]);
+            if (resResult.rows.length > 0) residentName = resResult.rows[0].name;
+        }
+
+        const formatTime = (dateString) => dateString ? new Date(dateString).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : null;
+        
+        res.status(201).json({
+            id: newUsage.id, apartmentId: newUsage.apartment_id, residentId: newUsage.resident_id, residentName,
+            amenity: newUsage.amenity, usageDate: newUsage.usage_date, startTime: formatTime(newUsage.start_time),
+            endTime: formatTime(newUsage.end_time), bookingCode: newUsage.booking_code, status: newUsage.status,
+        });
+    } catch (err) {
+        console.error('Add amenity usage error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.put('/api/amenity-usage/:id/status', [authenticateToken, isManagerOrAdmin], async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+        if (!['PENDING', 'USED', 'CANCELLED'].includes(status)) return res.status(400).json({ message: 'Invalid status value.' });
+
+        const { rows } = await db.query('UPDATE amenity_usage SET status = $1 WHERE id = $2 RETURNING *', [status, id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Booking not found.' });
+        
+        const updatedUsage = rows[0];
+        let residentName = null;
+        if (updatedUsage.resident_id) {
+            const resResult = await db.query('SELECT name FROM residents WHERE id = $1', [updatedUsage.resident_id]);
+            if (resResult.rows.length > 0) residentName = resResult.rows[0].name;
+        }
+        const formatTime = (dateString) => dateString ? new Date(dateString).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : null;
+
+        res.json({
+            id: updatedUsage.id, apartmentId: updatedUsage.apartment_id, residentId: updatedUsage.resident_id, residentName,
+            amenity: updatedUsage.amenity, usageDate: updatedUsage.usage_date, startTime: formatTime(updatedUsage.start_time),
+            endTime: formatTime(updatedUsage.end_time), bookingCode: updatedUsage.booking_code, status: updatedUsage.status,
+        });
+    } catch (err) {
+        console.error('Update amenity usage status error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+const formatUtilityRecord = row => ({
+    id: row.id, apartmentId: row.apartment_id, month: row.month, year: row.year,
+    electricity: { oldReading: parseFloat(row.electricity_old_reading), newReading: parseFloat(row.electricity_new_reading), consumption: parseFloat(row.electricity_new_reading) - parseFloat(row.electricity_old_reading), cost: parseFloat(row.electricity_cost) },
+    water: { oldReading: parseFloat(row.water_old_reading), newReading: parseFloat(row.water_new_reading), consumption: parseFloat(row.water_new_reading) - parseFloat(row.water_old_reading), cost: parseFloat(row.water_cost) }
+});
+
+app.get('/api/utility-records', authenticateToken, async (req, res) => {
+    try {
+        const { rows } = await db.query('SELECT * FROM utility_records ORDER BY year DESC, month DESC');
+        res.json(rows.map(formatUtilityRecord));
+    } catch (err) {
+        console.error('Get utility records error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.get('/api/utility-records/apartment/:apartmentId', authenticateToken, async (req, res) => {
+    const { apartmentId } = req.params;
+    try {
+        const { rows } = await db.query('SELECT * FROM utility_records WHERE apartment_id = $1 ORDER BY year DESC, month DESC', [apartmentId]);
+        res.json(rows.map(formatUtilityRecord));
+    } catch (err) {
+        console.error(`Get utility records for apartment ${apartmentId} error:`, err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.post('/api/utility-records', [authenticateToken, isAdmin], async (req, res) => {
+    const { apartmentId, month, year, newElectricityReading, newWaterReading } = req.body;
+    try {
+        const apartmentRes = await db.query('SELECT electricity_type FROM apartments WHERE id = $1', [apartmentId]);
+        if (apartmentRes.rows.length === 0) return res.status(404).json({ message: 'Apartment not found.' });
+        const apartment = apartmentRes.rows[0];
+
+        const latestRecordRes = await db.query('SELECT * FROM utility_records WHERE apartment_id = $1 ORDER BY year DESC, month DESC LIMIT 1', [apartmentId]);
+        const oldElectricityReading = latestRecordRes.rows[0]?.electricity_new_reading ?? 0;
+        const oldWaterReading = latestRecordRes.rows[0]?.water_new_reading ?? 0;
+
+        const electricityConsumption = newElectricityReading - oldElectricityReading;
+        const waterConsumption = newWaterReading - oldWaterReading;
+
+        const electricityCost = apartment.electricity_type === 'BUSINESS' ? calculateBusinessElectricityCost(electricityConsumption) : calculateResidentialElectricityCost(electricityConsumption);
+        const waterCost = calculateWaterCost(waterConsumption);
+
+        const newId = `util_${generateRandomId()}`;
+        const { rows } = await db.query(
+            `INSERT INTO utility_records (id, apartment_id, "month", "year", electricity_old_reading, electricity_new_reading, water_old_reading, water_new_reading, electricity_cost, water_cost) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,
+            [newId, apartmentId, month, year, oldElectricityReading, newElectricityReading, oldWaterReading, newWaterReading, electricityCost, waterCost]
+        );
+        res.status(201).json(formatUtilityRecord(rows[0]));
+    } catch (err) {
+        console.error('Add utility record error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+// --- NEW RESIDENT ACCOUNT ROUTES ---
+
+app.get('/api/resident-accounts', [authenticateToken, isManagerOrAdmin], async (req, res) => {
+    try {
+        const { rows } = await db.query(
+            `SELECT r.id, r.name, r.phone_number FROM residents r
+             JOIN resident_accounts ra ON r.id = ra.resident_id
+             WHERE r.phone_number IS NOT NULL AND r.is_active = TRUE
+             ORDER BY r.name`
+        );
+        res.json(rows.map(r => ({ id: r.id, name: r.name, phoneNumber: r.phone_number })));
+    } catch (err) {
+        console.error('Get resident accounts error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.post('/api/resident-accounts/sync', [authenticateToken, isAdmin], async (req, res) => {
+    try {
+        const passwordHash = await bcrypt.hash('Abc@12345', SALT_ROUNDS);
+        const query = `INSERT INTO resident_accounts (resident_id, password_hash) SELECT id, $1 FROM residents WHERE phone_number IS NOT NULL AND phone_number <> '' ON CONFLICT (resident_id) DO NOTHING;`;
+        const result = await db.query(query, [passwordHash]);
+        res.status(200).json({ message: result.rowCount > 0 ? `Đồng bộ thành công. Đã tạo ${result.rowCount} tài khoản mới.` : 'Không có tài khoản mới nào cần tạo. Tất cả đã được đồng bộ.' });
+    } catch (err) {
+        console.error('Sync resident accounts error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ khi đồng bộ tài khoản.' });
+    }
+});
+
+app.post('/api/resident-accounts/:residentId/reset-password', [authenticateToken, isManagerOrAdmin], async (req, res) => {
+    try {
+        const { residentId } = req.params;
+        const passwordHash = await bcrypt.hash('Abc@12345', SALT_ROUNDS);
+        const { rowCount } = await db.query('UPDATE resident_accounts SET password_hash = $1 WHERE resident_id = $2', [passwordHash, residentId]);
+        if (rowCount === 0) return res.status(404).json({ message: 'Không tìm thấy tài khoản cư dân.' });
+        res.status(200).json({ message: 'Mật khẩu đã được reset về mặc định.' });
+    } catch (err) {
+        console.error('Reset resident password error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.post('/api/resident-portal/login', async (req, res) => {
+    try {
+        const { phoneNumber, password } = req.body;
+        if (!phoneNumber?.trim() || !password) return res.status(400).json({ message: 'Vui lòng nhập đầy đủ số điện thoại và mật khẩu.' });
+
+        const resResult = await db.query('SELECT * FROM residents WHERE phone_number = $1', [phoneNumber.trim()]);
+        if (resResult.rowCount === 0) return res.status(401).json({ message: 'Số điện thoại hoặc mật khẩu không chính xác.' });
+        
+        const resident = resResult.rows[0];
+        if (!resident.is_active) return res.status(403).json({ message: 'Tài khoản của bạn đã bị ngừng kích hoạt. Vui lòng liên hệ quản lý.' });
+
+        const accResult = await db.query('SELECT * FROM resident_accounts WHERE resident_id = $1', [resident.id]);
+        if (accResult.rowCount === 0) return res.status(401).json({ message: 'Số điện thoại hoặc mật khẩu không chính xác.' });
+
+        const isMatch = await bcrypt.compare(password, accResult.rows[0].password_hash);
+        if (!isMatch) return res.status(401).json({ message: 'Số điện thoại hoặc mật khẩu không chính xác.' });
+
+        const occResult = await db.query('SELECT apartment_id FROM occupancies WHERE resident_id = $1', [resident.id]);
+        if (occResult.rowCount === 0) return res.status(403).json({ message: 'Bạn chưa được gán vào căn hộ nào.' });
+        
+        const aptResult = await db.query('SELECT id, code FROM apartments WHERE id = ANY($1::varchar[]) ORDER BY code', [occResult.rows.map(o => o.apartment_id)]);
+
+        const residentPayload = { id: resident.id, name: resident.name, type: 'resident' };
+        const token = jwt.sign(residentPayload, JWT_RESIDENT_SECRET, { expiresIn: '7d' });
+        res.cookie(TOKEN_COOKIE_NAME, token, { ...COOKIE_OPTIONS, maxAge: 7 * 24 * 60 * 60 * 1000 });
+        
+        res.json({ resident: { id: resident.id, name: resident.name }, apartments: aptResult.rows });
+    } catch (err) {
+        console.error('Resident portal login error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.put('/api/resident-portal/change-password/:residentId', authenticateToken, async (req, res) => {
+    try {
+        const { residentId } = req.params;
+        const { currentPassword, newPassword } = req.body;
+        if (!req.resident || residentId !== req.resident.id) return res.status(403).json({ message: 'Hành động không được phép.' });
+
+        const accResult = await db.query('SELECT * FROM resident_accounts WHERE resident_id = $1', [residentId]);
+        if (accResult.rowCount === 0) return res.status(404).json({ message: 'Không tìm thấy tài khoản.' });
+
+        const isMatch = await bcrypt.compare(currentPassword, accResult.rows[0].password_hash);
+        if (!isMatch) return res.status(403).json({ message: 'Mật khẩu hiện tại không chính xác.' });
+
+        const newPasswordHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+        await db.query('UPDATE resident_accounts SET password_hash = $1 WHERE resident_id = $2', [newPasswordHash, residentId]);
+        res.status(200).json({ message: 'Đổi mật khẩu thành công.' });
+    } catch (err) {
+        console.error('Change resident password error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+// --- FEEDBACK ROUTES (UPDATED FOR FILE STORAGE) ---
+
+// Helper to save base64 image and return filename
+const saveBase64Image = (base64String, feedbackId, index, type) => {
+    const matches = base64String.match(/^data:(.+);base64,(.+)$/);
+    if (!matches || matches.length !== 3) {
+        throw new Error('Invalid base64 string');
+    }
+    const mimeType = matches[1];
+    const data = matches[2];
+    const extension = mimeType.split('/')[1] || 'png';
+    
+    // Format: feedback_xxxxx-pic01.png or feedback_xxxxx-res01.png
+    const filename = `${feedbackId}-${type}${String(index + 1).padStart(2, '0')}.${extension}`;
+    const buffer = Buffer.from(data, 'base64');
+    
+    fs.writeFileSync(path.join(feedbackPictureDir, filename), buffer);
+    return filename;
+};
+
+const formatFeedback = row => ({
+    id: row.id,
+    residentId: row.resident_id,
+    residentName: row.resident_name,
+    apartmentId: row.apartment_id,
+    apartmentCode: row.apartment_code,
+    content: row.content,
+    imageData: (row.image_data || []).filter(Boolean),
+    status: row.status,
+    submittedAt: row.submitted_at,
+    adminResponseContent: row.admin_response_content,
+    adminResponseImageData: (row.admin_response_image_data || []).filter(Boolean),
+    resolvedByUsername: row.resolved_by_username,
+    resolvedAt: row.resolved_at,
+});
+
+app.get('/api/feedback', [authenticateToken, isManagerOrAdmin], async (req, res) => {
+    try {
+        const query = `
+            SELECT fb.*, r.name as resident_name, a.code as apartment_code, u.username as resolved_by_username
+            FROM resident_feedback fb JOIN residents r ON fb.resident_id = r.id JOIN apartments a ON fb.apartment_id = a.id
+            LEFT JOIN users u ON fb.resolved_by_user_id = u.id ORDER BY fb.submitted_at DESC
+        `;
+        const { rows } = await db.query(query);
+        res.json(rows.map(formatFeedback));
+    } catch (err) {
+        console.error('Get all feedback error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.get('/api/feedback/apartment/:apartmentId', authenticateToken, async (req, res) => {
+    try {
+        const { apartmentId } = req.params;
+        const { rows } = await db.query('SELECT * FROM resident_feedback WHERE apartment_id = $1 ORDER BY submitted_at DESC', [apartmentId]);
+        res.json(rows.map(formatFeedback));
+    } catch (err) {
+        console.error('Get apartment feedback error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ' });
+    }
+});
+
+app.post('/api/feedback', authenticateToken, async (req, res) => {
+    try {
+        const { residentId, apartmentId, content, imageData } = req.body;
+        if (!residentId || !apartmentId || !content || (req.resident && residentId !== req.resident.id)) return res.status(400).json({ message: 'Thông tin không hợp lệ.' });
+        
+        const newId = `feedback_${generateRandomId()}`;
+        
+        let imageFilenames = [];
+        if (imageData && Array.isArray(imageData)) {
+            imageFilenames = imageData.map((base64Str, index) => 
+                saveBase64Image(base64Str, newId, index, 'pic')
+            );
+        }
+
+        const { rows } = await db.query(
+            'INSERT INTO resident_feedback (id, resident_id, apartment_id, content, image_data) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [newId, residentId, apartmentId, content, imageFilenames]
+        );
+        res.status(201).json(formatFeedback(rows[0]));
+    } catch (err) {
+        console.error('Add feedback error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ khi gửi phản ánh.' });
+    }
+});
+
+app.put('/api/feedback/:id/resolve', [authenticateToken, isManagerOrAdmin], async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { adminResponseContent, adminResponseImageData } = req.body;
+        if (!adminResponseContent || !req.user) return res.status(400).json({ message: 'Nội dung phản hồi và ID người dùng là bắt buộc.' });
+        
+        let responseImageFilenames = [];
+        if (adminResponseImageData && Array.isArray(adminResponseImageData)) {
+            responseImageFilenames = adminResponseImageData.map((base64Str, index) => 
+                saveBase64Image(base64Str, id, index, 'res')
+            );
+        }
+
+        const query = `
+            UPDATE resident_feedback SET status = 'RESOLVED', admin_response_content = $1, admin_response_image_data = $2, resolved_by_user_id = $3, resolved_at = NOW()
+            WHERE id = $4 RETURNING *
+        `;
+        const result = await db.query(query, [adminResponseContent, responseImageFilenames, req.user.id, id]);
+        if (result.rowCount === 0) return res.status(404).json({ message: 'Không tìm thấy phản ánh.' });
+
+        const fullDetailQuery = `
+            SELECT fb.*, r.name as resident_name, a.code as apartment_code, u.username as resolved_by_username
+            FROM resident_feedback fb JOIN residents r ON fb.resident_id = r.id JOIN apartments a ON fb.apartment_id = a.id
+            LEFT JOIN users u ON fb.resolved_by_user_id = u.id WHERE fb.id = $1
+        `;
+        const { rows } = await db.query(fullDetailQuery, [id]);
+        res.json(formatFeedback(rows[0]));
+    } catch (err) {
+        console.error('Resolve feedback error:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ khi xử lý phản ánh.' });
+    }
+});
+
+app.listen(port, () => {
+    loadPricingConfig();
+    console.log(`Backend server is running on http://localhost:${port}`);
+    createDefaultAdmin();
+});

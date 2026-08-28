@@ -1,0 +1,293 @@
+import React, { useState } from 'react';
+import Modal from './ui/Modal';
+import type { Resident } from '../types';
+import { DocumentTextIcon } from './icons';
+
+interface AddResidentModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onAddResident: (resident: Omit<Resident, 'id'>) => void;
+}
+
+const AddResidentModal: React.FC<AddResidentModalProps> = ({ isOpen, onClose, onAddResident }) => {
+  const [name, setName] = useState('');
+  const [dob, setDob] = useState('');
+  const [idNumber, setIdNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [zaloId, setZaloId] = useState('');
+  const [email, setEmail] = useState('');
+  const [relationshipStatus, setRelationshipStatus] = useState<'OWNER' | 'FAMILY' | 'TENANT'>(
+    'FAMILY'
+  );
+  const [canUseAmenities, setCanUseAmenities] = useState(true);
+
+  // E-Invoice information
+  const [companyName, setCompanyName] = useState('');
+  const [buyerName, setBuyerName] = useState('');
+  const [taxCode, setTaxCode] = useState('');
+  const [invoiceAddress, setInvoiceAddress] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (name && dob && idNumber) {
+      onAddResident({
+        name,
+        dob,
+        idNumber,
+        zaloId,
+        phoneNumber,
+        isActive: true,
+        email,
+        relationshipStatus,
+        canUseAmenities,
+        companyName: companyName.trim() || undefined,
+        buyerName: buyerName.trim() || undefined,
+        taxCode: taxCode.trim() || undefined,
+        invoiceAddress: invoiceAddress.trim() || undefined,
+      });
+      onClose();
+      setName('');
+      setDob('');
+      setIdNumber('');
+      setPhoneNumber('');
+      setZaloId('');
+      setEmail('');
+      setRelationshipStatus('FAMILY');
+      setCanUseAmenities(true);
+      setCompanyName('');
+      setBuyerName('');
+      setTaxCode('');
+      setInvoiceAddress('');
+    }
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title="Thêm Cư Dân Mới">
+      <form onSubmit={handleSubmit} className="space-y-4 max-h-[80vh] overflow-y-auto pr-1">
+        <div>
+          <label
+            htmlFor="name"
+            className="block text-xs font-semibold text-ink-soft mb-1"
+          >
+            Họ và Tên <span className="text-brand-danger">*</span>
+          </label>
+          <input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="mt-1 block w-full px-3 py-2 rounded-lg border border-brand-border bg-surface-alt text-sm text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+            required
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="dob"
+            className="block text-xs font-semibold text-ink-soft mb-1"
+          >
+            Ngày Sinh <span className="text-brand-danger">*</span>
+          </label>
+          <input
+            type="date"
+            id="dob"
+            value={dob}
+            onChange={(e) => setDob(e.target.value)}
+            className="mt-1 block w-full px-3 py-2 rounded-lg border border-brand-border bg-surface-alt text-sm text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+            required
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="idNumber"
+            className="block text-xs font-semibold text-ink-soft mb-1"
+          >
+            Số CCCD/Passport <span className="text-brand-danger">*</span>
+          </label>
+          <input
+            type="text"
+            id="idNumber"
+            value={idNumber}
+            onChange={(e) => setIdNumber(e.target.value)}
+            className="mt-1 block w-full px-3 py-2 rounded-lg border border-brand-border bg-surface-alt text-sm text-ink font-mono tabular-nums placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+            required
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="phoneNumber"
+            className="block text-xs font-semibold text-ink-soft mb-1"
+          >
+            Số Điện Thoại (Tùy chọn)
+          </label>
+          <input
+            type="tel"
+            id="phoneNumber"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            className="mt-1 block w-full px-3 py-2 rounded-lg border border-brand-border bg-surface-alt text-sm text-ink font-mono tabular-nums placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="zaloId"
+            className="block text-xs font-semibold text-ink-soft mb-1"
+          >
+            Zalo ID (Tùy chọn)
+          </label>
+          <input
+            type="text"
+            id="zaloId"
+            value={zaloId}
+            onChange={(e) => setZaloId(e.target.value)}
+            className="mt-1 block w-full px-3 py-2 rounded-lg border border-brand-border bg-surface-alt text-sm text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-xs font-semibold text-ink-soft mb-1"
+          >
+            Email (Tùy chọn)
+          </label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="mt-1 block w-full px-3 py-2 rounded-lg border border-brand-border bg-surface-alt text-sm text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="relationshipStatus"
+            className="block text-xs font-semibold text-ink-soft mb-1"
+          >
+            Trạng thái quan hệ
+          </label>
+          <select
+            id="relationshipStatus"
+            value={relationshipStatus}
+            onChange={(e) => setRelationshipStatus(e.target.value as 'OWNER' | 'FAMILY' | 'TENANT')}
+            className="mt-1 block w-full px-3 py-2 rounded-lg border border-brand-border bg-surface-alt text-sm text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+          >
+            <option value="FAMILY">Thành viên gia đình</option>
+            <option value="OWNER">Chủ sở hữu (Dùng xuất hóa đơn)</option>
+            <option value="TENANT">Khách thuê</option>
+          </select>
+        </div>
+
+        {/* ── Thông tin Xuất Hóa Đơn Điện Tử (VNPT) ── */}
+        <div className="bg-accent-soft/60 p-4 rounded-xl border border-accent/40 space-y-3 mt-4">
+          <div className="flex items-center gap-2 text-accent-ink font-bold text-sm">
+            <DocumentTextIcon className="w-4 h-4 text-accent" />
+            <span>Thông Tin Xuất Hóa Đơn Điện Tử (HĐĐT)</span>
+          </div>
+          <p className="text-[11px] text-ink-soft">
+            Thông tin này sẽ được tự động điền khi xuất hóa đơn Điện Nước & Hóa Đơn Tổng Hợp cho căn hộ của cư dân này.
+          </p>
+
+          <div>
+            <label
+              htmlFor="add-companyName"
+              className="block text-xs font-semibold text-ink-soft mb-1"
+            >
+              Tên Công Ty / Đơn Vị (Company's name)
+            </label>
+            <input
+              type="text"
+              id="add-companyName"
+              placeholder="VD: CÔNG TY TNHH ABC (để trống nếu là cá nhân)"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              className="block w-full px-3 py-2 text-xs rounded-lg border border-brand-border bg-surface-alt text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="add-buyerName"
+              className="block text-xs font-semibold text-ink-soft mb-1"
+            >
+              Họ Tên Người Mua Hàng (Buyer)
+            </label>
+            <input
+              type="text"
+              id="add-buyerName"
+              placeholder={name || 'Họ tên người đại diện mua hàng'}
+              value={buyerName}
+              onChange={(e) => setBuyerName(e.target.value)}
+              className="block w-full px-3 py-2 text-xs rounded-lg border border-brand-border bg-surface-alt text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="add-taxCode"
+              className="block text-xs font-semibold text-ink-soft mb-1"
+            >
+              Mã Số Thuế (Tax Code)
+            </label>
+            <input
+              type="text"
+              id="add-taxCode"
+              placeholder="VD: 0309613403 hoặc MST cá nhân"
+              value={taxCode}
+              onChange={(e) => setTaxCode(e.target.value)}
+              className="block w-full px-3 py-2 text-xs rounded-lg border border-brand-border bg-surface-alt text-ink font-mono tabular-nums placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="add-invoiceAddress"
+              className="block text-xs font-semibold text-ink-soft mb-1"
+            >
+              Địa Chỉ Xuất Hóa Đơn (Address)
+            </label>
+            <textarea
+              id="add-invoiceAddress"
+              rows={2}
+              placeholder="VD: Tổ dân phố 1, đường Nguyễn Đình Chiểu, P. Tân Lợi, TP. Buôn Ma Thuột, Đắk Lắk"
+              value={invoiceAddress}
+              onChange={(e) => setInvoiceAddress(e.target.value)}
+              className="block w-full px-3 py-2 text-xs rounded-lg border border-brand-border bg-surface-alt text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center pt-2">
+          <input
+            id="can-use-amenities"
+            type="checkbox"
+            checked={canUseAmenities}
+            onChange={(e) => setCanUseAmenities(e.target.checked)}
+            className="h-4 w-4 rounded border-brand-border accent-accent"
+          />
+          <label
+            htmlFor="can-use-amenities"
+            className="ml-2 block text-sm text-ink"
+          >
+            Cho phép sử dụng tiện ích
+          </label>
+        </div>
+        <div className="flex justify-end gap-2 pt-4 border-t border-brand-border">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 rounded-lg bg-surface border border-brand-border text-ink hover:bg-surface-alt transition-colors text-sm font-medium"
+          >
+            Hủy
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover text-white text-sm font-semibold transition-colors"
+          >
+            Thêm
+          </button>
+        </div>
+      </form>
+    </Modal>
+  );
+};
+
+export default AddResidentModal;
