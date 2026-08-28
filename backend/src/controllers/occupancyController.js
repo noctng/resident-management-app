@@ -1,45 +1,34 @@
-const prisma = require('../config/prisma');
+const svc = require('../services/occupancyService');
 
+// GET /api/occupancies — List all occupancies
 exports.getAllOccupancies = async (req, res) => {
-    try {
-        const occupancies = await prisma.occupancies.findMany();
-        res.json(
-            occupancies.map((o) => ({ apartmentId: o.apartment_id, residentId: o.resident_id }))
-        );
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Lỗi máy chủ' });
-    }
+  try {
+    const result = await svc.getOccupancies();
+    res.json(result);
+  } catch (err) {
+    const status = err.status || 500;
+    res.status(status).json({ message: err.message || 'Lỗi máy chủ' });
+  }
 };
 
+// POST /api/occupancies — Create an occupancy
 exports.addOccupancy = async (req, res) => {
-    try {
-        await prisma.occupancies.create({
-            data: {
-                apartment_id: req.body.apartmentId,
-                resident_id: req.body.residentId,
-            },
-        });
-        res.status(201).json(req.body);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Lỗi máy chủ' });
-    }
+  try {
+    await svc.addOccupancy(req.body);
+    res.status(201).json(req.body);
+  } catch (err) {
+    const status = err.status || 500;
+    res.status(status).json({ message: err.message || 'Lỗi máy chủ' });
+  }
 };
 
+// DELETE /api/occupancies/:apartmentId/:residentId — Remove an occupancy
 exports.removeOccupancy = async (req, res) => {
-    try {
-        await prisma.occupancies.delete({
-            where: {
-                apartment_id_resident_id: {
-                    apartment_id: req.params.apartmentId,
-                    resident_id: req.params.residentId,
-                },
-            },
-        });
-        res.status(204).send();
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Lỗi máy chủ' });
-    }
+  try {
+    await svc.removeOccupancy(req.params.apartmentId, req.params.residentId);
+    res.status(204).send();
+  } catch (err) {
+    const status = err.status || 500;
+    res.status(status).json({ message: err.message || 'Lỗi máy chủ' });
+  }
 };
