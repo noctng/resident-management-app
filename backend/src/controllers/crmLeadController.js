@@ -1,60 +1,14 @@
-const prisma = require('../config/prisma');
-const { logActivity } = require('../utils/logger');
+const svc = require('../services/crmLeadService');
+const prisma = require('../config/prisma'); // CHỈ dùng cho convertLead (cross-module, GIỮ NGUYÊN per task)
 const crypto = require('crypto');
 
 /**
- * 1. Get All Leads with filters
+ * 1. Get All Leads with filters (route → service → repo)
  */
 exports.getLeads = async (req, res) => {
   try {
-    const { phase, status, search, lead_score } = req.query;
-
-    const where = {};
-    if (phase && phase !== 'ALL') where.phase_interest = phase;
-    if (status && status !== 'ALL') where.status = status;
-    if (lead_score && lead_score !== 'ALL') where.lead_score = lead_score;
-    if (search) {
-      where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { phone_number: { contains: search } },
-        { email: { contains: search, mode: 'insensitive' } },
-      ];
-    }
-
-    const leads = await prisma.crm_leads.findMany({
-      where,
-      orderBy: { created_at: 'desc' },
-      include: {
-        crm_opportunities: true,
-      },
-    });
-
-    // Group leads by stage for Kanban
-    const stages = {
-      NEW: [],
-      CONTACTED: [],
-      INTERESTED: [],
-      SITE_VISIT: [],
-      QUALIFIED: [],
-      LOST: [],
-      CONVERTED: [],
-    };
-
-    leads.forEach((l) => {
-      const st = l.status || 'NEW';
-      if (stages[st]) {
-        stages[st].push(l);
-      } else {
-        stages.NEW.push(l);
-      }
-    });
-
-    res.json({
-      success: true,
-      leads,
-      stages,
-      totalCount: leads.length,
-    });
+    const result = await svc.getLeads(req.query);
+    res.json({ success: true, ...result });
   } catch (err) {
     console.error('Lỗi lấy danh sách leads:', err);
     res.status(500).json({ success: false, message: err.message });
@@ -66,54 +20,16 @@ exports.getLeads = async (req, res) => {
  */
 exports.createLead = async (req, res) => {
   try {
-    const {
-      name,
-      phone_number,
-      email,
-      source = 'WALK_IN',
-      phase_interest = 'TESLA',
-      budget_range,
-      lead_score = 'WARM',
-      assigned_to,
-      notes,
-    } = req.body;
-
-    if (!name || !phone_number) {
-      return res.status(400).json({ success: false, message: 'Tên và số điện thoại là bắt buộc' });
-    }
-
-    const id = 'lead_' + crypto.randomBytes(6).toString('hex');
-    const newLead = await prisma.crm_leads.create({
-      data: {
-        id,
-        name,
-        phone_number,
-        email,
-        source,
-        phase_interest,
-        budget_range,
-        lead_score,
-        assigned_to: assigned_to || req.user?.name || 'Admin',
-        notes,
-        status: 'NEW',
-      },
-    });
-
-    await logActivity(
-      req.user,
-      'TẠO_LEAD_CRM',
-      'LEAD',
-      id,
-      name,
-      `Tạo lead mới quan tâm phân khu ${phase_interest} nguồn ${source}`
-    );
-
+    const newLead = await svc.createLead(req.body, req.user);
     res.status(201).json({
       success: true,
       message: 'Tạo khách hàng tiềm năng thành công',
       lead: newLead,
     });
   } catch (err) {
+    if (err.status) {
+      return res.status(err.status).json({ success: false, message: err.message });
+    }
     console.error('Lỗi tạo lead:', err);
     res.status(500).json({ success: false, message: err.message });
   }
@@ -124,38 +40,7 @@ exports.createLead = async (req, res) => {
  */
 exports.updateLead = async (req, res) => {
   try {
-    const { id } = req.params;
-    const {
-      name,
-      phone_number,
-      email,
-      source,
-      phase_interest,
-      budget_range,
-      status,
-      lead_score,
-      assigned_to,
-      notes,
-    } = req.body;
-
-    const updated = await prisma.crm_leads.update({
-      where: { id },
-      data: {
-        ...(name && { name }),
-        ...(phone_number && { phone_number }),
-        ...(email !== undefined && { email }),
-        ...(source && { source }),
-        ...(phase_interest && { phase_interest }),
-        ...(budget_range !== undefined && { budget_range }),
-        ...(status && { status }),
-        ...(lead_score && { lead_score }),
-        ...(assigned_to !== undefined && { assigned_to }),
-        ...(notes !== undefined && { notes }),
-        last_contact_at: new Date(),
-        updated_at: new Date(),
-      },
-    });
-
+    const updated = await svc.updateLead(req.params.id, req.body);
     res.json({
       success: true,
       message: 'Cập nhật lead thành công',
@@ -168,7 +53,27 @@ exports.updateLead = async (req, res) => {
 };
 
 /**
- * 4. Convert Lead to Opportunity / Customer
+ * 4. Delete Lead
+ */
+exports.deleteLead = async (req, res) => {
+  try {
+    await svc.deleteLead(req.params.id);
+    res.json({ success: true, message: 'Đã xóa lead thành công' });
+  } catch (err) {
+    console.error('Lỗi xóa lead:', err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+/**
+ * 5. Convert Lead to Opportunity / Customer
+ * ---------------------------------------------------------------------------
+ * GIỮ NGUYÊN trong controller (KHÔNG chuyển sang service) vì là handler
+ * CROSS-MODULE: chạm đồng thời 3 model (crm_leads + customers + crm_opportunities)
+ * và tạo nhiều bản ghi liên đới. Theo REFACTOR-GUIDE §6 + convention module
+ * `contract` (giữ $transaction cross-module ở controller), handler phức tạp
+ * cross-module được phép giữ lại ở controller. Controller vẫn import `prisma`
+ * DUY NHẤT cho handler này (xem báo cáo grep).
  */
 exports.convertLead = async (req, res) => {
   try {
@@ -227,20 +132,6 @@ exports.convertLead = async (req, res) => {
     });
   } catch (err) {
     console.error('Lỗi chuyển đổi lead:', err);
-    res.status(500).json({ success: false, message: err.message });
-  }
-};
-
-/**
- * 5. Delete Lead
- */
-exports.deleteLead = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await prisma.crm_leads.delete({ where: { id } });
-    res.json({ success: true, message: 'Đã xóa lead thành công' });
-  } catch (err) {
-    console.error('Lỗi xóa lead:', err);
     res.status(500).json({ success: false, message: err.message });
   }
 };
