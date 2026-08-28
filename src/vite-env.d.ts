@@ -1,6 +1,6 @@
-// Fix: Add explicit type definitions for import.meta.env to resolve TypeScript errors.
-// This ensures that TypeScript recognizes `import.meta.env`.
-// API calls now use relative paths proxied by Vite, so VITE_API_URL is no longer needed.
+/// <reference types="vite/client" />
+
+// Augment ImportMetaEnv với biến môi trường dự án (giữ nguyên từ bản cũ).
 interface ImportMetaEnv {
   readonly VITE_API_BASE_URL?: string;
 }
