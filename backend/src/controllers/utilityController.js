@@ -11,80 +11,44 @@ const { sendEmail } = require('../services/emailService');
 const { logActivity } = require('../utils/logger');
 const { getRenderedContent } = require('../services/templateService');
 const { generateQRCodeURL, formatUtilityTransferContent } = require('../services/vietQRService');
+const svc = require('../services/utilityService');
 
-// --- Helper: normalize pricing snapshot for backward compatibility ---
-// Old snapshots may lack 'vat' field or use different water format
-const normalizePricingSnapshot = (snapshot, currentConfig) => {
-    if (!snapshot) return currentConfig;
-    return {
-        ...snapshot,
-        vat: snapshot.vat || currentConfig.vat || { electricity: 8, water: 5 },
-        water: snapshot.water || currentConfig.water,
-        businessElectricity: snapshot.businessElectricity || currentConfig.businessElectricity,
-        residentialElectricity: snapshot.residentialElectricity || currentConfig.residentialElectricity,
-    };
-};
-
-// --- Helper formats ---
-const formatUtilityRecord = (r) => {
-    const elecCost = parseFloat(r.electricity_cost);
-    const waterCost = parseFloat(r.water_cost);
-    // Use pricing snapshot from record if available, otherwise fall back to current config
-    const rawConfig = r.pricing_snapshot || getPricingConfig();
-    const config = normalizePricingSnapshot(rawConfig, getPricingConfig());
-    const elecVatRate = (config.vat?.electricity || 0) / 100;
-    const waterVatRate = (config.vat?.water || 0) / 100;
-    // Reverse-calculate tax from tax-inclusive cost: baseCost = totalCost / (1 + vatRate), tax = totalCost - baseCost
-    const elecTax = Math.round(elecCost - elecCost / (1 + elecVatRate));
-    const waterTax = Math.round(waterCost - waterCost / (1 + waterVatRate));
-
-    return {
-        id: r.id,
-        apartmentId: r.apartment_id,
-        month: r.month,
-        year: r.year,
-        electricity: {
-            oldReading: parseFloat(r.electricity_old_reading),
-            newReading: parseFloat(r.electricity_new_reading),
-            consumption: parseFloat(r.electricity_new_reading) - parseFloat(r.electricity_old_reading),
-            cost: elecCost,
-            tax: elecTax,
-        },
-        water: {
-            oldReading: parseFloat(r.water_old_reading),
-            newReading: parseFloat(r.water_new_reading),
-            consumption: parseFloat(r.water_new_reading) - parseFloat(r.water_old_reading),
-            cost: waterCost,
-            tax: waterTax,
-        },
-        paymentStatus: r.payment_status || 'UNPAID',
-        paidDate: r.paid_date ? r.paid_date.toISOString().split('T')[0] : null,
-        emailSentAt: r.email_sent_at ? r.email_sent_at.toISOString() : null,
-        pricingSnapshot: r.pricing_snapshot || null,
-    };
-};
+// ─────────────────────────────────────────────────────────────────────────
+// CLEAN ARCHITECTURE — GHI CHÚ PHÂN TÁCH (utility module)
+// Đã chuyển sang service/repository (theo template vehicle):
+//   - getAllUtilityRecords        → svc.getAllUtilityRecords
+//   - getUtilityRecordsByApartment→ svc.getUtilityRecordsByApartment
+//   - recalculateUtilityCosts     → svc.recalculateUtilityCosts
+//   - formatUtilityRecord (DTO)   → svc.formatUtilityRecord (dùng lại bên dưới)
+//
+// GIỮ NGUYÊN trong controller (KHÔNG tách) để tuyệt đối bảo toàn behavior:
+//   - addUtilityRecord        : upload file (req.file) + fs tạo folder nginx + cross-model
+//                               apartments + tính tiền điện/nước (rủi ro đổi semantics).
+//   - analyzeMeterImage       : gọi AI vision external + parse JSON (side-effect ngoài).
+//   - getPricingConfig / updatePricingConfig / getPricingHistory : pricing config (file + history table).
+//   - sendBillNotification / sendBulkBillNotification / previewBillNotification : gửi email + template + logActivity.
+//   - generateBatchQRZip      : stream zip + fetch QR image.
+//   - updatePaymentStatus     : cập nhật + gửi notify thanh toán + logActivity (cross-module).
+// ─────────────────────────────────────────────────────────────────────────
 
 // --- Utility Records CRUD ---
 
+// GET /api/utility/utility-records — ủy quyền service/repository
 exports.getAllUtilityRecords = async (req, res) => {
     try {
-        const records = await prisma.utility_records.findMany({
-            orderBy: [{ year: 'desc' }, { month: 'desc' }],
-        });
-        res.json(records.map(formatUtilityRecord));
+        const records = await svc.getAllUtilityRecords();
+        res.json(records);
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Lỗi máy chủ' });
     }
 };
 
+// GET /api/utility/utility-records/apartment/:apartmentId — ủy quyền service/repository
 exports.getUtilityRecordsByApartment = async (req, res) => {
     try {
-        const records = await prisma.utility_records.findMany({
-            where: { apartment_id: req.params.apartmentId },
-            orderBy: [{ year: 'desc' }, { month: 'desc' }],
-        });
-        res.json(records.map(formatUtilityRecord));
+        const records = await svc.getUtilityRecordsByApartment(req.params.apartmentId);
+        res.json(records);
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Lỗi máy chủ' });
@@ -195,7 +159,7 @@ exports.addUtilityRecord = async (req, res) => {
             },
         });
 
-        res.status(201).json(formatUtilityRecord(newRecord));
+        res.status(201).json(svc.formatUtilityRecord(newRecord));
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Lỗi máy chủ' });
@@ -428,88 +392,11 @@ exports.getPricingHistory = async (req, res) => {
 
 // --- Recalculate utility costs for existing records ---
 // Only recalculates UNPAID records for the current month to protect historical data
+// Logic CRUD/cost đã chuyển sang svc.recalculateUtilityCosts (repository + pricing util).
 exports.recalculateUtilityCosts = async (req, res) => {
     try {
-        const now = new Date();
-        const currentMonth = now.getMonth() + 1;
-        const currentYear = now.getFullYear();
-
-        // Only find UNPAID records for the current month
-        const records = await prisma.utility_records.findMany({
-            where: {
-                month: currentMonth,
-                year: currentYear,
-                payment_status: 'UNPAID',
-            },
-            include: {
-                apartments: {
-                    select: { electricity_type: true },
-                },
-            },
-        });
-
-        let updatedCount = 0;
-        const results = [];
-        const currentPricing = getPricingConfig();
-
-        for (const record of records) {
-            const elecOld = parseFloat(record.electricity_old_reading);
-            const elecNew = parseFloat(record.electricity_new_reading);
-            const waterOld = parseFloat(record.water_old_reading);
-            const waterNew = parseFloat(record.water_new_reading);
-
-            const elecConsumption = elecNew - elecOld;
-            const waterConsumption = waterNew - waterOld;
-
-            // Skip if no consumption
-            if (elecConsumption <= 0 && waterConsumption <= 0) continue;
-
-            const electricityType = record.apartments?.electricity_type || 'RESIDENTIAL';
-
-            // Calculate costs using current pricing config
-            const newElecCost =
-                elecConsumption > 0
-                    ? electricityType === 'BUSINESS'
-                        ? calculateBusinessElectricityCost(elecConsumption)
-                        : calculateResidentialElectricityCost(elecConsumption)
-                    : 0;
-
-            const newWaterCost =
-                waterConsumption > 0 ? calculateWaterCost(waterConsumption, electricityType) : 0;
-
-            // Update if costs changed
-            if (
-                parseFloat(record.electricity_cost) !== newElecCost ||
-                parseFloat(record.water_cost) !== newWaterCost
-            ) {
-                await prisma.utility_records.update({
-                    where: { id: record.id },
-                    data: {
-                        electricity_cost: newElecCost,
-                        water_cost: newWaterCost,
-                        pricing_snapshot: currentPricing,
-                    },
-                });
-
-                updatedCount++;
-                results.push({
-                    id: record.id,
-                    apartment_id: record.apartment_id,
-                    month: record.month,
-                    year: record.year,
-                    old_elec_cost: parseFloat(record.electricity_cost),
-                    new_elec_cost: newElecCost,
-                    old_water_cost: parseFloat(record.water_cost),
-                    new_water_cost: newWaterCost,
-                });
-            }
-        }
-
-        res.json({
-            message: `Đã cập nhật ${updatedCount} bản ghi (chỉ kỳ ${currentMonth}/${currentYear} chưa thanh toán)`,
-            updatedCount,
-            details: results,
-        });
+        const result = await svc.recalculateUtilityCosts();
+        res.json(result);
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Lỗi máy chủ' });
@@ -1046,7 +933,7 @@ exports.updatePaymentStatus = async (req, res) => {
             }).catch(console.error);
         }
 
-        res.json(formatUtilityRecord(updatedRecord));
+        res.json(svc.formatUtilityRecord(updatedRecord));
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Lỗi cập nhật trạng thái thanh toán' });
