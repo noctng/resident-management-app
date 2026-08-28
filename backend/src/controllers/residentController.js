@@ -1,34 +1,15 @@
+const svc = require('../services/residentService');
 const prisma = require('../config/prisma');
 const bcrypt = require('bcrypt');
 const { generateRandomId } = require('../utils/helpers');
 
 const SALT_ROUNDS = 10;
 
-// --- Residents CRUD ---
+// --- Residents CRUD (thin controller: HTTP in/out only) ---
 
 exports.getAllResidents = async (req, res) => {
     try {
-        const residents = await prisma.residents.findMany({
-            orderBy: { name: 'asc' },
-        });
-        res.json(
-            residents.map((r) => ({
-                id: r.id,
-                name: r.name,
-                dob: r.dob,
-                idNumber: r.id_number,
-                zaloId: r.zalo_id,
-                phoneNumber: r.phone_number,
-                isActive: r.is_active,
-                email: r.email,
-                relationshipStatus: r.relationship_status,
-                canUseAmenities: r.can_use_amenities,
-                companyName: r.company_name,
-                buyerName: r.buyer_name,
-                taxCode: r.tax_code,
-                invoiceAddress: r.invoice_address,
-            }))
-        );
+        res.json(await svc.getAllResidents());
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Lỗi máy chủ' });
@@ -37,146 +18,20 @@ exports.getAllResidents = async (req, res) => {
 
 exports.createResident = async (req, res) => {
     try {
-        const {
-            name,
-            dob,
-            idNumber,
-            zaloId,
-            phoneNumber,
-            isActive,
-            email,
-            relationshipStatus,
-            canUseAmenities,
-            companyName,
-            buyerName,
-            taxCode,
-            invoiceAddress,
-        } = req.body;
-        const id = `res_${generateRandomId()}`;
-
-        const newResident = await prisma.residents.create({
-            data: {
-                id,
-                name,
-                dob: typeof dob === 'string' ? new Date(dob) : dob,
-                id_number: idNumber,
-                zalo_id: zaloId || null,
-                phone_number: phoneNumber || null,
-                is_active: isActive !== false,
-                email: email || null,
-                relationship_status: relationshipStatus || 'FAMILY',
-                can_use_amenities: canUseAmenities !== false,
-                company_name: companyName ? companyName.trim() : null,
-                buyer_name: buyerName ? buyerName.trim() : null,
-                tax_code: taxCode ? taxCode.trim() : null,
-                invoice_address: invoiceAddress ? invoiceAddress.trim() : null,
-            },
-        });
-
-        if (phoneNumber) {
-            const hash = await bcrypt.hash('Abc@12345', SALT_ROUNDS);
-            // safe create, ignore if exists (though for new resident it shouldn't exist)
-            await prisma.resident_accounts
-                .create({
-                    data: { resident_id: id, password_hash: hash },
-                })
-                .catch(() => {}); // catch ignore duplicate
-        }
-
-        res.status(201).json({
-            id: newResident.id,
-            name: newResident.name,
-            dob: newResident.dob,
-            idNumber: newResident.id_number,
-            zaloId: newResident.zalo_id,
-            phoneNumber: newResident.phone_number,
-            isActive: newResident.is_active,
-            email: newResident.email,
-            relationshipStatus: newResident.relationship_status,
-            canUseAmenities: newResident.can_use_amenities,
-            companyName: newResident.company_name,
-            buyerName: newResident.buyer_name,
-            taxCode: newResident.tax_code,
-            invoiceAddress: newResident.invoice_address,
-        });
+        const resident = await svc.createResident(req.body);
+        res.status(201).json(resident);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Lỗi máy chủ' });
+        res.status(err.status || 500).json({ message: err.status ? err.message : 'Lỗi máy chủ' });
     }
 };
 
 exports.updateResident = async (req, res) => {
     try {
-        const {
-            name,
-            dob,
-            idNumber,
-            phoneNumber,
-            zaloId,
-            email,
-            relationshipStatus,
-            companyName,
-            buyerName,
-            taxCode,
-            invoiceAddress,
-        } = req.body;
-
-        // Validation
-        // Validation handled by middleware
-        const cleanName = name?.trim();
-        const cleanIdNumber = idNumber?.trim();
-        const cleanEmail = email && email.trim() !== '' ? email.trim() : null;
-
-        const updatedResident = await prisma.residents.update({
-            where: { id: req.params.id },
-            data: {
-                name: cleanName,
-                dob: dob ? new Date(dob) : undefined,
-                id_number: cleanIdNumber,
-                phone_number: phoneNumber || null,
-                zalo_id: zaloId || null,
-                email: cleanEmail,
-                relationship_status: relationshipStatus,
-                company_name: companyName !== undefined ? (companyName?.trim() || null) : undefined,
-                buyer_name: buyerName !== undefined ? (buyerName?.trim() || null) : undefined,
-                tax_code: taxCode !== undefined ? (taxCode?.trim() || null) : undefined,
-                invoice_address: invoiceAddress !== undefined ? (invoiceAddress?.trim() || null) : undefined,
-            },
-        });
-
-        if (updatedResident.phone_number) {
-            const hash = await bcrypt.hash('Abc@12345', SALT_ROUNDS);
-            // Upsert or create if not exists. createMany with skipDuplicates not easy for single,
-            // easier to use upsert or just ignore error on create
-            try {
-                await prisma.resident_accounts.create({
-                    data: { resident_id: req.params.id, password_hash: hash },
-                });
-            } catch (e) {
-                // Ignore unique constraint violation if account exists
-            }
-        }
-
-        res.json({
-            id: updatedResident.id,
-            name: updatedResident.name,
-            dob: updatedResident.dob,
-            idNumber: updatedResident.id_number,
-            zaloId: updatedResident.zalo_id,
-            phoneNumber: updatedResident.phone_number,
-            isActive: updatedResident.is_active,
-            email: updatedResident.email,
-            relationshipStatus: updatedResident.relationship_status,
-            canUseAmenities: updatedResident.can_use_amenities,
-            companyName: updatedResident.company_name,
-            buyerName: updatedResident.buyer_name,
-            taxCode: updatedResident.tax_code,
-            invoiceAddress: updatedResident.invoice_address,
-        });
+        res.json(await svc.updateResident(req.params.id, req.body));
     } catch (err) {
         console.error('Error updating resident:', err);
         if (err.code === 'P2025') {
-            // Prisma record not found code
             return res.status(404).json({ message: 'Không tìm thấy cư dân' });
         }
         res.status(500).json({ message: 'Lỗi máy chủ: ' + err.message });
@@ -185,12 +40,7 @@ exports.updateResident = async (req, res) => {
 
 exports.updateResidentStatus = async (req, res) => {
     try {
-        const updated = await prisma.residents.update({
-            where: { id: req.params.id },
-            data: { is_active: req.body.isActive },
-            select: { id: true, is_active: true },
-        });
-        res.json(updated);
+        res.json(await svc.updateResidentStatus(req.params.id, req.body.isActive));
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Lỗi máy chủ' });
@@ -199,12 +49,7 @@ exports.updateResidentStatus = async (req, res) => {
 
 exports.updateAmenityAccess = async (req, res) => {
     try {
-        const updated = await prisma.residents.update({
-            where: { id: req.params.id },
-            data: { can_use_amenities: req.body.canUseAmenities },
-            select: { id: true, can_use_amenities: true },
-        });
-        res.json(updated);
+        res.json(await svc.updateAmenityAccess(req.params.id, req.body.canUseAmenities));
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Lỗi máy chủ' });
@@ -215,31 +60,7 @@ exports.updateAmenityAccess = async (req, res) => {
 
 exports.getAllResidentAccounts = async (req, res) => {
     try {
-        // Get residents who have accounts
-        // We can check if resident_accounts relation exists
-        // But resident_accounts table stores the relation.
-        // Prisma: findMany resident_accounts, include resident details.
-        const accounts = await prisma.resident_accounts.findMany({
-            include: {
-                residents: {
-                    select: { id: true, name: true, phone_number: true, is_active: true },
-                },
-            },
-            orderBy: {
-                residents: { name: 'asc' },
-            },
-        });
-
-        // Filter active residents and map
-        const result = accounts
-            .filter((a) => a.residents && a.residents.phone_number && a.residents.is_active)
-            .map((a) => ({
-                id: a.residents.id,
-                name: a.residents.name,
-                phoneNumber: a.residents.phone_number,
-            }));
-
-        res.json(result);
+        res.json(await svc.getAllResidentAccounts());
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Lỗi máy chủ' });
@@ -248,29 +69,7 @@ exports.getAllResidentAccounts = async (req, res) => {
 
 exports.syncResidentAccounts = async (req, res) => {
     try {
-        const h = await bcrypt.hash('Abc@12345', SALT_ROUNDS);
-
-        // Find candidates: phone number not null/empty, active? (Original query didn't check active, just phone)
-        const candidates = await prisma.residents.findMany({
-            where: {
-                AND: [{ phone_number: { not: null } }, { phone_number: { not: '' } }],
-            },
-            select: { id: true },
-        });
-
-        if (candidates.length === 0) {
-            return res.json({ message: 'Không có cư dân nào cần tạo tài khoản.' });
-        }
-
-        const result = await prisma.resident_accounts.createMany({
-            data: candidates.map((c) => ({
-                resident_id: c.id,
-                password_hash: h,
-            })),
-            skipDuplicates: true,
-        });
-
-        res.json({ message: `Đồng bộ xong. Đã tạo ${result.count} tài khoản.` });
+        res.json(await svc.syncResidentAccounts());
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Lỗi máy chủ' });
@@ -279,12 +78,7 @@ exports.syncResidentAccounts = async (req, res) => {
 
 exports.resetResidentPassword = async (req, res) => {
     try {
-        const h = await bcrypt.hash('Abc@12345', SALT_ROUNDS);
-        await prisma.resident_accounts.update({
-            where: { resident_id: req.params.residentId },
-            data: { password_hash: h, updated_at: new Date() },
-        });
-        res.json({ message: 'Đã reset mật khẩu.' });
+        res.json(await svc.resetResidentPassword(req.params.residentId));
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Lỗi máy chủ' });
@@ -293,70 +87,11 @@ exports.resetResidentPassword = async (req, res) => {
 
 exports.deleteResident = async (req, res) => {
     try {
-        const { id } = req.params;
-
-        // 1. Fetch resident to verify existence and check relationship status
-        const resident = await prisma.residents.findUnique({
-            where: { id },
-        });
-
-        if (!resident) {
-            return res.status(404).json({ message: 'Không tìm thấy cư dân' });
-        }
-
-        // 2. Block deletion if the resident is an OWNER
-        if (resident.relationship_status === 'OWNER') {
-            return res.status(400).json({
-                message: 'Không thể xóa cư dân là chủ sở hữu (Chủ hộ). Vui lòng chuyển quyền chủ sở hữu sang người khác trước khi xóa.',
-            });
-        }
-
-        // 3. Ensure the dummy resident for soft-anonymizing feedback exists
-        const dummyResidentId = 'res_deleted';
-        const dummyExists = await prisma.residents.findUnique({
-            where: { id: dummyResidentId },
-        });
-
-        if (!dummyExists) {
-            await prisma.residents.create({
-                data: {
-                    id: dummyResidentId,
-                    name: 'Cư dân đã xóa',
-                    relationship_status: 'FAMILY',
-                    is_active: false,
-                    can_use_amenities: false,
-                },
-            });
-        }
-
-        // 4. Run database updates & deletion in a transaction
-        await prisma.$transaction([
-            // Reassign feedback to dummy resident
-            prisma.resident_feedback.updateMany({
-                where: { resident_id: id },
-                data: { resident_id: dummyResidentId },
-            }),
-            // Set amenity usage resident relation to null (anonymize)
-            prisma.amenity_usage.updateMany({
-                where: { resident_id: id },
-                data: { resident_id: null },
-            }),
-            // Delete portal account
-            prisma.resident_accounts.deleteMany({
-                where: { resident_id: id },
-            }),
-            // Delete occupancy links to apartments
-            prisma.occupancies.deleteMany({
-                where: { resident_id: id },
-            }),
-            // Delete the resident record
-            prisma.residents.delete({
-                where: { id },
-            }),
-        ]);
-
-        res.json({ message: 'Đã xóa cư dân thành công.' });
+        res.json(await svc.deleteResident(req.params.id));
     } catch (err) {
+        if (err.status) {
+            return res.status(err.status).json({ message: err.message });
+        }
         console.error('Error deleting resident:', err);
         res.status(500).json({ message: 'Lỗi máy chủ: ' + err.message });
     }
