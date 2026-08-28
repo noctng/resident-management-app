@@ -6,7 +6,7 @@
     "scripts": {
         "start": "node server.js",
         "dev": "nodemon server.js",
-        "lint": "eslint .",
+        "lint": "node node_modules/eslint/bin/eslint.js .",
         "format": "prettier --write .",
         "db:backup": "node src/scripts/backupDb.js"
     },
