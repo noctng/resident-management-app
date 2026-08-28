@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 const repo = require('../repositories/announcementRepository');
-const { sendPushToAllResidents } = require('./pushService');
+const pushService = require('./pushService');
 
 const NEWS_IMAGE_DIR = path.join(__dirname, '../../uploads/news/images');
 const NGINX_NEWS_IMAGE_DIR = 'D:/nginx/nginx-1.28.0/html/dist/news/images';
@@ -92,7 +92,7 @@ async function publish(id) {
   if (!existing) { const e = new Error('Không tìm thấy bài viết'); e.status = 404; throw e; }
   const updated = await repo.setPublishState(id, true);
   const categoryLabel = { general: 'Thông báo', event: 'Sự kiện', notice: 'Lưu ý', urgent: '🚨 Khẩn cấp' };
-  sendPushToAllResidents({
+  pushService.sendPushToAllResidents({
     title: `📰 ${categoryLabel[existing.category] || 'Tin tức mới'}`,
     body: existing.title + (existing.summary ? ` — ${existing.summary.slice(0, 80)}` : ''),
     url: '/?tab=news',
