@@ -9,6 +9,7 @@ import {
   ArrowPathIcon,
   SparklesIcon,
 } from '../../components/icons';
+import { StatCard } from '../../components/ui/Card';
 
 interface CrmDashboardPageProps {
   onNavigate?: (route: string) => void;
@@ -92,63 +93,45 @@ export const CrmDashboardPage: React.FC<CrmDashboardPageProps> = ({ onNavigate }
         <>
           {/* ── Executive KPI Summary Cards ── */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-surface p-5 rounded-xl border border-brand-border shadow-sm space-y-2">
-              <div className="flex justify-between items-center text-xs text-ink-soft">
-                <span>Tổng Doanh Thu Ký Kết</span>
-                <DocumentTextIcon className="w-5 h-5 text-accent" />
-              </div>
-              <div className="text-xl font-bold text-ink font-mono tabular-nums">
-                {Number(metrics?.totalContractRevenue || 0).toLocaleString('vi-VN')} ₫
-              </div>
-              <div className="text-[11px] text-ink-soft">
-                Đã thu hồi:{' '}
-                <strong className="text-brand-success font-mono tabular-nums">
-                  {Number(metrics?.totalCollectedAmount || 0).toLocaleString('vi-VN')} ₫
-                </strong>
-              </div>
-            </div>
-
-            <div className="bg-surface p-5 rounded-xl border border-brand-border shadow-sm space-y-2">
-              <div className="flex justify-between items-center text-xs text-ink-soft">
-                <span>Dư Nợ Còn Phải Thu</span>
-                <BanknotesIcon className="w-5 h-5 text-brand-warning" />
-              </div>
-              <div className="text-xl font-bold text-brand-warning font-mono tabular-nums">
-                {Number(metrics?.totalRemainingDebt || 0).toLocaleString('vi-VN')} ₫
-              </div>
-              <div className="text-[11px] text-ink-soft">
-                Phân bổ theo LTT 10 đợt chuẩn thực tế
-              </div>
-            </div>
-
-            <div className="bg-surface p-5 rounded-xl border border-brand-border shadow-sm space-y-2">
-              <div className="flex justify-between items-center text-xs text-ink-soft">
-                <span>Dự Thu Dòng Tiền 30 Ngày Tới</span>
-                <ArrowTrendingUpIcon className="w-5 h-5 text-brand-teal" />
-              </div>
-              <div className="text-xl font-bold text-brand-teal font-mono tabular-nums">
-                {Number(metrics?.forecastCashflow?.next30Days || 0).toLocaleString('vi-VN')} ₫
-              </div>
-              <div className="text-[11px] text-ink-soft">
-                60 ngày:{' '}
-                <strong className="font-mono tabular-nums">
-                  {Number(metrics?.forecastCashflow?.next60Days || 0).toLocaleString('vi-VN')} ₫
-                </strong>
-              </div>
-            </div>
-
-            <div className="bg-surface p-5 rounded-xl border border-brand-border shadow-sm space-y-2">
-              <div className="flex justify-between items-center text-xs text-ink-soft">
-                <span>Nợ Quá Hạn Cần Thu</span>
-                <ClockIcon className="w-5 h-5 text-brand-danger" />
-              </div>
-              <div className="text-xl font-bold text-brand-danger font-mono tabular-nums">
-                {Number(metrics?.totalOverdueAmount || 0).toLocaleString('vi-VN')} ₫
-              </div>
-              <div className="text-[11px] text-brand-danger/80">
-                Gồm {metrics?.overduePaymentsCount || 0} đợt chậm trả (Lãi 0.05%/ngày)
-              </div>
-            </div>
+            <StatCard
+              label="Tổng Doanh Thu Ký Kết"
+              value={`${Number(metrics?.totalContractRevenue || 0).toLocaleString('vi-VN')} ₫`}
+              subValue={`Đã thu hồi: ${Number(metrics?.totalCollectedAmount || 0).toLocaleString('vi-VN')} ₫`}
+              subTone="success"
+              icon={DocumentTextIcon}
+              iconBg="bg-accent-soft"
+              iconColor="text-accent-ink"
+            />
+            <StatCard
+              label="Dư Nợ Còn Phải Thu"
+              value={`${Number(metrics?.totalRemainingDebt || 0).toLocaleString('vi-VN')} ₫`}
+              subValue="Phân bổ theo LTT 10 đợt chuẩn"
+              subTone="neutral"
+              valueTone="warning"
+              icon={BanknotesIcon}
+              iconBg="bg-brand-warning-soft"
+              iconColor="text-brand-warning"
+            />
+            <StatCard
+              label="Dự Thu Dòng Tiền 30 Ngày Tới"
+              value={`${Number(metrics?.forecastCashflow?.next30Days || 0).toLocaleString('vi-VN')} ₫`}
+              subValue={`60 ngày: ${Number(metrics?.forecastCashflow?.next60Days || 0).toLocaleString('vi-VN')} ₫`}
+              subTone="neutral"
+              valueTone="teal"
+              icon={ArrowTrendingUpIcon}
+              iconBg="bg-brand-teal-soft"
+              iconColor="text-brand-teal"
+            />
+            <StatCard
+              label="Nợ Quá Hạn Cần Thu"
+              value={`${Number(metrics?.totalOverdueAmount || 0).toLocaleString('vi-VN')} ₫`}
+              subValue={`Gồm ${metrics?.overduePaymentsCount || 0} đợt chậm trả (Lãi 0.05%/ngày)`}
+              subTone="danger"
+              valueTone="danger"
+              icon={ClockIcon}
+              iconBg="bg-brand-danger-soft"
+              iconColor="text-brand-danger"
+            />
           </div>
 
           {/* ── Absorption Rate By Real Estate Phase ── */}
