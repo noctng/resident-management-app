@@ -99,6 +99,8 @@ export const UnifiedMonthlyView: React.FC<UnifiedMonthlyViewProps> = ({
       {/* ── 4 KPI Summary Cards ── */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
+            className="motion-safe:animate-fade-in-1 [animation-fill-mode:both]"
+
           label="Tổng phát sinh"
           subValue={`${computedSummary.recordsCount} căn hộ`}
           subTone="neutral"
@@ -139,6 +141,8 @@ export const UnifiedMonthlyView: React.FC<UnifiedMonthlyViewProps> = ({
         </div>
 
         <StatCard
+            className="motion-safe:animate-fade-in-2 [animation-fill-mode:both]"
+
           label="Còn nợ"
           subValue={`Thuế phải thu: ${formatCurrency(computedSummary.total_electricity_tax + computedSummary.total_water_tax)}`}
           subTone="neutral"

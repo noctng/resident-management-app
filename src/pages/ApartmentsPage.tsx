@@ -219,6 +219,8 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
       {/* ── KPI Summary Dashboard Cards ── */}
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
         <StatCard
+            className="motion-safe:animate-fade-in-1 [animation-fill-mode:both]"
+
           label="Tổng căn bàn giao"
           value={`${stats.total} căn`}
           subValue={`${stats.teslaCount} TESLA • ${stats.cantataCount} CANTATA`}
@@ -228,6 +230,8 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
           iconColor="text-accent-ink"
         />
         <StatCard
+            className="motion-safe:animate-fade-in-2 [animation-fill-mode:both]"
+
           label="Đang ở (Lấp đầy)"
           value={`${stats.occupiedApts} căn`}
           subValue={`Tỷ lệ lấp đầy: ${stats.occupancyRate}%`}
@@ -238,6 +242,8 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
           iconColor="text-brand-success"
         />
         <StatCard
+            className="motion-safe:animate-fade-in-3 [animation-fill-mode:both]"
+
           label="Chưa chuyển vào"
           value={`${stats.vacantApts} căn`}
           subValue="Đã bàn giao chờ nhận nhà"
@@ -248,6 +254,8 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
           iconColor="text-brand-warning"
         />
         <StatCard
+            className="motion-safe:animate-fade-in-4 [animation-fill-mode:both]"
+
           label="Tổng nhân khẩu"
           value={`${stats.totalResidents} cư dân`}
           subValue={`~${stats.avgDensity} người/căn`}
@@ -258,6 +266,8 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
           iconColor="text-brand-teal"
         />
         <StatCard
+            className="motion-safe:animate-fade-in-5 [animation-fill-mode:both]"
+
           label="Tổng giá trị BĐS"
           value={`~${stats.totalAssetValueInBillion} tỷ VNĐ`}
           subValue="100% căn đã nghiệm thu"

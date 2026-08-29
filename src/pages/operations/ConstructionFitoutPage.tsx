@@ -241,6 +241,8 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
       {/* 4 Financial & Operational Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
+            className="motion-safe:animate-fade-in-1 [animation-fill-mode:both]"
+
           label="Hồ sơ đang thi công"
           value={`${stats.activeConstructing || 0} căn`}
           subValue="Giới hạn ≤ 3 căn/block"
@@ -250,6 +252,8 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
           iconColor="text-accent-ink"
         />
         <StatCard
+            className="motion-safe:animate-fade-in-2 [animation-fill-mode:both]"
+
           label="Tiền ký quỹ 100Tr đang giữ"
           value={`${Number(stats.totalDepositHeld || 0).toLocaleString('vi-VN')} đ`}
           subValue="Ký quỹ bảo lãnh mặt bằng"
@@ -260,6 +264,8 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
           iconColor="text-brand-success"
         />
         <StatCard
+            className="motion-safe:animate-fade-in-3 [animation-fill-mode:both]"
+
           label="Thẻ công nhân hoạt động"
           value={`${stats.totalWorkers || 0} thẻ thợ`}
           subValue="Được phép ra vào theo giờ"
@@ -270,6 +276,8 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
           iconColor="text-accent-ink"
         />
         <StatCard
+            className="motion-safe:animate-fade-in-4 [animation-fill-mode:both]"
+
           label="Tiền phạt vi phạm trừ ký quỹ"
           value={`${Number(stats.totalViolationsFine || 0).toLocaleString('vi-VN')} đ`}
           subValue="Theo biểu phí E.5.6"

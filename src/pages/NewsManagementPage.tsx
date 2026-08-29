@@ -514,7 +514,9 @@ function NewsManagementPage() {
               { label: 'Đã xuất bản', value: posts.filter((p) => p.is_published).length, tone: 'success' as const },
               { label: 'Bản nháp', value: posts.filter((p) => !p.is_published).length, tone: 'warning' as const },
             ].map((s) => (
-              <StatCard key={s.label} label={s.label} value={s.value} valueTone={s.tone} />
+              <StatCard
+            className="motion-safe:animate-fade-in-1 [animation-fill-mode:both]"
+ key={s.label} label={s.label} value={s.value} valueTone={s.tone} />
             ))}
           </div>
 

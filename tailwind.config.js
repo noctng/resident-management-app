@@ -120,6 +120,12 @@ export default {
       },
       animation: {
         'fade-in': 'fade-in 0.2s ease-out',
+        'fade-in-1': 'fade-in 0.2s ease-out 0s both',
+        'fade-in-2': 'fade-in 0.2s ease-out 0.04s both',
+        'fade-in-3': 'fade-in 0.2s ease-out 0.08s both',
+        'fade-in-4': 'fade-in 0.2s ease-out 0.12s both',
+        'fade-in-5': 'fade-in 0.2s ease-out 0.16s both',
+        'fade-in-6': 'fade-in 0.2s ease-out 0.2s both',
         'slide-up': 'slide-up 0.2s ease-out',
         'slide-down': 'slide-down 0.2s ease-out',
         shimmer: 'shimmer 1.5s infinite linear',

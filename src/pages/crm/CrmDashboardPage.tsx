@@ -94,6 +94,8 @@ export const CrmDashboardPage: React.FC<CrmDashboardPageProps> = ({ onNavigate }
           {/* ── Executive KPI Summary Cards ── */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard
+            className="motion-safe:animate-fade-in-1 [animation-fill-mode:both]"
+
               label="Tổng Doanh Thu Ký Kết"
               value={`${Number(metrics?.totalContractRevenue || 0).toLocaleString('vi-VN')} ₫`}
               subValue={`Đã thu hồi: ${Number(metrics?.totalCollectedAmount || 0).toLocaleString('vi-VN')} ₫`}
@@ -103,6 +105,8 @@ export const CrmDashboardPage: React.FC<CrmDashboardPageProps> = ({ onNavigate }
               iconColor="text-accent-ink"
             />
             <StatCard
+            className="motion-safe:animate-fade-in-2 [animation-fill-mode:both]"
+
               label="Dư Nợ Còn Phải Thu"
               value={`${Number(metrics?.totalRemainingDebt || 0).toLocaleString('vi-VN')} ₫`}
               subValue="Phân bổ theo LTT 10 đợt chuẩn"
@@ -113,6 +117,8 @@ export const CrmDashboardPage: React.FC<CrmDashboardPageProps> = ({ onNavigate }
               iconColor="text-brand-warning"
             />
             <StatCard
+            className="motion-safe:animate-fade-in-3 [animation-fill-mode:both]"
+
               label="Dự Thu Dòng Tiền 30 Ngày Tới"
               value={`${Number(metrics?.forecastCashflow?.next30Days || 0).toLocaleString('vi-VN')} ₫`}
               subValue={`60 ngày: ${Number(metrics?.forecastCashflow?.next60Days || 0).toLocaleString('vi-VN')} ₫`}
@@ -123,6 +129,8 @@ export const CrmDashboardPage: React.FC<CrmDashboardPageProps> = ({ onNavigate }
               iconColor="text-brand-teal"
             />
             <StatCard
+            className="motion-safe:animate-fade-in-4 [animation-fill-mode:both]"
+
               label="Nợ Quá Hạn Cần Thu"
               value={`${Number(metrics?.totalOverdueAmount || 0).toLocaleString('vi-VN')} ₫`}
               subValue={`Gồm ${metrics?.overduePaymentsCount || 0} đợt chậm trả (Lãi 0.05%/ngày)`}

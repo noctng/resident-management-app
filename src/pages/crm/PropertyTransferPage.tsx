@@ -251,6 +251,8 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
       {/* 4 Financial & Operational Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
+            className="motion-safe:animate-fade-in-1 [animation-fill-mode:both]"
+
           label="Tổng hồ sơ chuyển nhượng"
           value={`${stats.totalTransfers || 0} hồ sơ`}
           subValue="Đã thực hiện trên hệ thống"
@@ -260,6 +262,8 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
           iconColor="text-accent-ink"
         />
         <StatCard
+            className="motion-safe:animate-fade-in-2 [animation-fill-mode:both]"
+
           label="Tổng giá trị đã kế thừa"
           value={`${Number(stats.totalInheritedValue || 0).toLocaleString('vi-VN')} đ`}
           subValue="Bảo lưu lịch sử đã đóng"
@@ -270,6 +274,8 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
           iconColor="text-brand-success"
         />
         <StatCard
+            className="motion-safe:animate-fade-in-3 [animation-fill-mode:both]"
+
           label="Chuyển nhượng trong tháng"
           value={`${stats.thisMonthTransfers || 0} hồ sơ`}
           subValue="Phát sinh tháng này"
@@ -280,6 +286,8 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
           iconColor="text-accent-ink"
         />
         <StatCard
+            className="motion-safe:animate-fade-in-4 [animation-fill-mode:both]"
+
           label="Căn chuyển nhượng >2 lần"
           value={`${stats.multiTransfersCount || 0} căn`}
           subValue="Cảnh báo theo dõi đầu cơ"

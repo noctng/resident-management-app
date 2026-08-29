@@ -217,6 +217,8 @@ export const CommissionPage: React.FC<CommissionPageProps> = ({ onNavigate, onBa
       {/* 4 Financial Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
+            className="motion-safe:animate-fade-in-1 [animation-fill-mode:both]"
+
           label="Tổng hoa hồng phát sinh"
           value={`${Number(stats.totalCommission || 0).toLocaleString('vi-VN')} đ`}
           subValue="Theo toàn bộ HĐMB đã ký"
@@ -226,6 +228,8 @@ export const CommissionPage: React.FC<CommissionPageProps> = ({ onNavigate, onBa
           iconColor="text-accent-ink"
         />
         <StatCard
+            className="motion-safe:animate-fade-in-2 [animation-fill-mode:both]"
+
           label="Đã giải ngân chi trả"
           value={`${Number(stats.totalPaid || 0).toLocaleString('vi-VN')} đ`}
           subValue="Đã thanh toán thực tế"
@@ -236,6 +240,8 @@ export const CommissionPage: React.FC<CommissionPageProps> = ({ onNavigate, onBa
           iconColor="text-brand-success"
         />
         <StatCard
+            className="motion-safe:animate-fade-in-3 [animation-fill-mode:both]"
+
           label="Công nợ hoa hồng còn lại"
           value={`${Number(stats.totalPending || 0).toLocaleString('vi-VN')} đ`}
           subValue="Chờ các đợt giải ngân tiếp theo"
@@ -246,6 +252,8 @@ export const CommissionPage: React.FC<CommissionPageProps> = ({ onNavigate, onBa
           iconColor="text-brand-warning"
         />
         <StatCard
+            className="motion-safe:animate-fade-in-4 [animation-fill-mode:both]"
+
           label="Hồ sơ chờ phê duyệt"
           value={`${stats.pendingApprovalCount || 0} HĐ`}
           subValue="Cần GĐKD duyệt chi"

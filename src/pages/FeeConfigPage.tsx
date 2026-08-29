@@ -594,6 +594,8 @@ export default function FeeConfigPage() {
               {currentConfig ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in">
                   <StatCard
+            className="motion-safe:animate-fade-in-1 [animation-fill-mode:both]"
+
                     label="Phí Quản Lý"
                     subValue="Theo diện tích"
                     value={formatCurrency(currentConfig.management_fee_per_sqm)}
@@ -604,6 +606,8 @@ export default function FeeConfigPage() {
                   />
 
                   <StatCard
+            className="motion-safe:animate-fade-in-2 [animation-fill-mode:both]"
+
                     label="Internet"
                     subValue="Gói cơ bản"
                     value={formatCurrency(currentConfig.internet_fee)}
@@ -614,6 +618,8 @@ export default function FeeConfigPage() {
                   />
 
                   <StatCard
+            className="motion-safe:animate-fade-in-3 [animation-fill-mode:both]"
+
                     label="Truyền Hình"
                     subValue="Gói tiêu chuẩn"
                     value={formatCurrency(currentConfig.cable_tv_fee)}
@@ -624,6 +630,8 @@ export default function FeeConfigPage() {
                   />
 
                   <StatCard
+            className="motion-safe:animate-fade-in-4 [animation-fill-mode:both]"
+
                     label="Gửi Xe Ô tô"
                     subValue="Vé tháng"
                     value={formatCurrency(currentConfig.parking_car_fee)}
@@ -634,6 +642,8 @@ export default function FeeConfigPage() {
                   />
 
                   <StatCard
+            className="motion-safe:animate-fade-in-5 [animation-fill-mode:both]"
+
                     label="Gửi Xe Máy"
                     subValue="Vé tháng"
                     value={formatCurrency(currentConfig.parking_motorbike_fee)}
@@ -644,6 +654,8 @@ export default function FeeConfigPage() {
                   />
 
                   <StatCard
+            className="motion-safe:animate-fade-in-6 [animation-fill-mode:both]"
+
                     label="Bảo Vệ"
                     subValue="An ninh 24/7"
                     value={formatCurrency(currentConfig.security_fee)}
@@ -654,6 +666,8 @@ export default function FeeConfigPage() {
                   />
 
                   <StatCard
+            className="motion-safe:animate-fade-in-1 [animation-fill-mode:both]"
+
                     label="Vệ Sinh"
                     subValue="Cảnh quan"
                     value={formatCurrency(currentConfig.cleaning_fee)}

@@ -172,6 +172,8 @@ export default function ManagementFeePage() {
       {summary && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <StatCard
+            className="motion-safe:animate-fade-in-1 [animation-fill-mode:both]"
+
             label="Tổng Hóa Đơn"
             value={summary.total_invoices}
             icon={DocumentTextIcon}
@@ -179,6 +181,8 @@ export default function ManagementFeePage() {
             iconColor="text-ink-soft"
           />
           <StatCard
+            className="motion-safe:animate-fade-in-2 [animation-fill-mode:both]"
+
             label="Tổng Tiền"
             value={formatCurrency(Number(summary.total_amount))}
             icon={BanknotesIcon}
@@ -186,6 +190,8 @@ export default function ManagementFeePage() {
             iconColor="text-accent-ink"
           />
           <StatCard
+            className="motion-safe:animate-fade-in-3 [animation-fill-mode:both]"
+
             label="Đã Thu"
             value={formatCurrency(Number(summary.paid_amount))}
             valueTone="success"
@@ -194,6 +200,8 @@ export default function ManagementFeePage() {
             iconColor="text-brand-success"
           />
           <StatCard
+            className="motion-safe:animate-fade-in-4 [animation-fill-mode:both]"
+
             label="Còn Nợ"
             value={formatCurrency(Number(summary.debt_amount))}
             valueTone="danger"

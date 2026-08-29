@@ -313,6 +313,8 @@ const RevenueReportPage: React.FC<Props> = ({ onNavigate, onBack }) => {
           {/* Summary Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <StatCard
+            className="motion-safe:animate-fade-in-1 [animation-fill-mode:both]"
+
               label="Tổng Doanh Thu"
               value={formatCurrency(data.totalRevenue)}
               valueTone="accent"
@@ -321,6 +323,8 @@ const RevenueReportPage: React.FC<Props> = ({ onNavigate, onBack }) => {
               iconColor="text-accent-ink"
             />
             <StatCard
+            className="motion-safe:animate-fade-in-2 [animation-fill-mode:both]"
+
               label="Đã Thu"
               value={formatCurrency(data.totalPaid)}
               valueTone="success"
@@ -329,6 +333,8 @@ const RevenueReportPage: React.FC<Props> = ({ onNavigate, onBack }) => {
               iconColor="text-brand-success"
             />
             <StatCard
+            className="motion-safe:animate-fade-in-3 [animation-fill-mode:both]"
+
               label="Còn Lại"
               value={formatCurrency(data.totalRemaining)}
               valueTone="warning"
@@ -337,6 +343,8 @@ const RevenueReportPage: React.FC<Props> = ({ onNavigate, onBack }) => {
               iconColor="text-brand-warning"
             />
             <StatCard
+            className="motion-safe:animate-fade-in-4 [animation-fill-mode:both]"
+
               label="So với kỳ trước"
               value={`${data.comparison.changePercent >= 0 ? '+' : ''}${data.comparison.changePercent}%`}
               valueTone={data.comparison.changePercent >= 0 ? 'success' : 'danger'}

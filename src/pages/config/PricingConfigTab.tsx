@@ -40,6 +40,8 @@ export const PricingConfigTab: React.FC<PricingConfigTabProps> = ({
         </h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           <StatCard
+            className="motion-safe:animate-fade-in-1 [animation-fill-mode:both]"
+
             label="Phí quản lý"
             value={(feeConfig?.management_fee_per_sqm ?? 0).toLocaleString('vi-VN')}
             subValue="VNĐ / m² / tháng"
@@ -49,6 +51,8 @@ export const PricingConfigTab: React.FC<PricingConfigTabProps> = ({
             iconColor="text-accent-ink"
           />
           <StatCard
+            className="motion-safe:animate-fade-in-2 [animation-fill-mode:both]"
+
             label="Điện sinh hoạt (Bậc 1)"
             value={(editableConfig.residentialElectricity[0]?.rate ?? 0).toLocaleString('vi-VN')}
             subValue="VNĐ / kWh"
@@ -59,6 +63,8 @@ export const PricingConfigTab: React.FC<PricingConfigTabProps> = ({
             iconColor="text-brand-teal"
           />
           <StatCard
+            className="motion-safe:animate-fade-in-3 [animation-fill-mode:both]"
+
             label="Nước sinh hoạt"
             value={editableConfig.water.residentialRate.toLocaleString('vi-VN')}
             subValue="VNĐ / m³"
@@ -69,6 +75,8 @@ export const PricingConfigTab: React.FC<PricingConfigTabProps> = ({
             iconColor="text-brand-teal"
           />
           <StatCard
+            className="motion-safe:animate-fade-in-4 [animation-fill-mode:both]"
+
             label="VAT điện / nước"
             value={`${editableConfig.vat.electricity}% / ${editableConfig.vat.water}%`}
             subValue="Thuế suất GTGT"
