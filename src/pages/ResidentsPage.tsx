@@ -21,6 +21,7 @@ import ResidentApartmentsModal from '../components/ResidentApartmentsModal';
 import ImportResidentModal from '../components/ImportResidentModal';
 import { DocumentArrowUpIcon } from '../components/icons';
 import { useToast } from '../components/ui';
+import { StatCard } from '../components/ui/Card';
 
 interface ResidentsPageProps {
   residents: Resident[];
@@ -216,91 +217,57 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
 
       {/* ── KPI Summary Dashboard Cards ── */}
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4">
-
-        {/* Card 1: Tổng Cư Dân */}
-        <div className="bg-surface rounded-xl p-4 border border-brand-border shadow-sm hover:shadow-md transition-shadow duration-200">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-ink-soft uppercase tracking-wider">Tổng cư dân</span>
-            <div className="w-8 h-8 rounded-lg bg-brand-success-soft text-brand-success flex items-center justify-center">
-              <UsersIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-2 flex items-baseline gap-1.5">
-            <span className="text-2xl font-bold text-ink">{stats.total}</span>
-            <span className="text-xs text-ink-soft">người</span>
-          </div>
-          <div className="mt-1.5 text-[11.5px] text-brand-success font-medium">
-            {stats.withPhone} cư dân có SĐT
-          </div>
-        </div>
-
-        {/* Card 2: Chủ Hộ */}
-        <div className="bg-surface rounded-xl p-4 border border-brand-border shadow-sm hover:shadow-md transition-shadow duration-200">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-ink-soft uppercase tracking-wider">Chủ hộ</span>
-            <div className="w-8 h-8 rounded-lg bg-accent-soft text-accent-ink flex items-center justify-center">
-              <KeyIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-2 flex items-baseline gap-1.5">
-            <span className="text-2xl font-bold text-ink">{stats.owners}</span>
-            <span className="text-xs text-ink-soft">chủ hộ</span>
-          </div>
-          <div className="mt-1.5 text-[11.5px] text-accent-ink font-medium">
-            Chiếm {stats.ownersPercent}% tổng nhân khẩu
-          </div>
-        </div>
-
-        {/* Card 3: Người Thân & Khách Thuê */}
-        <div className="bg-surface rounded-xl p-4 border border-brand-border shadow-sm hover:shadow-md transition-shadow duration-200">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-ink-soft uppercase tracking-wider">Gia đình & Thuê</span>
-            <div className="w-8 h-8 rounded-lg bg-brand-teal-soft text-brand-teal flex items-center justify-center">
-              <UserPlusIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-2 flex items-baseline gap-1.5">
-            <span className="text-2xl font-bold text-ink">{stats.familyAndTenants}</span>
-            <span className="text-xs text-ink-soft">người</span>
-          </div>
-          <div className="mt-1.5 text-[11.5px] text-brand-teal font-medium truncate">
-            {stats.family} người thân • {stats.tenants} thuê
-          </div>
-        </div>
-
-        {/* Card 4: Quyền Tiện Ích VIP */}
-        <div className="bg-surface rounded-xl p-4 border border-brand-border shadow-sm hover:shadow-md transition-shadow duration-200">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-ink-soft uppercase tracking-wider">Tiện ích VIP</span>
-            <div className="w-8 h-8 rounded-lg bg-brand-warning-soft text-brand-warning flex items-center justify-center">
-              <SparklesIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-2 flex items-baseline gap-1.5">
-            <span className="text-2xl font-bold text-ink">{stats.amenityAllowed}</span>
-            <span className="text-xs text-ink-soft">cư dân</span>
-          </div>
-          <div className="mt-1.5 text-[11.5px] text-brand-warning font-medium">
-            Đạt {stats.amenityPercent}% được cấp quyền
-          </div>
-        </div>
-
-        {/* Card 5: Tình Trạng Cư Trú */}
-        <div className="bg-surface rounded-xl p-4 border border-brand-border shadow-sm hover:shadow-md transition-shadow duration-200 col-span-2 sm:col-span-1 lg:col-span-1">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-ink-soft uppercase tracking-wider">Đang hoạt động</span>
-            <div className="w-8 h-8 rounded-lg bg-brand-success-soft text-brand-success flex items-center justify-center">
-              <CheckCircleIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-2 flex items-baseline gap-1.5">
-            <span className="text-2xl font-bold text-ink">{stats.active}</span>
-            <span className="text-xs text-ink-soft">đang ở</span>
-          </div>
-          <div className="mt-1.5 text-[11.5px] text-ink-soft font-medium">
-            {stats.inactive > 0 ? `${stats.inactive} tạm vắng / dừng HĐ` : 'Tất cả đang sinh sống'}
-          </div>
-        </div>
+        <StatCard
+          label="Tổng cư dân"
+          value={stats.total}
+          unit="người"
+          icon={UsersIcon}
+          iconBg="bg-brand-success-soft"
+          iconColor="text-brand-success"
+          subValue={`${stats.withPhone} cư dân có SĐT`}
+          subTone="success"
+        />
+        <StatCard
+          label="Chủ hộ"
+          value={stats.owners}
+          unit="chủ hộ"
+          icon={KeyIcon}
+          iconBg="bg-accent-soft"
+          iconColor="text-accent-ink"
+          subValue={`Chiếm ${stats.ownersPercent}% tổng nhân khẩu`}
+          subTone="accent"
+        />
+        <StatCard
+          label="Gia đình & Thuê"
+          value={stats.familyAndTenants}
+          unit="người"
+          icon={UserPlusIcon}
+          iconBg="bg-brand-teal-soft"
+          iconColor="text-brand-teal"
+          subValue={`${stats.family} người thân • ${stats.tenants} thuê`}
+          subTone="teal"
+        />
+        <StatCard
+          label="Tiện ích VIP"
+          value={stats.amenityAllowed}
+          unit="cư dân"
+          icon={SparklesIcon}
+          iconBg="bg-brand-warning-soft"
+          iconColor="text-brand-warning"
+          subValue={`Đạt ${stats.amenityPercent}% được cấp quyền`}
+          subTone="warning"
+        />
+        <StatCard
+          label="Đang hoạt động"
+          value={stats.active}
+          unit="đang ở"
+          icon={CheckCircleIcon}
+          iconBg="bg-brand-success-soft"
+          iconColor="text-brand-success"
+          subValue={stats.inactive > 0 ? `${stats.inactive} tạm vắng / dừng HĐ` : 'Tất cả đang sinh sống'}
+          subTone="neutral"
+          className="col-span-2 sm:col-span-1 lg:col-span-1"
+        />
       </div>
 
 
