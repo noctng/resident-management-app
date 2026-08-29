@@ -18,6 +18,7 @@ import {
   ClockIcon,
   UserIcon,
 } from '../components/icons';
+import { StatCard } from '../components/ui/Card';
 
 export default function FeeConfigPage() {
   const [currentConfig, setCurrentConfig] = useState<FeeConfig | null>(null);
@@ -592,166 +593,75 @@ export default function FeeConfigPage() {
             <div>
               {currentConfig ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in">
-                  {/* Management */}
-                  <div className="p-6 bg-surface rounded-2xl border border-brand-border hover:border-accent/40 hover:shadow-md transition-all">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="p-3 bg-accent-soft text-accent-ink rounded-xl transition-colors">
-                        <BriefcaseIcon className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-ink-soft uppercase tracking-wide">
-                          Phí Quản Lý
-                        </p>
-                        <p className="text-xs text-ink-soft font-medium">Theo diện tích</p>
-                      </div>
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <p className="font-mono text-3xl tabular-nums font-bold text-ink">
-                        {formatCurrency(currentConfig.management_fee_per_sqm)}
-                      </p>
-                      <span className="text-sm text-ink-soft font-medium">
-                        đ/m²
-                      </span>
-                    </div>
-                  </div>
+                  <StatCard
+                    label="Phí Quản Lý"
+                    subValue="Theo diện tích"
+                    value={formatCurrency(currentConfig.management_fee_per_sqm)}
+                    unit="đ/m²"
+                    icon={BriefcaseIcon}
+                    iconBg="bg-accent-soft"
+                    iconColor="text-accent-ink"
+                  />
 
-                  {/* Internet */}
-                  <div className="p-6 bg-surface rounded-2xl border border-brand-border hover:border-accent/40 hover:shadow-md transition-all">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="p-3 bg-brand-teal-soft text-brand-teal rounded-xl transition-colors">
-                        <WifiIcon className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-ink-soft uppercase tracking-wide">
-                          Internet
-                        </p>
-                        <p className="text-xs text-ink-soft font-medium">Gói cơ bản</p>
-                      </div>
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <p className="font-mono text-3xl tabular-nums font-bold text-ink">
-                        {formatCurrency(currentConfig.internet_fee)}
-                      </p>
-                      <span className="text-sm text-ink-soft font-medium">
-                        đ/tháng
-                      </span>
-                    </div>
-                  </div>
+                  <StatCard
+                    label="Internet"
+                    subValue="Gói cơ bản"
+                    value={formatCurrency(currentConfig.internet_fee)}
+                    unit="đ/tháng"
+                    icon={WifiIcon}
+                    iconBg="bg-brand-teal-soft"
+                    iconColor="text-brand-teal"
+                  />
 
-                  {/* TV */}
-                  <div className="p-6 bg-surface rounded-2xl border border-brand-border hover:border-accent/40 hover:shadow-md transition-all">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="p-3 bg-brand-warning-soft text-brand-warning rounded-xl transition-colors">
-                        <TvIcon className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-ink-soft uppercase tracking-wide">
-                          Truyền Hình
-                        </p>
-                        <p className="text-xs text-ink-soft font-medium">Gói tiêu chuẩn</p>
-                      </div>
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <p className="font-mono text-3xl tabular-nums font-bold text-ink">
-                        {formatCurrency(currentConfig.cable_tv_fee)}
-                      </p>
-                      <span className="text-sm text-ink-soft font-medium">
-                        đ/tháng
-                      </span>
-                    </div>
-                  </div>
+                  <StatCard
+                    label="Truyền Hình"
+                    subValue="Gói tiêu chuẩn"
+                    value={formatCurrency(currentConfig.cable_tv_fee)}
+                    unit="đ/tháng"
+                    icon={TvIcon}
+                    iconBg="bg-brand-warning-soft"
+                    iconColor="text-brand-warning"
+                  />
 
-                  {/* Car */}
-                  <div className="p-6 bg-surface rounded-2xl border border-brand-border hover:border-accent/40 hover:shadow-md transition-all">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="p-3 bg-accent-soft text-accent-ink rounded-xl transition-colors">
-                        <TruckIcon className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-ink-soft uppercase tracking-wide">
-                          Gửi Xe Ô tô
-                        </p>
-                        <p className="text-xs text-ink-soft font-medium">Vé tháng</p>
-                      </div>
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <p className="font-mono text-3xl tabular-nums font-bold text-ink">
-                        {formatCurrency(currentConfig.parking_car_fee)}
-                      </p>
-                      <span className="text-sm text-ink-soft font-medium">
-                        đ/xe
-                      </span>
-                    </div>
-                  </div>
+                  <StatCard
+                    label="Gửi Xe Ô tô"
+                    subValue="Vé tháng"
+                    value={formatCurrency(currentConfig.parking_car_fee)}
+                    unit="đ/xe"
+                    icon={TruckIcon}
+                    iconBg="bg-accent-soft"
+                    iconColor="text-accent-ink"
+                  />
 
-                  {/* Motorbike */}
-                  <div className="p-6 bg-surface rounded-2xl border border-brand-border hover:border-accent/40 hover:shadow-md transition-all">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="p-3 bg-brand-teal-soft text-brand-teal rounded-xl transition-colors">
-                        <TruckIcon className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-ink-soft uppercase tracking-wide">
-                          Gửi Xe Máy
-                        </p>
-                        <p className="text-xs text-ink-soft font-medium">Vé tháng</p>
-                      </div>
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <p className="font-mono text-3xl tabular-nums font-bold text-ink">
-                        {formatCurrency(currentConfig.parking_motorbike_fee)}
-                      </p>
-                      <span className="text-sm text-ink-soft font-medium">
-                        đ/xe
-                      </span>
-                    </div>
-                  </div>
+                  <StatCard
+                    label="Gửi Xe Máy"
+                    subValue="Vé tháng"
+                    value={formatCurrency(currentConfig.parking_motorbike_fee)}
+                    unit="đ/xe"
+                    icon={TruckIcon}
+                    iconBg="bg-brand-teal-soft"
+                    iconColor="text-brand-teal"
+                  />
 
-                  {/* Security */}
-                  <div className="p-6 bg-surface rounded-2xl border border-brand-border hover:border-accent/40 hover:shadow-md transition-all">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="p-3 bg-brand-warning-soft text-brand-warning rounded-xl transition-colors">
-                        <ShieldCheckIcon className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-ink-soft uppercase tracking-wide">
-                          Bảo Vệ
-                        </p>
-                        <p className="text-xs text-ink-soft font-medium">An ninh 24/7</p>
-                      </div>
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <p className="font-mono text-3xl tabular-nums font-bold text-ink">
-                        {formatCurrency(currentConfig.security_fee)}
-                      </p>
-                      <span className="text-sm text-ink-soft font-medium">
-                        đ/tháng
-                      </span>
-                    </div>
-                  </div>
+                  <StatCard
+                    label="Bảo Vệ"
+                    subValue="An ninh 24/7"
+                    value={formatCurrency(currentConfig.security_fee)}
+                    unit="đ/tháng"
+                    icon={ShieldCheckIcon}
+                    iconBg="bg-brand-warning-soft"
+                    iconColor="text-brand-warning"
+                  />
 
-                  {/* Cleaning */}
-                  <div className="p-6 bg-surface rounded-2xl border border-brand-border hover:border-accent/40 hover:shadow-md transition-all">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="p-3 bg-accent-soft text-accent-ink rounded-xl transition-colors">
-                        <SparklesIcon className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-ink-soft uppercase tracking-wide">
-                          Vệ Sinh
-                        </p>
-                        <p className="text-xs text-ink-soft font-medium">Cảnh quan</p>
-                      </div>
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <p className="font-mono text-3xl tabular-nums font-bold text-ink">
-                        {formatCurrency(currentConfig.cleaning_fee)}
-                      </p>
-                      <span className="text-sm text-ink-soft font-medium">
-                        đ/tháng
-                      </span>
-                    </div>
-                  </div>
+                  <StatCard
+                    label="Vệ Sinh"
+                    subValue="Cảnh quan"
+                    value={formatCurrency(currentConfig.cleaning_fee)}
+                    unit="đ/tháng"
+                    icon={SparklesIcon}
+                    iconBg="bg-accent-soft"
+                    iconColor="text-accent-ink"
+                  />
 
                   {/* Effective Date */}
                   <div className="p-6 bg-surface-alt rounded-2xl border border-dashed border-brand-border flex flex-col justify-center items-center text-center transition-colors">
