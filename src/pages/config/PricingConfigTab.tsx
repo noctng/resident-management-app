@@ -1,5 +1,6 @@
 import React from 'react';
 import { CurrencyDollarIcon } from '../../components/icons';
+import { StatCard } from '../../components/ui/Card';
 import type { PricingConfig, FeeConfig } from '../../types';
 
 interface PricingConfigTabProps {
@@ -38,34 +39,45 @@ export const PricingConfigTab: React.FC<PricingConfigTabProps> = ({
           Tổng Quan Biểu Phí Hiện Tại
         </h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="bg-surface-alt/60 border border-brand-border rounded-lg p-4">
-            <div className="text-xs font-semibold text-ink-soft">Phí quản lý</div>
-            <div className="text-2xl font-mono text-ink mt-1 tabular-nums">
-              {(feeConfig?.management_fee_per_sqm ?? 0).toLocaleString('vi-VN')}
-            </div>
-            <div className="text-[11px] text-ink-soft mt-0.5">VNĐ / m² / tháng</div>
-          </div>
-          <div className="bg-surface-alt/60 border border-brand-border rounded-lg p-4">
-            <div className="text-xs font-semibold text-ink-soft">Điện sinh hoạt (Bậc 1)</div>
-            <div className="text-2xl font-mono text-ink mt-1 tabular-nums">
-              {(editableConfig.residentialElectricity[0]?.rate ?? 0).toLocaleString('vi-VN')}
-            </div>
-            <div className="text-[11px] text-ink-soft mt-0.5">VNĐ / kWh</div>
-          </div>
-          <div className="bg-surface-alt/60 border border-brand-border rounded-lg p-4">
-            <div className="text-xs font-semibold text-ink-soft">Nước sinh hoạt</div>
-            <div className="text-2xl font-mono text-ink mt-1 tabular-nums">
-              {editableConfig.water.residentialRate.toLocaleString('vi-VN')}
-            </div>
-            <div className="text-[11px] text-ink-soft mt-0.5">VNĐ / m³</div>
-          </div>
-          <div className="bg-surface-alt/60 border border-brand-border rounded-lg p-4">
-            <div className="text-xs font-semibold text-ink-soft">VAT điện / nước</div>
-            <div className="text-2xl font-mono text-ink mt-1 tabular-nums">
-              {editableConfig.vat.electricity}% / {editableConfig.vat.water}%
-            </div>
-            <div className="text-[11px] text-ink-soft mt-0.5">Thuế suất GTGT</div>
-          </div>
+          <StatCard
+            label="Phí quản lý"
+            value={(feeConfig?.management_fee_per_sqm ?? 0).toLocaleString('vi-VN')}
+            subValue="VNĐ / m² / tháng"
+            subTone="neutral"
+            icon={CurrencyDollarIcon}
+            iconBg="bg-accent-soft"
+            iconColor="text-accent-ink"
+          />
+          <StatCard
+            label="Điện sinh hoạt (Bậc 1)"
+            value={(editableConfig.residentialElectricity[0]?.rate ?? 0).toLocaleString('vi-VN')}
+            subValue="VNĐ / kWh"
+            subTone="neutral"
+            valueTone="teal"
+            icon={CurrencyDollarIcon}
+            iconBg="bg-brand-teal-soft"
+            iconColor="text-brand-teal"
+          />
+          <StatCard
+            label="Nước sinh hoạt"
+            value={editableConfig.water.residentialRate.toLocaleString('vi-VN')}
+            subValue="VNĐ / m³"
+            subTone="neutral"
+            valueTone="teal"
+            icon={CurrencyDollarIcon}
+            iconBg="bg-brand-teal-soft"
+            iconColor="text-brand-teal"
+          />
+          <StatCard
+            label="VAT điện / nước"
+            value={`${editableConfig.vat.electricity}% / ${editableConfig.vat.water}%`}
+            subValue="Thuế suất GTGT"
+            subTone="neutral"
+            valueTone="warning"
+            icon={CurrencyDollarIcon}
+            iconBg="bg-brand-warning-soft"
+            iconColor="text-brand-warning"
+          />
         </div>
       </section>
 
