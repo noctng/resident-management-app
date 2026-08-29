@@ -15,6 +15,7 @@ import {
   Squares2x2Icon,
   MagnifyingGlassIcon,
 } from '../components/icons';
+import { StatCard } from '../components/ui/Card';
 import { api } from '../services/api';
 import { useToast } from '../components/ui';
 import ApartmentResidentsModal from '../components/ApartmentResidentsModal';
@@ -217,92 +218,55 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
 
       {/* ── KPI Summary Dashboard Cards ── */}
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
-        {/* Card 1: Tổng Căn Bàn Giao */}
-        <div className="bg-surface rounded-2xl p-4 border border-brand-border shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold text-ink-soft uppercase tracking-wider">Tổng căn bàn giao</span>
-            <div className="w-8 h-8 rounded-xl bg-accent-soft text-accent-ink flex items-center justify-center">
-              <BuildingOfficeIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-2 flex items-baseline gap-1">
-            <span className="text-2xl font-black text-ink font-mono tabular-nums">{stats.total}</span>
-            <span className="text-xs text-ink-faint">căn</span>
-          </div>
-          <div className="mt-1 text-[11px] text-accent font-semibold">
-            {stats.teslaCount} TESLA • {stats.cantataCount} CANTATA
-          </div>
-        </div>
-
-        {/* Card 2: Trạng Thái Cư Trú (Đang Ở) */}
-        <div className="bg-surface rounded-2xl p-4 border border-brand-border shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold text-ink-soft uppercase tracking-wider">Đang ở (Lấp đầy)</span>
-            <div className="w-8 h-8 rounded-xl bg-brand-success-soft text-brand-success flex items-center justify-center">
-              <CheckCircleIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-2 flex items-baseline gap-1">
-            <span className="text-2xl font-black text-ink font-mono tabular-nums">{stats.occupiedApts}</span>
-            <span className="text-xs text-ink-faint">căn</span>
-          </div>
-          <div className="mt-1 text-[11px] text-brand-success font-semibold">
-            Tỷ lệ lấp đầy: {stats.occupancyRate}%
-          </div>
-        </div>
-
-        {/* Card 3: Căn Hộ Trống */}
-        <div className="bg-surface rounded-2xl p-4 border border-brand-border shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold text-ink-soft uppercase tracking-wider">Chưa chuyển vào</span>
-            <div className="w-8 h-8 rounded-xl bg-brand-warning-soft text-brand-warning flex items-center justify-center">
-              <KeyIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-2 flex items-baseline gap-1">
-            <span className="text-2xl font-black text-ink font-mono tabular-nums">{stats.vacantApts}</span>
-            <span className="text-xs text-ink-faint">căn</span>
-          </div>
-          <div className="mt-1 text-[11px] text-brand-warning font-semibold">
-            Đã bàn giao chờ nhận nhà
-          </div>
-        </div>
-
-        {/* Card 4: Tổng Cư Dân */}
-        <div className="bg-surface rounded-2xl p-4 border border-brand-border shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold text-ink-soft uppercase tracking-wider">Tổng nhân khẩu</span>
-            <div className="w-8 h-8 rounded-xl bg-brand-teal-soft text-brand-teal flex items-center justify-center">
-              <UsersIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-2 flex items-baseline gap-1">
-            <span className="text-2xl font-black text-ink font-mono tabular-nums">{stats.totalResidents}</span>
-            <span className="text-xs text-ink-faint">cư dân</span>
-          </div>
-          <div className="mt-1 text-[11px] text-brand-teal font-semibold">
-            ~{stats.avgDensity} người/căn
-          </div>
-        </div>
-
-        {/* Card 5: Tổng Giá Trị BĐS Đã Bàn Giao */}
-        <div className="bg-surface rounded-2xl p-4 border border-brand-border shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold text-ink-soft uppercase tracking-wider">Tổng giá trị BĐS</span>
-            <div className="w-8 h-8 rounded-xl bg-accent-soft text-accent-ink flex items-center justify-center">
-              <BanknotesIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-2 flex items-baseline gap-1">
-            <span className="text-2xl font-black text-accent font-mono tabular-nums">
-              ~{stats.totalAssetValueInBillion}
-            </span>
-            <span className="text-xs text-ink-faint">tỷ VNĐ</span>
-          </div>
-          <div className="mt-1 text-[11px] text-accent font-semibold">
-            100% căn đã nghiệm thu
-          </div>
-        </div>
+        <StatCard
+          label="Tổng căn bàn giao"
+          value={`${stats.total} căn`}
+          subValue={`${stats.teslaCount} TESLA • ${stats.cantataCount} CANTATA`}
+          subTone="accent"
+          icon={BuildingOfficeIcon}
+          iconBg="bg-accent-soft"
+          iconColor="text-accent-ink"
+        />
+        <StatCard
+          label="Đang ở (Lấp đầy)"
+          value={`${stats.occupiedApts} căn`}
+          subValue={`Tỷ lệ lấp đầy: ${stats.occupancyRate}%`}
+          subTone="success"
+          valueTone="success"
+          icon={CheckCircleIcon}
+          iconBg="bg-brand-success-soft"
+          iconColor="text-brand-success"
+        />
+        <StatCard
+          label="Chưa chuyển vào"
+          value={`${stats.vacantApts} căn`}
+          subValue="Đã bàn giao chờ nhận nhà"
+          subTone="warning"
+          valueTone="warning"
+          icon={KeyIcon}
+          iconBg="bg-brand-warning-soft"
+          iconColor="text-brand-warning"
+        />
+        <StatCard
+          label="Tổng nhân khẩu"
+          value={`${stats.totalResidents} cư dân`}
+          subValue={`~${stats.avgDensity} người/căn`}
+          subTone="teal"
+          valueTone="teal"
+          icon={UsersIcon}
+          iconBg="bg-brand-teal-soft"
+          iconColor="text-brand-teal"
+        />
+        <StatCard
+          label="Tổng giá trị BĐS"
+          value={`~${stats.totalAssetValueInBillion} tỷ VNĐ`}
+          subValue="100% căn đã nghiệm thu"
+          subTone="accent"
+          valueTone="accent"
+          icon={BanknotesIcon}
+          iconBg="bg-accent-soft"
+          iconColor="text-accent-ink"
+        />
       </div>
 
       {/* ── Filter Toolbar ── */}
