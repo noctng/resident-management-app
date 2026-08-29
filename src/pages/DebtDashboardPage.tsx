@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { formatDate } from '../utils/formatters';
 import { api } from '../services/api';
+import { StatCard } from '../components/ui/Card';
 import {
   DocumentChartBarIcon,
   CheckCircleIcon,
@@ -121,83 +122,50 @@ export default function DebtDashboardPage() {
 
       {/* Overall Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-surface rounded-2xl shadow-sm border border-brand-border p-6 hover:shadow-md transition-shadow duration-200 group">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-xs font-medium text-ink-soft mb-1">
-                Tổng Hóa Đơn
-              </p>
-              <p className="text-3xl font-bold text-ink mt-1 tabular-nums">
-                {overallStats?.total_invoices || 0}
-              </p>
-              <div className="mt-2 text-xs text-ink-soft">
-                Phát sinh trong tháng
-              </div>
+        <StatCard
+          label="Tổng Hóa Đơn"
+          value={overallStats?.total_invoices || 0}
+          icon={DocumentChartBarIcon}
+          iconBg="bg-surface-alt"
+          iconColor="text-ink-soft"
+          subValue="Phát sinh trong tháng"
+          subTone="neutral"
+        />
+        <StatCard
+          label="Đã Thu"
+          value={formatCurrency(overallStats?.collected_amount || 0)}
+          icon={BanknotesIcon}
+          iconBg="bg-brand-success-soft"
+          iconColor="text-brand-success"
+          subValue={`${overallStats?.paid_invoices || 0} hóa đơn`}
+          subTone="success"
+        />
+        <StatCard
+          label="Còn Nợ"
+          value={formatCurrency(overallStats?.debt_amount || 0)}
+          valueTone="danger"
+          icon={ArrowTrendingUpIcon}
+          iconBg="bg-brand-danger-soft"
+          iconColor="text-brand-danger"
+          subValue={`${(overallStats?.pending_invoices || 0) + (overallStats?.overdue_invoices || 0)} hóa đơn`}
+          subTone="danger"
+        />
+        <StatCard
+          label="Tỷ Lệ Thu Hồi"
+          value={formatPercent(overallStats?.collection_rate || 0)}
+          valueTone="teal"
+          icon={ChartBarIcon}
+          iconBg="bg-brand-teal-soft"
+          iconColor="text-brand-teal"
+          footer={
+            <div className="w-full bg-surface-alt rounded-full h-1.5 mt-3 overflow-hidden">
+              <div
+                className="bg-gradient-to-r from-primary-500 to-secondary-600 h-full rounded-full"
+                style={{ width: `${overallStats?.collection_rate || 0}%` }}
+              />
             </div>
-            <div className="w-12 h-12 bg-surface-alt rounded-xl flex items-center justify-center text-ink-soft">
-              <DocumentChartBarIcon className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-surface rounded-2xl shadow-sm border border-brand-border p-6 hover:shadow-md transition-shadow duration-200 group">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-xs font-medium text-ink-soft mb-1">Đã Thu</p>
-              <p className="text-2xl font-mono tabular-nums font-bold text-ink mt-1">
-                {formatCurrency(overallStats?.collected_amount || 0)}
-              </p>
-              <p className="text-xs text-brand-success mt-2 font-medium flex items-center gap-1">
-                <CheckCircleIcon className="w-3 h-3" />
-                {overallStats?.paid_invoices || 0} hóa đơn
-              </p>
-            </div>
-            <div className="w-12 h-12 bg-brand-success-soft rounded-xl flex items-center justify-center text-brand-success">
-              <BanknotesIcon className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-surface rounded-2xl shadow-sm border border-brand-border p-6 hover:shadow-md transition-shadow duration-200 group">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-xs font-medium text-ink-soft mb-1">Còn Nợ</p>
-              <p className="font-serif text-3xl text-brand-danger mt-1">
-                {formatCurrency(overallStats?.debt_amount || 0)}
-              </p>
-              <p className="text-xs text-brand-danger mt-2 font-medium flex items-center gap-1">
-                <ExclamationTriangleIcon className="w-3 h-3" />
-                {(overallStats?.pending_invoices || 0) + (overallStats?.overdue_invoices || 0)} hóa
-                đơn
-              </p>
-            </div>
-            <div className="w-12 h-12 bg-brand-danger-soft rounded-xl flex items-center justify-center text-brand-danger">
-              <ArrowTrendingUpIcon className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-surface rounded-2xl shadow-sm border border-brand-border p-6 hover:shadow-md transition-shadow duration-200 group">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-xs font-medium text-ink-soft mb-1">
-                Tỷ Lệ Thu Hồi
-              </p>
-              <p className="text-3xl font-bold text-brand-teal mt-1 tabular-nums">
-                {formatPercent(overallStats?.collection_rate || 0)}
-              </p>
-              <div className="w-full bg-surface-alt rounded-full h-1.5 mt-3 overflow-hidden">
-                <div
-                  className="bg-gradient-to-r from-primary-500 to-secondary-600 h-full rounded-full"
-                  style={{ width: `${overallStats?.collection_rate || 0}%` }}
-                ></div>
-              </div>
-            </div>
-            <div className="w-12 h-12 bg-brand-teal-soft rounded-xl flex items-center justify-center text-brand-teal">
-              <ChartBarIcon className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
+          }
+        />
       </div>
 
       {/* Allocation Bar */}
