@@ -14,6 +14,7 @@ import {
   ClockIcon,
   WrenchScrewdriverIcon,
 } from '../../components/icons';
+import { StatCard } from '../../components/ui/Card';
 import ContractorManagementModal from '../../components/ContractorManagementModal';
 
 interface ConstructionFitoutPageProps {
@@ -239,49 +240,45 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
 
       {/* 4 Financial & Operational Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <BuildingOfficeIcon className="w-4 h-4 text-accent" />
-            Hồ sơ đang thi công
-          </span>
-          <div className="text-2xl font-bold font-mono text-ink tabular-nums">
-            {stats.activeConstructing || 0} căn
-          </div>
-          <p className="text-[11px] text-ink-soft">Giới hạn ≤ 3 căn/block</p>
-        </div>
-
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <BanknotesIcon className="w-4 h-4 text-brand-success" />
-            Tiền ký quỹ 100Tr đang giữ
-          </span>
-          <div className="text-xl font-bold font-mono text-brand-success tabular-nums">
-            {Number(stats.totalDepositHeld || 0).toLocaleString('vi-VN')} đ
-          </div>
-          <p className="text-[11px] text-brand-success font-medium">Ký quỹ bảo lãnh mặt bằng</p>
-        </div>
-
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <UsersIcon className="w-4 h-4 text-accent" />
-            Thẻ công nhân hoạt động
-          </span>
-          <div className="text-2xl font-bold font-mono text-accent tabular-nums">
-            {stats.totalWorkers || 0} thẻ thợ
-          </div>
-          <p className="text-[11px] text-ink-soft">Được phép ra vào theo giờ</p>
-        </div>
-
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <ExclamationTriangleIcon className="w-4 h-4 text-brand-danger" />
-            Tiền phạt vi phạm trừ ký quỹ
-          </span>
-          <div className="text-xl font-bold font-mono text-brand-danger tabular-nums">
-            {Number(stats.totalViolationsFine || 0).toLocaleString('vi-VN')} đ
-          </div>
-          <p className="text-[11px] text-brand-danger font-medium">Theo biểu phí E.5.6</p>
-        </div>
+        <StatCard
+          label="Hồ sơ đang thi công"
+          value={`${stats.activeConstructing || 0} căn`}
+          subValue="Giới hạn ≤ 3 căn/block"
+          subTone="neutral"
+          icon={BuildingOfficeIcon}
+          iconBg="bg-accent-soft"
+          iconColor="text-accent-ink"
+        />
+        <StatCard
+          label="Tiền ký quỹ 100Tr đang giữ"
+          value={`${Number(stats.totalDepositHeld || 0).toLocaleString('vi-VN')} đ`}
+          subValue="Ký quỹ bảo lãnh mặt bằng"
+          subTone="success"
+          valueTone="success"
+          icon={BanknotesIcon}
+          iconBg="bg-brand-success-soft"
+          iconColor="text-brand-success"
+        />
+        <StatCard
+          label="Thẻ công nhân hoạt động"
+          value={`${stats.totalWorkers || 0} thẻ thợ`}
+          subValue="Được phép ra vào theo giờ"
+          subTone="neutral"
+          valueTone="accent"
+          icon={UsersIcon}
+          iconBg="bg-accent-soft"
+          iconColor="text-accent-ink"
+        />
+        <StatCard
+          label="Tiền phạt vi phạm trừ ký quỹ"
+          value={`${Number(stats.totalViolationsFine || 0).toLocaleString('vi-VN')} đ`}
+          subValue="Theo biểu phí E.5.6"
+          subTone="danger"
+          valueTone="danger"
+          icon={ExclamationTriangleIcon}
+          iconBg="bg-brand-danger-soft"
+          iconColor="text-brand-danger"
+        />
       </div>
 
       {/* Tabs Bar */}
