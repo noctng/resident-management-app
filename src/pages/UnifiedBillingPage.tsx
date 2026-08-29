@@ -541,8 +541,7 @@ export default function UnifiedBillingPage({ onBack, apartments }: Props) {
               <button
                 onClick={handleBulkSend}
                 disabled={sendingBulk}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-accent hover:bg-accent-hover text-white text-xs font-semibold shadow-sm transition-colors disabled:opacity-50 cursor-pointer"
-              >
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-accent hover:bg-accent-hover text-white text-xs font-semibold shadow-sm transition-colors disabled:opacity-50 cursor-pointer" aria-label="Đóng">
                 <EnvelopeIcon className="w-4 h-4" />
                 <span className="hidden sm:inline">
                   {sendingBulk ? 'Đang gửi...' : 'Gửi Email'}
@@ -551,16 +550,14 @@ export default function UnifiedBillingPage({ onBack, apartments }: Props) {
               <button
                 onClick={handleBatchQR}
                 disabled={generatingQR}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface hover:bg-surface-alt text-ink border border-brand-border text-xs font-semibold transition-colors disabled:opacity-50 cursor-pointer"
-              >
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface hover:bg-surface-alt text-ink border border-brand-border text-xs font-semibold transition-colors disabled:opacity-50 cursor-pointer" aria-label="Đóng">
                 <QrCodeIcon className="w-4 h-4 text-ink-soft" />
                 <span className="hidden sm:inline">{generatingQR ? 'Đang tạo...' : 'Tạo QR'}</span>
               </button>
               <button
                 onClick={handleExportReport}
                 disabled={exportingReport}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface hover:bg-surface-alt text-ink border border-brand-border text-xs font-semibold transition-colors disabled:opacity-50 cursor-pointer"
-              >
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface hover:bg-surface-alt text-ink border border-brand-border text-xs font-semibold transition-colors disabled:opacity-50 cursor-pointer" aria-label="Đóng">
                 <DocumentArrowDownIcon className="w-4 h-4 text-ink-soft" />
                 <span className="hidden sm:inline">
                   {exportingReport ? 'Đang xuất...' : 'Xuất Excel'}

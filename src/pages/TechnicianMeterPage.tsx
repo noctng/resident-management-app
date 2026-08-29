@@ -415,8 +415,7 @@ export const TechnicianMeterPage: React.FC<TechnicianMeterPageProps> = ({
             <button
               onClick={onBack}
               className="p-2 min-w-[48px] min-h-[48px] inline-flex items-center justify-center rounded-xl border border-brand-border bg-surface text-ink-soft hover:text-accent transition-colors focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:outline-none"
-              title="Quay lại"
-            >
+              title="Quay lại" aria-label="Đóng">
               <ChevronLeftIcon className="w-5 h-5" />
             </button>
           )}

@@ -265,8 +265,7 @@ const ConvertToResidentModal: React.FC<ConvertToResidentModalProps> = ({
           <button
             type="submit"
             className="px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-            disabled={isSubmitting || missingIdNumber || completedContracts.length === 0}
-          >
+            disabled={isSubmitting || missingIdNumber || completedContracts.length === 0} aria-label="Đóng">
             {isSubmitting && (
               <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
             )}

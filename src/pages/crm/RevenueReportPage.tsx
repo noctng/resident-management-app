@@ -256,8 +256,7 @@ const RevenueReportPage: React.FC<Props> = ({ onNavigate, onBack }) => {
                                 ? 'bg-surface-alt text-ink-faint cursor-not-allowed border border-brand-border shadow-sm'
                                 : 'bg-accent text-white border border-accent hover:bg-accent-hover hover:shadow-md shadow-sm'
                             }
-                        `}
-          >
+                        `} aria-label="Đóng">
             {exporting ? (
               <>
                 <svg

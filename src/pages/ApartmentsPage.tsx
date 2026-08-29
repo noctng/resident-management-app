@@ -208,8 +208,7 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
           <button
             onClick={handleExportExcel}
             disabled={exporting}
-            className="bg-surface-alt text-ink-soft hover:text-ink hover:bg-brand-border px-3.5 py-2 rounded-xl transition-colors font-bold text-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
-          >
+            className="bg-surface-alt text-ink-soft hover:text-ink hover:bg-brand-border px-3.5 py-2 rounded-xl transition-colors font-bold text-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50" aria-label="Đóng">
             <DocumentArrowDownIcon className="w-4 h-4" />
             <span>{exporting ? 'Đang xuất...' : 'Xuất Excel'}</span>
           </button>

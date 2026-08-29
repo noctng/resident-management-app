@@ -178,7 +178,7 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ booking, onClose, o
             <PencilIcon className="w-5 h-5" />
             Chỉnh sửa đặt lịch
           </h3>
-          <button onClick={onClose} className="text-white/80 hover:text-white transition-colors">
+          <button onClick={onClose} className="text-white/80 hover:text-white transition-colors" aria-label="Đóng">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -490,8 +490,7 @@ const AmenityPage: React.FC<AmenityPageProps> = ({
           <button
             onClick={handleExportExcel}
             disabled={isExporting}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold bg-surface border border-brand-border text-ink rounded-xl hover:bg-surface-alt hover:border-accent/40 hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-wait cursor-pointer"
-          >
+            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold bg-surface border border-brand-border text-ink rounded-xl hover:bg-surface-alt hover:border-accent/40 hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-wait cursor-pointer" aria-label="Đóng">
             <DocumentArrowDownIcon className="w-5 h-5" />
             <span className="hidden sm:inline">{isExporting ? 'Đang xuất...' : 'Xuất Excel'}</span>
           </button>

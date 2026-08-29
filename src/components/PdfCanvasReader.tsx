@@ -369,8 +369,7 @@ export const PdfCanvasReader: React.FC<PdfCanvasReaderProps> = ({
               type="button"
               onClick={handlePrint}
               className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-surface-alt hover:bg-surface-alt text-ink-faint hover:text-white flex items-center justify-center cursor-pointer hidden md:flex"
-              title="In tài liệu"
-            >
+              title="In tài liệu" aria-label="Đóng">
               <PrinterIcon className="w-4 h-4" />
             </button>
           </div>

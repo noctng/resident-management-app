@@ -145,8 +145,7 @@ export const PdfViewerModal: React.FC<PdfViewerModalProps> = ({
               type="button"
               onClick={onClose}
               className="p-2 text-ink-soft hover:text-brand-danger hover:bg-brand-danger-soft rounded-lg transition-colors cursor-pointer ml-1"
-              title="Đóng"
-            >
+              title="Đóng" aria-label="Đóng">
               <XMarkIcon className="w-5 h-5" />
             </button>
           </div>

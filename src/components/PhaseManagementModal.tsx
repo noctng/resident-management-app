@@ -173,7 +173,7 @@ export const PhaseManagementModal: React.FC<PhaseManagementModalProps> = ({
               <p className="text-xs text-ink-soft">Thêm, sửa và định hình phân khu / phân kỳ bán hàng BĐS</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
+          <button onClick={onClose} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer" aria-label="Đóng">
             <XMarkIcon className="w-5 h-5" />
           </button>
         </div>

@@ -114,8 +114,7 @@ const EmailPreviewModal: React.FC<Props> = ({ paymentId, isOpen, onClose, onConf
           <button
             onClick={handleSend}
             disabled={sending || loading}
-            className="px-6 py-2 bg-accent hover:bg-accent-hover text-white rounded-lg transition-colors duration-200 cursor-pointer disabled:opacity-50 flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
-          >
+            className="px-6 py-2 bg-accent hover:bg-accent-hover text-white rounded-lg transition-colors duration-200 cursor-pointer disabled:opacity-50 flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40" aria-label="Đóng">
             {sending ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>

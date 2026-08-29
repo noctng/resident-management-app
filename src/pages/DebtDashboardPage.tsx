@@ -110,8 +110,7 @@ export default function DebtDashboardPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={fetchDashboardData}
-            className="p-2.5 bg-surface text-ink-soft rounded-xl border border-brand-border hover:text-accent hover:border-accent/40 transition-colors duration-200 cursor-pointer"
-          >
+            className="p-2.5 bg-surface text-ink-soft rounded-xl border border-brand-border hover:text-accent hover:border-accent/40 transition-colors duration-200 cursor-pointer" aria-label="Đóng">
             <ArrowPathIcon className="w-5 h-5" />
           </button>
           <div className="bg-surface px-4 py-2 rounded-xl text-sm font-medium text-ink-soft border border-brand-border">

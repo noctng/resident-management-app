@@ -485,8 +485,7 @@ const UtilityPage: React.FC<UtilityPageProps> = ({
                 onClick={handleBulkSend}
                 disabled={sendingBulk}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-accent hover:bg-accent-hover text-white text-xs font-semibold shadow-sm transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-accent/40 disabled:opacity-50"
-                title="Gửi email hàng loạt"
-              >
+                title="Gửi email hàng loạt" aria-label="Đóng">
                 <EnvelopeIcon className="w-4 h-4" />
                 <span className="hidden sm:inline">
                   {sendingBulk ? 'Đang gửi...' : 'Gửi Email'}
@@ -496,8 +495,7 @@ const UtilityPage: React.FC<UtilityPageProps> = ({
                 onClick={handleBatchQR}
                 disabled={generatingQR}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface border border-brand-border text-ink-soft hover:text-ink hover:border-accent/40 text-xs font-semibold shadow-sm transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-accent/40 disabled:opacity-50"
-                title="Tạo QR hàng loạt"
-              >
+                title="Tạo QR hàng loạt" aria-label="Đóng">
                 <QrCodeIcon className="w-4 h-4" />
                 <span className="hidden sm:inline">{generatingQR ? 'Đang tạo...' : 'Tạo QR'}</span>
               </button>
@@ -505,8 +503,7 @@ const UtilityPage: React.FC<UtilityPageProps> = ({
                 onClick={handleExportReport}
                 disabled={exportingReport}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface border border-brand-border text-ink-soft hover:text-ink hover:border-accent/40 text-xs font-semibold shadow-sm transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-accent/40 disabled:opacity-50"
-                title="Xuất Excel"
-              >
+                title="Xuất Excel" aria-label="Đóng">
                 <DocumentArrowDownIcon className="w-4 h-4" />
                 <span className="hidden sm:inline">
                   {exportingReport ? 'Đang xuất...' : 'Xuất Excel'}

@@ -106,8 +106,7 @@ const BankAppButton: React.FC<{ app: BankApp; isConfigured: boolean }> = ({
         isConfigured
           ? 'border-brand-success/40 bg-brand-success-soft/50 hover:bg-brand-success-soft'
           : 'border-brand-border bg-surface hover:border-accent/60 hover:bg-surface-alt'
-      }`}
-    >
+      }`} aria-label="Đóng">
       {/* Bank icon circle */}
       <div
         className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0"
@@ -547,8 +546,7 @@ const PaymentQRModal: React.FC<PaymentQRModalProps> = ({
                   onClick={handleDownloadQR}
                   disabled={downloading}
                   className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-ink bg-surface border border-brand-border px-3 py-2 rounded-lg hover:bg-surface-alt transition-colors duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 disabled:opacity-50"
-                  title="Tải ảnh mã QR trực tiếp về thiết bị"
-                >
+                  title="Tải ảnh mã QR trực tiếp về thiết bị" aria-label="Đóng">
                   <svg className="w-4 h-4 text-ink-soft shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
@@ -565,8 +563,7 @@ const PaymentQRModal: React.FC<PaymentQRModalProps> = ({
                   onClick={handleCopyQR}
                   disabled={copying}
                   className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-ink bg-surface border border-brand-border px-3 py-2 rounded-lg hover:bg-surface-alt transition-colors duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 disabled:opacity-50"
-                  title="Sao chép ảnh mã QR vào bộ nhớ tạm"
-                >
+                  title="Sao chép ảnh mã QR vào bộ nhớ tạm" aria-label="Đóng">
                   <svg className="w-4 h-4 text-ink-soft shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"

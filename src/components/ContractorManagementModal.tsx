@@ -183,7 +183,7 @@ export const ContractorManagementModal: React.FC<ContractorManagementModalProps>
               <p className="text-xs text-ink-soft">Danh sách các đối tác cơ điện, nhôm kính, chống thấm & hoàn thiện</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
+          <button onClick={onClose} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer" aria-label="Đóng">
             <XMarkIcon className="w-5 h-5" />
           </button>
         </div>

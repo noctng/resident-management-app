@@ -116,8 +116,7 @@ const ContractListPage: React.FC<ContractListPageProps> = ({ onNavigate, onBack,
         <div className="flex items-center gap-4">
           <button
             onClick={onBack}
-            className="p-1.5 border border-brand-border text-ink-soft hover:text-accent hover:border-accent/40 hover:bg-accent-soft/40 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent/40"
-          >
+            className="p-1.5 border border-brand-border text-ink-soft hover:text-accent hover:border-accent/40 hover:bg-accent-soft/40 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent/40" aria-label="Đóng">
             <ArrowLeftIcon className="w-6 h-6" />
           </button>
           <div>

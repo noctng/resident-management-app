@@ -101,8 +101,7 @@ const PaymentRestructureModal: React.FC<Props> = ({
           </h3>
           <button
             onClick={onClose}
-            className="text-ink-soft hover:text-ink transition-colors duration-200 cursor-pointer"
-          >
+            className="text-ink-soft hover:text-ink transition-colors duration-200 cursor-pointer" aria-label="Đóng">
             <XMarkIcon className="w-6 h-6" />
           </button>
         </div>

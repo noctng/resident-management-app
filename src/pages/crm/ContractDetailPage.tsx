@@ -1139,8 +1139,7 @@ export const ContractDetailPage: React.FC<ContractDetailPageProps> = ({ onNaviga
                 <button
                   type="submit"
                   disabled={uploadingDoc}
-                  className="px-5 py-2 bg-accent hover:bg-accent-hover text-white rounded-xl font-bold transition-colors cursor-pointer shadow-sm disabled:opacity-50 inline-flex items-center gap-1.5"
-                >
+                  className="px-5 py-2 bg-accent hover:bg-accent-hover text-white rounded-xl font-bold transition-colors cursor-pointer shadow-sm disabled:opacity-50 inline-flex items-center gap-1.5" aria-label="Đóng">
                   {uploadingDoc && <ArrowPathIcon className="w-4 h-4 animate-spin" />}
                   <span>{uploadingDoc ? 'Đang tải...' : 'Lưu Bản Scan'}</span>
                 </button>

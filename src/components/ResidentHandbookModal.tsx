@@ -64,8 +64,7 @@ const ResidentHandbookModal: React.FC<ResidentHandbookModalProps> = ({ isOpen, o
           <div className="flex items-center gap-2">
             <button
               onClick={onClose}
-              className="p-1.5 rounded-xl bg-brand-danger hover:brightness-110 text-white border border-brand-danger/50 transition flex items-center justify-center cursor-pointer"
-            >
+              className="p-1.5 rounded-xl bg-brand-danger hover:brightness-110 text-white border border-brand-danger/50 transition flex items-center justify-center cursor-pointer" aria-label="Đóng">
               <XMarkIcon className="w-5 h-5" />
             </button>
           </div>

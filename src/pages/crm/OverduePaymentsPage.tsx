@@ -180,8 +180,7 @@ const OverduePaymentsPage: React.FC<OverduePaymentsPageProps> = ({ onNavigate, o
       <div className="flex items-center gap-4">
         <button
           onClick={onBack}
-          className="p-2 hover:bg-surface-alt rounded-full transition-colors cursor-pointer"
-        >
+          className="p-2 hover:bg-surface-alt rounded-full transition-colors cursor-pointer" aria-label="Đóng">
           <ArrowLeftIcon className="w-6 h-6 text-ink-soft" />
         </button>
         <h1 className=" font-seriftext-2xl font-bold text-ink">Yêu cầu Thanh toán Nợ</h1>

@@ -425,8 +425,7 @@ function ResidentPortalHost() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-[10px] bg-accent hover:bg-accent-hover text-white text-sm font-semibold transition-colors disabled:opacity-60 disabled:cursor-wait cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-offset-2"
-                >
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-[10px] bg-accent hover:bg-accent-hover text-white text-sm font-semibold transition-colors disabled:opacity-60 disabled:cursor-wait cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-offset-2" aria-label="Đóng">
                   {isLoading && (
                     <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
                   )}

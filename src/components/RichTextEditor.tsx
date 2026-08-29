@@ -622,8 +622,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
                 type="button"
                 onClick={handleInsertMedia}
                 disabled={uploading || (mediaTab === 'upload' && !selectedFileBase64) || (mediaTab === 'youtube' && !youtubeInput) || (mediaTab === 'url' && !imageUrlInput)}
-                className="px-4 py-2 rounded-lg text-xs font-semibold bg-accent hover:bg-accent-hover text-white disabled:opacity-50 transition-colors duration-200 shadow-sm cursor-pointer flex items-center gap-1.5"
-              >
+                className="px-4 py-2 rounded-lg text-xs font-semibold bg-accent hover:bg-accent-hover text-white disabled:opacity-50 transition-colors duration-200 shadow-sm cursor-pointer flex items-center gap-1.5" aria-label="Đóng">
                 <PlusIcon className="w-3.5 h-3.5" />
                 <span>{uploading ? 'Đang tải lên...' : 'Chèn vào bài viết'}</span>
               </button>

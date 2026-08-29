@@ -195,8 +195,7 @@ const HandbookConfigTab: React.FC = () => {
             onClick={loadHandbookInfo}
             disabled={loading}
             className="p-1.5 border border-brand-border rounded-lg text-ink-soft hover:text-accent hover:border-accent/40 transition-colors cursor-pointer disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-accent/40"
-            title="Làm mới"
-          >
+            title="Làm mới" aria-label="Đóng">
             <ArrowPathIcon className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
         </div>
@@ -313,8 +312,7 @@ const HandbookConfigTab: React.FC = () => {
                 type="button"
                 onClick={handleSaveInfo}
                 disabled={isSavingInfo}
-                className="w-full py-2 bg-accent hover:bg-accent-hover text-white rounded-lg text-xs font-bold transition-colors cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-accent/40"
-              >
+                className="w-full py-2 bg-accent hover:bg-accent-hover text-white rounded-lg text-xs font-bold transition-colors cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-accent/40" aria-label="Đóng">
                 {isSavingInfo ? (
                   <>
                     <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
@@ -373,8 +371,7 @@ const HandbookConfigTab: React.FC = () => {
             <button
               onClick={handleUpload}
               disabled={!selectedFile || uploading}
-              className="w-full py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-xs font-bold transition-colors cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-accent/40"
-            >
+              className="w-full py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-xs font-bold transition-colors cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-accent/40" aria-label="Đóng">
               {uploading ? (
                 <>
                   <ArrowPathIcon className="w-4 h-4 animate-spin" />

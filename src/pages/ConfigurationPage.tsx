@@ -518,8 +518,7 @@ const ConfigurationPage: React.FC<ConfigurationPageProps> = ({ onBack, currentUs
           <button
             onClick={handleSave}
             disabled={isSaveDisabled}
-            className="flex items-center gap-2 px-5 py-2 bg-accent hover:bg-accent-hover text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-sm text-sm font-medium transition-colors cursor-pointer"
-          >
+            className="flex items-center gap-2 px-5 py-2 bg-accent hover:bg-accent-hover text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-sm text-sm font-medium transition-colors cursor-pointer" aria-label="Đóng">
             {isSaving ? (
               <ArrowPathIcon className="w-4 h-4 animate-spin" />
             ) : (

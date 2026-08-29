@@ -572,8 +572,7 @@ export default function FeeConfigPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-xl shadow-md text-sm font-bold transition-all disabled:opacity-50 flex items-center gap-2 transform active:scale-95"
-                >
+                  className="px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-xl shadow-md text-sm font-bold transition-all disabled:opacity-50 flex items-center gap-2 transform active:scale-95" aria-label="Đóng">
                   {loading ? (
                     <>
                       <ArrowPathIcon className="w-5 h-5 animate-spin" />

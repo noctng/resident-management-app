@@ -224,8 +224,7 @@ export const InvoiceViewModal: React.FC<InvoiceViewModalProps> = ({
                   onClick={handlePublishToVnpt}
                   disabled={publishing || loading}
                   className="inline-flex items-center gap-1 px-3 py-1.5 bg-accent hover:bg-accent-hover text-white text-xs font-bold rounded-lg shadow-sm hover:shadow transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex-shrink-0"
-                  title="Gửi dữ liệu và phát hành chính thức lên cổng VNPT E-Invoice"
-                >
+                  title="Gửi dữ liệu và phát hành chính thức lên cổng VNPT E-Invoice" aria-label="Đóng">
                   {publishing ? (
                     <>
                       <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />

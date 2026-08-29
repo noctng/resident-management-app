@@ -299,8 +299,7 @@ export const ImportApartmentModal: React.FC<ImportApartmentModalProps> = ({
             type="button"
             onClick={handleUpload}
             disabled={!file || importing}
-            className="px-5 py-2.5 rounded-lg bg-secondary hover:bg-secondary/90 text-white font-semibold text-xs shadow-sm transition-colors duration-200 flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-accent/40"
-          >
+            className="px-5 py-2.5 rounded-lg bg-secondary hover:bg-secondary/90 text-white font-semibold text-xs shadow-sm transition-colors duration-200 flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-accent/40" aria-label="Đóng">
             {importing ? (
               <>
                 <ArrowPathIcon className="w-4 h-4 animate-spin" />

@@ -45,8 +45,7 @@ const ResidentApartmentsModal: React.FC<ResidentApartmentsModalProps> = ({
           </h3>
           <button
             onClick={onClose}
-            className="text-ink-faint hover:text-ink-soft transition-colors cursor-pointer"
-          >
+            className="text-ink-faint hover:text-ink-soft transition-colors cursor-pointer" aria-label="Đóng">
             <XMarkIcon className="w-6 h-6" />
           </button>
         </div>

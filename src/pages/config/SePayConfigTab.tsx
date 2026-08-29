@@ -555,8 +555,7 @@ export const SePayConfigTab: React.FC<SePayConfigTabProps> = ({
             type="button"
             onClick={handleTestWebhook}
             disabled={isTesting}
-            className="px-4 py-2.5 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-semibold disabled:opacity-50 cursor-pointer flex items-center gap-2 transition-colors"
-          >
+            className="px-4 py-2.5 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-semibold disabled:opacity-50 cursor-pointer flex items-center gap-2 transition-colors" aria-label="Đóng">
             {isTesting ? (
               <>
                 <ArrowPathIcon className="w-4 h-4 animate-spin" />

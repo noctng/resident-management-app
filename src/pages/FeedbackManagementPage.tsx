@@ -306,8 +306,7 @@ const ResolveFeedbackModal: React.FC<{
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-5 py-2.5 bg-accent hover:bg-accent-hover text-white font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent/40 disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 transition-colors cursor-pointer"
-                  >
+                    className="px-5 py-2.5 bg-accent hover:bg-accent-hover text-white font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent/40 disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 transition-colors cursor-pointer" aria-label="Đóng">
                     {isSubmitting ? (
                       <>
                         <svg
