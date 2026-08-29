@@ -9,6 +9,7 @@ import {
   EnvelopeIcon,
 } from '../../components/icons';
 import { EmptyState } from '../../components/ui';
+import { StatCard } from '../../components/ui/Card';
 
 interface ComputedSummary {
   total_electricity: number;
@@ -97,24 +98,15 @@ export const UnifiedMonthlyView: React.FC<UnifiedMonthlyViewProps> = ({
     <div className="space-y-6">
       {/* ── 4 KPI Summary Cards ── */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Tổng phát sinh */}
-        <div className="bg-surface rounded-xl p-5 border border-brand-border shadow-sm">
-          <div className="flex items-center justify-between mb-3">
-            <div className="p-2 bg-accent-soft rounded-lg text-accent-ink">
-              <BanknotesIcon className="w-5 h-5" />
-            </div>
-            <span className="text-xs font-semibold text-ink-soft">{computedSummary.recordsCount} căn hộ</span>
-          </div>
-          <p className="text-xs font-medium text-ink-soft">Tổng phát sinh</p>
-          <p className="text-2xl font-mono tabular-nums font-bold text-ink mt-1">
-            {formatCurrency(computedSummary.grand_total)}
-          </p>
-          <p className="text-[11px] text-ink-soft mt-2 truncate" title={`Điện ${formatCurrency(computedSummary.total_electricity)} · Nước ${formatCurrency(computedSummary.total_water)} · Phí QL ${formatCurrency(computedSummary.total_management_fee)}`}>
-            Điện {formatCurrency(computedSummary.total_electricity)} · Nước{' '}
-            {formatCurrency(computedSummary.total_water)} · QL{' '}
-            {formatCurrency(computedSummary.total_management_fee)}
-          </p>
-        </div>
+        <StatCard
+          label="Tổng phát sinh"
+          subValue={`${computedSummary.recordsCount} căn hộ`}
+          subTone="neutral"
+          value={formatCurrency(computedSummary.grand_total)}
+          icon={BanknotesIcon}
+          iconBg="bg-accent-soft"
+          iconColor="text-accent-ink"
+        />
 
         {/* Đã thu */}
         <div className="bg-surface rounded-xl p-5 border border-brand-border shadow-sm">
@@ -146,22 +138,16 @@ export const UnifiedMonthlyView: React.FC<UnifiedMonthlyViewProps> = ({
           </div>
         </div>
 
-        {/* Còn nợ */}
-        <div className="bg-surface rounded-xl p-5 border border-brand-border shadow-sm">
-          <div className="flex items-center justify-between mb-3">
-            <div className="p-2 bg-brand-danger-soft rounded-lg text-brand-danger">
-              <ExclamationTriangleIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <p className="text-xs font-medium text-ink-soft">Còn nợ</p>
-          <p className="text-2xl font-mono tabular-nums font-bold text-brand-danger mt-1">
-            {formatCurrency(outstanding)}
-          </p>
-          <p className="text-[11px] text-ink-soft mt-3">
-            Thuế phải thu:{' '}
-            {formatCurrency(computedSummary.total_electricity_tax + computedSummary.total_water_tax)}
-          </p>
-        </div>
+        <StatCard
+          label="Còn nợ"
+          subValue={`Thuế phải thu: ${formatCurrency(computedSummary.total_electricity_tax + computedSummary.total_water_tax)}`}
+          subTone="neutral"
+          value={formatCurrency(outstanding)}
+          valueTone="danger"
+          icon={ExclamationTriangleIcon}
+          iconBg="bg-brand-danger-soft"
+          iconColor="text-brand-danger"
+        />
 
         {/* Tỷ lệ thu */}
         <div className="bg-surface rounded-xl p-5 border border-brand-border shadow-sm flex items-center justify-between">
