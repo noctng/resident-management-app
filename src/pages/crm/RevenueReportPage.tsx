@@ -13,6 +13,7 @@ import {
   DocumentArrowDownIcon,
   ChevronLeftIcon,
 } from '../../components/icons';
+import { StatCard } from '../../components/ui/Card';
 
 interface Props {
   onNavigate?: (route: string) => void;
@@ -311,46 +312,39 @@ const RevenueReportPage: React.FC<Props> = ({ onNavigate, onBack }) => {
         <>
           {/* Summary Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <SummaryCard
-              icon={<BanknotesIcon className="w-6 h-6 text-accent" />}
-              chipClass="bg-accent-soft"
+            <StatCard
               label="Tổng Doanh Thu"
               value={formatCurrency(data.totalRevenue)}
-              colorClass="text-accent"
-              borderClass="border-l-accent"
+              valueTone="accent"
+              icon={BanknotesIcon}
+              iconBg="bg-accent-soft"
+              iconColor="text-accent-ink"
             />
-            <SummaryCard
-              icon={<CheckCircleIcon className="w-6 h-6 text-brand-success" />}
-              chipClass="bg-brand-success-soft"
+            <StatCard
               label="Đã Thu"
               value={formatCurrency(data.totalPaid)}
-              colorClass="text-brand-success"
-              borderClass="border-l-brand-success"
+              valueTone="success"
+              icon={CheckCircleIcon}
+              iconBg="bg-brand-success-soft"
+              iconColor="text-brand-success"
             />
-            <SummaryCard
-              icon={<ClockIcon className="w-6 h-6 text-brand-warning" />}
-              chipClass="bg-brand-warning-soft"
+            <StatCard
               label="Còn Lại"
               value={formatCurrency(data.totalRemaining)}
-              colorClass="text-brand-warning"
-              borderClass="border-l-brand-warning"
+              valueTone="warning"
+              icon={ClockIcon}
+              iconBg="bg-brand-warning-soft"
+              iconColor="text-brand-warning"
             />
-            <SummaryCard
-              icon={
-                <ArrowTrendingUpIcon
-                  className={`w-6 h-6 ${
-                    data.comparison.changePercent >= 0 ? 'text-brand-success' : 'text-brand-danger rotate-180'
-                  }`}
-                />
-              }
-              chipClass={data.comparison.changePercent >= 0 ? 'bg-brand-success-soft' : 'bg-brand-danger-soft'}
+            <StatCard
               label="So với kỳ trước"
               value={`${data.comparison.changePercent >= 0 ? '+' : ''}${data.comparison.changePercent}%`}
-              colorClass={data.comparison.changePercent >= 0 ? 'text-brand-success' : 'text-brand-danger'}
-              borderClass={
-                data.comparison.changePercent >= 0 ? 'border-l-brand-success' : 'border-l-brand-danger'
-              }
-              subtitle={`Kỳ trước: ${formatCurrency(data.comparison.previousRevenue)}`}
+              valueTone={data.comparison.changePercent >= 0 ? 'success' : 'danger'}
+              subValue={`Kỳ trước: ${formatCurrency(data.comparison.previousRevenue)}`}
+              subTone="neutral"
+              icon={ArrowTrendingUpIcon}
+              iconBg={data.comparison.changePercent >= 0 ? 'bg-brand-success-soft' : 'bg-brand-danger-soft'}
+              iconColor={data.comparison.changePercent >= 0 ? 'text-brand-success' : 'text-brand-danger'}
             />
           </div>
 
@@ -442,28 +436,5 @@ const RevenueReportPage: React.FC<Props> = ({ onNavigate, onBack }) => {
   );
 };
 
-// Helper Component: Summary Card
-const SummaryCard: React.FC<{
-  icon: React.ReactNode;
-  chipClass?: string;
-  label: string;
-  value: string;
-  colorClass: string;
-  borderClass: string;
-  subtitle?: string;
-}> = ({ icon, chipClass, label, value, colorClass, borderClass, subtitle }) => (
-  <div
-    className={`bg-surface p-6 rounded-xl shadow-sm border border-brand-border border-l-4 ${borderClass} transition-all duration-200 hover:shadow-md`}
-  >
-    <div className="flex justify-between items-start mb-3">
-      <div className={`p-2.5 rounded-lg ${chipClass || 'bg-surface-alt'}`}>{icon}</div>
-    </div>
-    <div className="text-sm font-medium text-ink-soft mb-1">{label}</div>
-    <div className={`text-2xl font-bold font-mono tabular-nums ${colorClass} tracking-tight`}>{value}</div>
-    {subtitle && (
-      <div className="text-xs text-ink-soft mt-2 pt-2 border-t border-brand-border">{subtitle}</div>
-    )}
-  </div>
-);
 
 export default RevenueReportPage;
