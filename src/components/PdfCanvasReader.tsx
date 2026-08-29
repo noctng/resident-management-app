@@ -113,7 +113,7 @@ const PdfPage: React.FC<PageProps> = ({ pdfDoc, pageNumber, scale, containerWidt
 
   return (
     <div
-      className="flex flex-col items-center bg-white shadow-2xl rounded-xl overflow-hidden my-3 border border-stone-700/30 transition-all"
+      className="flex flex-col items-center bg-white shadow-2xl rounded-xl overflow-hidden my-3 border border-brand-border/30 transition-all"
       style={{
         width: dimensions ? `${dimensions.width}px` : '100%',
         minHeight: dimensions ? `${dimensions.height}px` : '300px',
@@ -130,13 +130,13 @@ const PdfPage: React.FC<PageProps> = ({ pdfDoc, pageNumber, scale, containerWidt
           }}
         />
         {isRendering && !dimensions && (
-          <div className="absolute inset-0 flex items-center justify-center bg-stone-100/50">
-            <ArrowPathIcon className="w-6 h-6 text-amber-500 animate-spin" />
+          <div className="absolute inset-0 flex items-center justify-center bg-surface-alt/50">
+            <ArrowPathIcon className="w-6 h-6 text-brand-warning animate-spin" />
           </div>
         )}
       </div>
 
-      <div className="w-full py-1.5 px-4 bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 text-[11px] font-mono text-center border-t border-stone-200 dark:border-stone-700 select-none">
+      <div className="w-full py-1.5 px-4 bg-surface-alt dark:bg-surface-alt text-ink-soft dark:text-ink-faint text-[11px] font-mono text-center border-t border-brand-border dark:border-brand-border select-none">
         Trang {pageNumber} / {pdfDoc.numPages}
       </div>
     </div>
@@ -245,47 +245,47 @@ export const PdfCanvasReader: React.FC<PdfCanvasReaderProps> = ({
   const zoomPercent = Math.round(scale * 100);
 
   return (
-    <div className="flex flex-col h-full w-full bg-stone-900 text-white rounded-2xl overflow-hidden shadow-xl border border-stone-800">
+    <div className="flex flex-col h-full w-full bg-surface-alt text-white rounded-2xl overflow-hidden shadow-xl border border-brand-border">
       
       {/* Reader Toolbar */}
       {showControls && (
-        <div className="px-3 py-2.5 bg-stone-950 border-b border-stone-800 flex flex-wrap items-center justify-between gap-2 shrink-0 z-10">
+        <div className="px-3 py-2.5 bg-surface-alt border-b border-brand-border flex flex-wrap items-center justify-between gap-2 shrink-0 z-10">
           
           {/* Left: Document Info & Page Navigation */}
           <div className="flex items-center gap-2 min-w-0">
-            <span className="text-xs font-bold text-amber-300 flex items-center gap-1 shrink-0" title={title}>
-              <DocumentTextIcon className="w-4 h-4 text-amber-400" />
+            <span className="text-xs font-bold text-brand-warning flex items-center gap-1 shrink-0" title={title}>
+              <DocumentTextIcon className="w-4 h-4 text-brand-warning" />
               <span className="hidden sm:inline truncate max-w-[150px]">{title}</span>
             </span>
 
             {numPages > 0 && (
-              <div className="flex items-center gap-1 bg-stone-800 px-2 py-1 rounded-xl text-xs font-mono">
+              <div className="flex items-center gap-1 bg-surface-alt px-2 py-1 rounded-xl text-xs font-mono">
                 {viewMode === 'single' ? (
                   <>
                     <button
                       type="button"
                       onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                       disabled={currentPage <= 1}
-                      className="p-1 hover:text-amber-300 disabled:opacity-30 cursor-pointer"
+                      className="p-1 hover:text-brand-warning disabled:opacity-30 cursor-pointer"
                       title="Trang trước"
                     >
                       ◀
                     </button>
-                    <span className="font-bold text-amber-300">
+                    <span className="font-bold text-brand-warning">
                       {currentPage} / {numPages}
                     </span>
                     <button
                       type="button"
                       onClick={() => setCurrentPage((p) => Math.min(numPages, p + 1))}
                       disabled={currentPage >= numPages}
-                      className="p-1 hover:text-amber-300 disabled:opacity-30 cursor-pointer"
+                      className="p-1 hover:text-brand-warning disabled:opacity-30 cursor-pointer"
                       title="Trang tiếp"
                     >
                       ▶
                     </button>
                   </>
                 ) : (
-                  <span className="text-amber-300 font-bold">
+                  <span className="text-brand-warning font-bold">
                     Tổng cộng: {numPages} trang
                   </span>
                 )}
@@ -296,7 +296,7 @@ export const PdfCanvasReader: React.FC<PdfCanvasReaderProps> = ({
             <button
               type="button"
               onClick={() => setViewMode((m) => (m === 'continuous' ? 'single' : 'continuous'))}
-              className="px-2 py-1 bg-stone-800 hover:bg-stone-700 text-[11px] rounded-lg text-stone-300 font-medium transition cursor-pointer hidden md:inline"
+              className="px-2 py-1 bg-surface-alt hover:bg-surface-alt text-[11px] rounded-lg text-ink-faint font-medium transition cursor-pointer hidden md:inline"
               title="Đổi chế độ cuộn trang / từng trang"
             >
               {viewMode === 'continuous' ? '📜 Cuộn liên tục' : '📄 Từng trang'}
@@ -311,7 +311,7 @@ export const PdfCanvasReader: React.FC<PdfCanvasReaderProps> = ({
               onClick={handleZoomOut}
               disabled={scale <= 0.6}
               title="Thu nhỏ"
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-stone-800 hover:bg-stone-700 active:scale-95 disabled:opacity-30 flex items-center justify-center text-stone-200 cursor-pointer font-bold text-sm"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-surface-alt hover:bg-surface-alt active:scale-95 disabled:opacity-30 flex items-center justify-center text-ink-faint cursor-pointer font-bold text-sm"
             >
               －
             </button>
@@ -321,7 +321,7 @@ export const PdfCanvasReader: React.FC<PdfCanvasReaderProps> = ({
               type="button"
               onClick={handleResetZoom}
               title="100% (Reset Zoom)"
-              className="px-2 h-7 sm:h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-amber-300 font-mono text-xs font-bold cursor-pointer transition active:scale-95"
+              className="px-2 h-7 sm:h-8 rounded-lg bg-surface-alt hover:bg-surface-alt text-brand-warning font-mono text-xs font-bold cursor-pointer transition active:scale-95"
             >
               {zoomPercent}%
             </button>
@@ -332,19 +332,19 @@ export const PdfCanvasReader: React.FC<PdfCanvasReaderProps> = ({
               onClick={handleZoomIn}
               disabled={scale >= 2.5}
               title="Phóng to"
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-stone-800 hover:bg-stone-700 active:scale-95 disabled:opacity-30 flex items-center justify-center text-stone-200 cursor-pointer font-bold text-sm"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-surface-alt hover:bg-surface-alt active:scale-95 disabled:opacity-30 flex items-center justify-center text-ink-faint cursor-pointer font-bold text-sm"
             >
               ＋
             </button>
 
-            <div className="h-4 w-px bg-stone-700 mx-0.5"></div>
+            <div className="h-4 w-px bg-surface-alt mx-0.5"></div>
 
             {/* Fullscreen Button */}
             {onOpenFullscreen && !isFullscreen && (
               <button
                 type="button"
                 onClick={onOpenFullscreen}
-                className="px-2.5 h-7 sm:h-8 bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold rounded-lg transition flex items-center gap-1 active:scale-95 cursor-pointer shadow-xs"
+                className="px-2.5 h-7 sm:h-8 bg-brand-warning hover:bg-brand-warning text-white text-xs font-bold rounded-lg transition flex items-center gap-1 active:scale-95 cursor-pointer shadow-xs"
                 title="Phóng toàn màn hình"
               >
                 <span>⛶ Toàn màn hình</span>
@@ -357,10 +357,10 @@ export const PdfCanvasReader: React.FC<PdfCanvasReaderProps> = ({
               download={fileName}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 sm:px-2.5 h-7 sm:h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white text-xs font-medium transition flex items-center gap-1 cursor-pointer"
+              className="p-1.5 sm:px-2.5 h-7 sm:h-8 rounded-lg bg-surface-alt hover:bg-surface-alt text-ink-faint hover:text-white text-xs font-medium transition flex items-center gap-1 cursor-pointer"
               title="Tải PDF về máy"
             >
-              <DocumentArrowDownIcon className="w-4 h-4 text-amber-400" />
+              <DocumentArrowDownIcon className="w-4 h-4 text-brand-warning" />
               <span className="hidden lg:inline">Tải về</span>
             </a>
 
@@ -368,7 +368,7 @@ export const PdfCanvasReader: React.FC<PdfCanvasReaderProps> = ({
             <button
               type="button"
               onClick={handlePrint}
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white flex items-center justify-center cursor-pointer hidden md:flex"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-surface-alt hover:bg-surface-alt text-ink-faint hover:text-white flex items-center justify-center cursor-pointer hidden md:flex"
               title="In tài liệu"
             >
               <PrinterIcon className="w-4 h-4" />
@@ -381,27 +381,27 @@ export const PdfCanvasReader: React.FC<PdfCanvasReaderProps> = ({
       {/* Main Canvas Viewport with Touch & Scroll */}
       <div
         ref={containerRef}
-        className="flex-1 w-full overflow-auto bg-stone-900 p-2 sm:p-6 flex flex-col items-center gap-2 select-none touch-pan-y"
+        className="flex-1 w-full overflow-auto bg-surface-alt p-2 sm:p-6 flex flex-col items-center gap-2 select-none touch-pan-y"
         style={{ minHeight: isFullscreen ? 'calc(100vh - 4rem)' : '580px' }}
       >
         {loading && (
-          <div className="flex flex-col items-center justify-center my-auto py-16 text-stone-400 space-y-3">
-            <ArrowPathIcon className="w-9 h-9 text-amber-400 animate-spin" />
+          <div className="flex flex-col items-center justify-center my-auto py-16 text-ink-faint space-y-3">
+            <ArrowPathIcon className="w-9 h-9 text-brand-warning animate-spin" />
             <span className="text-xs font-bold tracking-wide">Đang nạp và kết xuất Sổ Tay Cư Dân...</span>
-            <span className="text-[11px] text-stone-500">Tương thích hoàn hảo mọi thiết bị di động & máy tính</span>
+            <span className="text-[11px] text-ink-soft">Tương thích hoàn hảo mọi thiết bị di động & máy tính</span>
           </div>
         )}
 
         {error && (
-          <div className="flex flex-col items-center justify-center my-auto py-12 px-4 text-center space-y-4 max-w-md bg-stone-950 p-6 rounded-2xl border border-stone-800">
-            <DocumentTextIcon className="w-12 h-12 text-amber-400 mx-auto" />
-            <p className="text-xs text-stone-300 leading-relaxed">{error}</p>
+          <div className="flex flex-col items-center justify-center my-auto py-12 px-4 text-center space-y-4 max-w-md bg-surface-alt p-6 rounded-2xl border border-brand-border">
+            <DocumentTextIcon className="w-12 h-12 text-brand-warning mx-auto" />
+            <p className="text-xs text-ink-faint leading-relaxed">{error}</p>
             <a
               href={pdfUrl}
               download={fileName}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold shadow-lg transition flex items-center gap-2"
+              className="px-4 py-2 bg-brand-warning hover:bg-brand-warning text-white rounded-xl text-xs font-bold shadow-lg transition flex items-center gap-2"
             >
               <DocumentArrowDownIcon className="w-4 h-4" />
               <span>Tải File PDF Ngay</span>

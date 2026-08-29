@@ -27,40 +27,40 @@ interface FilterOptions {
 }
 
 const ACTION_LABELS: Record<string, { label: string; color: string; bg: string }> = {
-  CREATE: { label: 'Thêm mới', color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200' },
-  CREATE_RESIDENT: { label: 'Thêm cư dân', color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200' },
-  CREATE_USER: { label: 'Tạo tài khoản', color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200' },
-  CREATE_CONTRACT: { label: 'Tạo hợp đồng', color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200' },
-  CREATE_BOOKING: { label: 'Tạo giữ chỗ', color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200' },
-  CREATE_DEPOSIT: { label: 'Tạo đặt cọc', color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200' },
-  CREATE_TRANSFER: { label: 'Tạo chuyển nhượng', color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200' },
-  CREATE_FEEDBACK: { label: 'Gửi phản ánh', color: 'text-cyan-700', bg: 'bg-cyan-50 border-cyan-200' },
+  CREATE: { label: 'Thêm mới', color: 'text-brand-success', bg: 'bg-brand-success-soft border-brand-success' },
+  CREATE_RESIDENT: { label: 'Thêm cư dân', color: 'text-brand-success', bg: 'bg-brand-success-soft border-brand-success' },
+  CREATE_USER: { label: 'Tạo tài khoản', color: 'text-brand-success', bg: 'bg-brand-success-soft border-brand-success' },
+  CREATE_CONTRACT: { label: 'Tạo hợp đồng', color: 'text-brand-success', bg: 'bg-brand-success-soft border-brand-success' },
+  CREATE_BOOKING: { label: 'Tạo giữ chỗ', color: 'text-brand-success', bg: 'bg-brand-success-soft border-brand-success' },
+  CREATE_DEPOSIT: { label: 'Tạo đặt cọc', color: 'text-brand-success', bg: 'bg-brand-success-soft border-brand-success' },
+  CREATE_TRANSFER: { label: 'Tạo chuyển nhượng', color: 'text-brand-success', bg: 'bg-brand-success-soft border-brand-success' },
+  CREATE_FEEDBACK: { label: 'Gửi phản ánh', color: 'text-brand-teal', bg: 'bg-brand-teal-soft border-brand-teal' },
 
-  UPDATE: { label: 'Cập nhật', color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200' },
-  UPDATE_RESIDENT: { label: 'Sửa cư dân', color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200' },
-  UPDATE_RESIDENT_STATUS: { label: 'Đổi trạng thái cư dân', color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200' },
-  UPDATE_USER_PERMISSION: { label: 'Phân quyền NV', color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200' },
-  UPDATE_CONTRACT: { label: 'Sửa hợp đồng', color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200' },
-  UPDATE_AMENITY_ACCESS: { label: 'Quyền tiện ích', color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200' },
+  UPDATE: { label: 'Cập nhật', color: 'text-brand-warning', bg: 'bg-brand-warning-soft border-brand-warning' },
+  UPDATE_RESIDENT: { label: 'Sửa cư dân', color: 'text-brand-warning', bg: 'bg-brand-warning-soft border-brand-warning' },
+  UPDATE_RESIDENT_STATUS: { label: 'Đổi trạng thái cư dân', color: 'text-brand-warning', bg: 'bg-brand-warning-soft border-brand-warning' },
+  UPDATE_USER_PERMISSION: { label: 'Phân quyền NV', color: 'text-accent', bg: 'bg-accent-soft border-accent' },
+  UPDATE_CONTRACT: { label: 'Sửa hợp đồng', color: 'text-brand-warning', bg: 'bg-brand-warning-soft border-brand-warning' },
+  UPDATE_AMENITY_ACCESS: { label: 'Quyền tiện ích', color: 'text-brand-warning', bg: 'bg-brand-warning-soft border-brand-warning' },
 
-  DELETE: { label: 'Xóa', color: 'text-rose-700', bg: 'bg-rose-50 border-rose-200' },
-  DELETE_RESIDENT: { label: 'Xóa cư dân', color: 'text-rose-700', bg: 'bg-rose-50 border-rose-200' },
-  DELETE_USER: { label: 'Xóa nhân viên', color: 'text-rose-700', bg: 'bg-rose-50 border-rose-200' },
+  DELETE: { label: 'Xóa', color: 'text-accent', bg: 'bg-accent-soft border-accent' },
+  DELETE_RESIDENT: { label: 'Xóa cư dân', color: 'text-accent', bg: 'bg-accent-soft border-accent' },
+  DELETE_USER: { label: 'Xóa nhân viên', color: 'text-accent', bg: 'bg-accent-soft border-accent' },
 
-  USER_LOGIN: { label: 'Đăng nhập Admin', color: 'text-blue-700', bg: 'bg-blue-50 border-blue-200' },
-  RESIDENT_LOGIN: { label: 'Đăng nhập Portal', color: 'text-sky-700', bg: 'bg-sky-50 border-sky-200' },
-  LOGIN_FAILED: { label: 'Đăng nhập thất bại', color: 'text-red-700', bg: 'bg-red-100 border-red-300' },
-  USER_LOGOUT: { label: 'Đăng xuất', color: 'text-slate-600', bg: 'bg-slate-100 border-slate-200' },
+  USER_LOGIN: { label: 'Đăng nhập Admin', color: 'text-brand-teal', bg: 'bg-brand-teal-soft border-brand-teal' },
+  RESIDENT_LOGIN: { label: 'Đăng nhập Portal', color: 'text-brand-teal', bg: 'bg-brand-teal-soft border-brand-teal' },
+  LOGIN_FAILED: { label: 'Đăng nhập thất bại', color: 'text-brand-danger', bg: 'bg-brand-danger-soft border-brand-danger' },
+  USER_LOGOUT: { label: 'Đăng xuất', color: 'text-ink-soft', bg: 'bg-surface-alt border-brand-border' },
 
-  CHANGE_PASSWORD: { label: 'Đổi mật khẩu', color: 'text-indigo-700', bg: 'bg-indigo-50 border-indigo-200' },
-  RESET_PASSWORD: { label: 'Reset mật khẩu', color: 'text-orange-700', bg: 'bg-orange-50 border-orange-200' },
-  RESET_RESIDENT_PASSWORD: { label: 'Reset MK cư dân', color: 'text-orange-700', bg: 'bg-orange-50 border-orange-200' },
-  SYNC_RESIDENT_ACCOUNTS: { label: 'Đồng bộ tài khoản', color: 'text-teal-700', bg: 'bg-teal-50 border-teal-200' },
+  CHANGE_PASSWORD: { label: 'Đổi mật khẩu', color: 'text-accent', bg: 'bg-accent-soft border-accent' },
+  RESET_PASSWORD: { label: 'Reset mật khẩu', color: 'text-accent', bg: 'bg-accent-soft border-accent' },
+  RESET_RESIDENT_PASSWORD: { label: 'Reset MK cư dân', color: 'text-accent', bg: 'bg-accent-soft border-accent' },
+  SYNC_RESIDENT_ACCOUNTS: { label: 'Đồng bộ tài khoản', color: 'text-brand-teal', bg: 'bg-brand-teal-soft border-brand-teal' },
 
-  RESOLVE: { label: 'Xử lý', color: 'text-indigo-700', bg: 'bg-indigo-50 border-indigo-200' },
-  RESOLVE_FEEDBACK: { label: 'Xử lý phản ánh', color: 'text-indigo-700', bg: 'bg-indigo-50 border-indigo-200' },
-  HANDOVER_APARTMENT: { label: 'Bàn giao căn hộ', color: 'text-emerald-800', bg: 'bg-emerald-100 border-emerald-300' },
-  IMPORT_RESIDENTS: { label: 'Import Excel', color: 'text-teal-700', bg: 'bg-teal-50 border-teal-200' },
+  RESOLVE: { label: 'Xử lý', color: 'text-accent', bg: 'bg-accent-soft border-accent' },
+  RESOLVE_FEEDBACK: { label: 'Xử lý phản ánh', color: 'text-accent', bg: 'bg-accent-soft border-accent' },
+  HANDOVER_APARTMENT: { label: 'Bàn giao căn hộ', color: 'text-brand-success', bg: 'bg-brand-success-soft border-brand-success' },
+  IMPORT_RESIDENTS: { label: 'Import Excel', color: 'text-brand-teal', bg: 'bg-brand-teal-soft border-brand-teal' },
 };
 
 const ActivityLogPage: React.FC<ActivityLogPageProps> = ({ onBack, initialUserId }) => {
@@ -274,8 +274,8 @@ const ActivityLogPage: React.FC<ActivityLogPageProps> = ({ onBack, initialUserId
   const renderActionBadge = (action: string) => {
     const info = ACTION_LABELS[action] || {
       label: action,
-      color: 'text-slate-700',
-      bg: 'bg-slate-50 border-slate-200',
+      color: 'text-ink',
+      bg: 'bg-surface-alt border-brand-border',
     };
     return (
       <span
@@ -289,14 +289,14 @@ const ActivityLogPage: React.FC<ActivityLogPageProps> = ({ onBack, initialUserId
   const renderMethodBadge = (method?: string) => {
     if (!method) return null;
     const colors: Record<string, string> = {
-      GET: 'bg-blue-100 text-blue-800',
-      POST: 'bg-emerald-100 text-emerald-800',
-      PUT: 'bg-amber-100 text-amber-800',
-      PATCH: 'bg-purple-100 text-purple-800',
-      DELETE: 'bg-rose-100 text-rose-800',
+      GET: 'bg-brand-teal-soft text-brand-teal',
+      POST: 'bg-brand-success-soft text-brand-success',
+      PUT: 'bg-brand-warning-soft text-brand-warning',
+      PATCH: 'bg-accent-soft text-accent',
+      DELETE: 'bg-accent-soft text-accent',
     };
     return (
-      <span className={`px-1.5 py-0.2 rounded text-[10px] font-mono font-bold ${colors[method] || 'bg-gray-100 text-gray-800'}`}>
+      <span className={`px-1.5 py-0.2 rounded text-[10px] font-mono font-bold ${colors[method] || 'bg-surface-alt text-ink'}`}>
         {method}
       </span>
     );
@@ -573,8 +573,8 @@ const ActivityLogPage: React.FC<ActivityLogPageProps> = ({ onBack, initialUserId
                       <span
                         className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
                           log.statusCode < 300
-                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                            : 'bg-rose-50 text-rose-700 border border-rose-200'
+                            ? 'bg-brand-success-soft text-brand-success border border-brand-success'
+                            : 'bg-accent-soft text-accent border border-accent'
                         }`}
                       >
                         {log.statusCode}
@@ -605,7 +605,7 @@ const ActivityLogPage: React.FC<ActivityLogPageProps> = ({ onBack, initialUserId
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-brand-border">
                         {log.oldValue && (
                           <div>
-                            <span className="text-rose-600 font-bold block mb-1">Giá trị cũ (Before):</span>
+                            <span className="text-accent font-bold block mb-1">Giá trị cũ (Before):</span>
                             <pre className="p-2 bg-surface-alt rounded text-[11px] overflow-x-auto max-h-40">
                               {JSON.stringify(log.oldValue, null, 2)}
                             </pre>
@@ -613,7 +613,7 @@ const ActivityLogPage: React.FC<ActivityLogPageProps> = ({ onBack, initialUserId
                         )}
                         {log.newValue && (
                           <div>
-                            <span className="text-emerald-600 font-bold block mb-1">Giá trị mới (After):</span>
+                            <span className="text-brand-success font-bold block mb-1">Giá trị mới (After):</span>
                             <pre className="p-2 bg-surface-alt rounded text-[11px] overflow-x-auto max-h-40">
                               {JSON.stringify(log.newValue, null, 2)}
                             </pre>
@@ -637,7 +637,7 @@ const ActivityLogPage: React.FC<ActivityLogPageProps> = ({ onBack, initialUserId
             </div>
           )}
           {!hasMore && logs.length > 0 && (
-            <p className="text-xs text-ink-faint">Đã hiển thị toàn bộ {totalCount} bản ghi log</p>
+            <p className="text-xs text-ink-soft">Đã hiển thị toàn bộ {totalCount} bản ghi log</p>
           )}
         </div>
       </div>

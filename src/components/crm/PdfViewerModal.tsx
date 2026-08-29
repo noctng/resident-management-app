@@ -156,7 +156,7 @@ export const PdfViewerModal: React.FC<PdfViewerModalProps> = ({
         {/* Uses <object> tag which is most compatible for inline PDF rendering.
             <iframe> is nested inside as fallback for older browsers.
             Both point to the /crm_docs/ nginx static path directly. */}
-        <div className="flex-1 bg-[#525659] relative overflow-hidden">
+        <div className="flex-1 bg-ink relative overflow-hidden">
           <object
             data={`${fullUrl}#toolbar=1&navpanes=1&scrollbar=1&view=FitH`}
             type="application/pdf"
