@@ -12,6 +12,7 @@ import {
 import MarkPaymentPaidModal from '../../components/MarkPaymentPaidModal';
 import EmailPreviewModal from '../../components/EmailPreviewModal';
 import { useToast } from '../../components/ui';
+import { StatCard } from '../../components/ui/Card';
 import { formatDate } from '../../utils/formatters';
 
 interface PaymentWithDetails {
@@ -188,39 +189,33 @@ const OverduePaymentsPage: React.FC<OverduePaymentsPageProps> = ({ onNavigate, o
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-surface p-4 rounded-xl shadow-sm border border-brand-border border-l-4 border-l-brand-danger">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-brand-danger-soft">
-              <ExclamationTriangleIcon className="w-6 h-6 text-brand-danger" />
-            </div>
-            <div>
-              <div className="text-sm text-ink-soft">Quá hạn</div>
-              <div className="text-2xl font-bold font-mono tabular-nums text-brand-danger">{overdueCount}</div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-surface p-4 rounded-xl shadow-sm border border-brand-border border-l-4 border-l-brand-warning">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-brand-warning-soft">
-              <ClockIcon className="w-6 h-6 text-brand-warning" />
-            </div>
-            <div>
-              <div className="text-sm text-ink-soft">Sắp đến hạn</div>
-              <div className="text-2xl font-bold font-mono tabular-nums text-brand-warning">{upcomingCount}</div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-surface p-4 rounded-xl shadow-sm border border-brand-border border-l-4 border-l-brand-teal">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-brand-teal-soft">
-              <ClockIcon className="w-6 h-6 text-brand-teal" />
-            </div>
-            <div>
-              <div className="text-sm text-ink-soft">Tổng cộng</div>
-              <div className="text-2xl font-bold font-mono tabular-nums text-brand-teal">{payments.length}</div>
-            </div>
-          </div>
-        </div>
+        <StatCard
+          label="Quá hạn"
+          value={overdueCount}
+          icon={ExclamationTriangleIcon}
+          iconBg="bg-brand-danger-soft"
+          iconColor="text-brand-danger"
+          valueTone="danger"
+          accentTone="danger"
+        />
+        <StatCard
+          label="Sắp đến hạn"
+          value={upcomingCount}
+          icon={ClockIcon}
+          iconBg="bg-brand-warning-soft"
+          iconColor="text-brand-warning"
+          valueTone="warning"
+          accentTone="warning"
+        />
+        <StatCard
+          label="Tổng cộng"
+          value={payments.length}
+          icon={ClockIcon}
+          iconBg="bg-brand-teal-soft"
+          iconColor="text-brand-teal"
+          valueTone="teal"
+          accentTone="teal"
+        />
       </div>
 
       {/* Filters */}
