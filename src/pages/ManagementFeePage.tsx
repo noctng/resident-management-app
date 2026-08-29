@@ -11,6 +11,7 @@ import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
 } from '../components/icons';
+import { StatCard } from '../components/ui/Card';
 
 export default function ManagementFeePage() {
   const [fees, setFees] = useState<ManagementFee[]>([]);
@@ -170,48 +171,36 @@ export default function ManagementFeePage() {
       {/* Statistics Cards */}
       {summary && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-surface border border-brand-border rounded-xl p-4 flex items-start justify-between gap-3">
-            <div>
-              <p className="text-xs text-ink-soft">Tổng Hóa Đơn</p>
-              <p className="font-mono text-2xl tabular-nums text-ink">{summary.total_invoices}</p>
-            </div>
-            <div className="p-2 bg-surface-alt text-ink-soft rounded-lg shrink-0">
-              <DocumentTextIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="bg-surface border border-brand-border rounded-xl p-4 flex items-start justify-between gap-3">
-            <div>
-              <p className="text-xs text-ink-soft">Tổng Tiền</p>
-              <p className="font-mono text-2xl tabular-nums text-ink">
-                {formatCurrency(Number(summary.total_amount))}
-              </p>
-            </div>
-            <div className="p-2 bg-accent-soft text-accent-ink rounded-lg shrink-0">
-              <BanknotesIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="bg-surface border border-brand-border rounded-xl p-4 flex items-start justify-between gap-3">
-            <div>
-              <p className="text-xs text-ink-soft">Đã Thu</p>
-              <p className="font-mono text-2xl tabular-nums text-brand-success">
-                {formatCurrency(Number(summary.paid_amount))}
-              </p>
-            </div>
-            <div className="p-2 bg-brand-success-soft text-brand-success rounded-lg shrink-0">
-              <CheckCircleIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="bg-surface border border-brand-border rounded-xl p-4 flex items-start justify-between gap-3">
-            <div>
-              <p className="text-xs text-ink-soft">Còn Nợ</p>
-              <p className="font-mono text-2xl tabular-nums text-brand-danger">
-                {formatCurrency(Number(summary.debt_amount))}
-              </p>
-            </div>
-            <div className="p-2 bg-brand-danger-soft text-brand-danger rounded-lg shrink-0">
-              <ExclamationTriangleIcon className="w-5 h-5" />
-            </div>
-          </div>
+          <StatCard
+            label="Tổng Hóa Đơn"
+            value={summary.total_invoices}
+            icon={DocumentTextIcon}
+            iconBg="bg-surface-alt"
+            iconColor="text-ink-soft"
+          />
+          <StatCard
+            label="Tổng Tiền"
+            value={formatCurrency(Number(summary.total_amount))}
+            icon={BanknotesIcon}
+            iconBg="bg-accent-soft"
+            iconColor="text-accent-ink"
+          />
+          <StatCard
+            label="Đã Thu"
+            value={formatCurrency(Number(summary.paid_amount))}
+            valueTone="success"
+            icon={CheckCircleIcon}
+            iconBg="bg-brand-success-soft"
+            iconColor="text-brand-success"
+          />
+          <StatCard
+            label="Còn Nợ"
+            value={formatCurrency(Number(summary.debt_amount))}
+            valueTone="danger"
+            icon={ExclamationTriangleIcon}
+            iconBg="bg-brand-danger-soft"
+            iconColor="text-brand-danger"
+          />
         </div>
       )}
 
