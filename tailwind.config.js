@@ -70,6 +70,21 @@ export default {
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
         mono: ['"IBM Plex Mono"', 'monospace'],
       },
+      // ── Type Ramp (Quiet Luxury) ───────────────────────────────────────────
+      // display/h1 = Playfair serif (premium anchors); h2/body/caption = Be Vietnam sans.
+      fontSize: {
+        display: ['2.75rem', { lineHeight: '1.05', fontFamily: ['"Playfair Display"', 'Georgia', 'serif'], fontWeight: '700', letterSpacing: '-0.01em' }],
+        h1: ['1.875rem', { lineHeight: '1.2', fontFamily: ['"Playfair Display"', 'Georgia', 'serif'], fontWeight: '600' }],
+        h2: ['1.375rem', { lineHeight: '1.3', fontWeight: '600' }],
+        body: ['0.875rem', { lineHeight: '1.5' }],
+        caption: ['0.75rem', { lineHeight: '1.4' }],
+      },
+      // ── Elevation system (3 levels) — replaces scattered rgba hardcode ─────
+      boxShadow: {
+        'elevation-surface': '0 1px 2px rgba(20,30,25,0.04), 0 6px 20px -8px rgba(20,30,25,0.12)',
+        'elevation-raised': '0 2px 4px rgba(20,30,25,0.05), 0 12px 32px -10px rgba(20,30,25,0.16)',
+        'elevation-overlay': '0 8px 16px rgba(20,30,25,0.08), 0 24px 56px -12px rgba(20,30,25,0.24)',
+      },
       keyframes: {
         'fade-in': {
           from: { opacity: '0' },
