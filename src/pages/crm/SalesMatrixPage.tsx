@@ -18,6 +18,7 @@ import {
   ZenTreeIcon,
   MuseumIcon,
 } from '../../components/icons';
+import { StatCard } from '../../components/ui/Card';
 
 interface SalesMatrixPageProps {
   onNavigate?: (route: string) => void;
@@ -205,23 +206,21 @@ export const SalesMatrixPage: React.FC<SalesMatrixPageProps> = ({ onNavigate, on
       {/* KPI Stats Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {[
-          { label: 'Sẵn bán', count: stats.available, cls: 'bg-surface text-ink border-brand-border', dot: 'bg-ink-soft' },
-          { label: 'Giữ chỗ', count: stats.booked, cls: 'bg-accent-soft text-accent-ink border-accent/30', dot: 'bg-accent' },
-          { label: 'Đã cọc', count: stats.deposited, cls: 'bg-brand-teal-soft text-brand-teal border-brand-teal/30', dot: 'bg-brand-teal' },
-          { label: 'Đã ký HĐ', count: stats.contracted, cls: 'bg-accent text-white border-accent', dot: 'bg-white' },
-          { label: 'Đã bàn giao', count: stats.handedOver, cls: 'bg-brand-success-soft text-brand-success border-brand-success/25', dot: 'bg-brand-success' },
-          { label: 'Khóa bán', count: stats.locked, cls: 'bg-surface-alt text-ink-faint border-dashed border-brand-border', dot: 'bg-ink-faint' },
+          { label: 'Sẵn bán', count: stats.available, tone: 'ink' as const, dot: 'bg-ink-soft' },
+          { label: 'Giữ chỗ', count: stats.booked, tone: 'accent' as const, dot: 'bg-accent' },
+          { label: 'Đã cọc', count: stats.deposited, tone: 'teal' as const, dot: 'bg-brand-teal' },
+          { label: 'Đã ký HĐ', count: stats.contracted, tone: 'accent' as const, dot: 'bg-accent' },
+          { label: 'Đã bàn giao', count: stats.handedOver, tone: 'success' as const, dot: 'bg-brand-success' },
+          { label: 'Khóa bán', count: stats.locked, tone: 'ink' as const, dot: 'bg-ink-faint' },
         ].map((item, idx) => (
-          <div
+          <StatCard
             key={idx}
-            className={`p-3.5 rounded-xl border shadow-sm flex items-center gap-3 transition-all duration-200 ${item.cls}`}
-          >
-            <span className={`w-3 h-3 rounded-full ${item.dot} flex-shrink-0`} />
-            <div>
-              <div className="text-[11px] font-medium opacity-80">{item.label}</div>
-              <div className="text-lg font-bold">{item.count}</div>
-            </div>
-          </div>
+            label={item.label}
+            value={item.count}
+            valueTone={item.tone}
+            className="border-l-4"
+            subValue={<span className={`inline-block w-2.5 h-2.5 rounded-full ${item.dot}`} />}
+          />
         ))}
       </div>
 
