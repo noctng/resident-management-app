@@ -151,9 +151,11 @@ async function completeHandover(contractId, handoverDate, notes, actor) {
         can_use_amenities: true,
       });
     } else {
-      // Update missing phone
+      // Update missing phone → gán lại biến để tạo account
       if (!resident.phone_number && customer.phone) {
-        await repo.updateResident(resident.id, { phone_number: customer.phone });
+        resident = await repo.updateResident(resident.id, {
+          phone_number: customer.phone,
+        });
       }
     }
 
