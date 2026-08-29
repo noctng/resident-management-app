@@ -22,7 +22,7 @@ const EmailPreviewModal: React.FC<EmailPreviewModalProps> = ({
   if (!isOpen || !data) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-2xl max-h-[92vh] overflow-y-auto custom-scrollbar flex flex-col">
         <header className="p-4 border-b border-brand-border flex justify-between items-center bg-surface-alt">
           <div>

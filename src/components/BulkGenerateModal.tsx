@@ -73,7 +73,7 @@ export default function BulkGenerateModal({ month, year, onClose, onSuccess }: P
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div className="bg-surface w-full rounded-2xl shadow-elevation-overlay border border-brand-border max-w-4xl max-h-[92vh] overflow-y-auto custom-scrollbar">
         {/* Header */}
         <div className="sticky top-0 z-10 px-5 py-4 border-b border-brand-border flex justify-between items-center bg-surface">

@@ -115,7 +115,7 @@ const BookAmenityModal: React.FC<BookAmenityModalProps> = ({
     'mt-1 block w-full px-3 py-2 border border-brand-border rounded-lg shadow-sm';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-opacity">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-opacity" role="dialog" aria-modal="true">
       <div
         className="bg-white rounded-xl shadow-elevation-overlay w-full max-w-md transform transition-all scale-100 overflow-hidden flex flex-col"
         role="dialog"

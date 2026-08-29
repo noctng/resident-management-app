@@ -71,7 +71,7 @@ const MarkPaymentPaidModal: React.FC<MarkPaymentPaidModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
         <div className="px-5 py-4 border-b border-brand-border flex justify-between items-center">
           <div className="flex items-center gap-2.5">

@@ -82,7 +82,7 @@ const CancelContractModal: React.FC<CancelContractModalProps> = ({
   const suggestedRefund = totalPaid * 0.9; // 90% refund policy
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" role="dialog" aria-modal="true">
       <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
         <div className="px-6 py-4 border-b border-brand-border flex justify-between items-center bg-brand-danger-soft">
           <div className="flex items-center gap-3">

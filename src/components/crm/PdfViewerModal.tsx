@@ -78,7 +78,7 @@ export const PdfViewerModal: React.FC<PdfViewerModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/75 backdrop-blur-xs animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/75 backdrop-blur-xs animate-fade-in" role="dialog" aria-modal="true">
       <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-5xl h-[92vh] flex flex-col overflow-hidden animate-scale-up">
 
         {/* ─── Modal Header ─────────────────────────────────────────── */}

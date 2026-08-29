@@ -26,7 +26,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({ usage, isOpen, onClose }) => 
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(usage.bookingCode)}`;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-opacity">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-opacity" role="dialog" aria-modal="true">
       <div
         className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-sm overflow-hidden flex flex-col"
         role="dialog"

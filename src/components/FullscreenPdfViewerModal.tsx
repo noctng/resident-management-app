@@ -47,7 +47,7 @@ export const FullscreenPdfViewerModal: React.FC<FullscreenPdfViewerModalProps> =
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-sidebar-bg-2/95 flex flex-col backdrop-blur-lg animate-fade-in select-none">
+    <div className="fixed inset-0 z-[9999] bg-sidebar-bg-2/95 flex flex-col backdrop-blur-lg animate-fade-in select-none" role="dialog" aria-modal="true">
       
       {/* Top Floating Control Bar */}
       <header className="h-14 px-4 sm:px-6 bg-sidebar-bg-2 border-b border-sidebar-line text-white flex items-center justify-between gap-3 shrink-0 shadow-elevation-overlay z-10">

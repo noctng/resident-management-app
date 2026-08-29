@@ -40,7 +40,7 @@ export const ConfirmProvider: React.FC<{ children: React.ReactNode }> = ({ child
       {children}
       {pending &&
         createPortal(
-          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" role="dialog" aria-modal="true">
             <div
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
               onClick={() => handleResponse(false)}

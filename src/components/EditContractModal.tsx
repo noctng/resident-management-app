@@ -89,7 +89,7 @@ const EditContractModal: React.FC<EditContractModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" role="dialog" aria-modal="true">
       <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-3xl max-h-[92vh] overflow-y-auto custom-scrollbar">
         <div className="sticky top-0 px-6 py-4 border-b border-brand-border flex justify-between items-center bg-surface-alt">
           <div className="flex items-center gap-3">
