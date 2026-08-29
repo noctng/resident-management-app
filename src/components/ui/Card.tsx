@@ -27,8 +27,8 @@ export const Card: React.FC<CardProps> = ({
   <div
     onClick={onClick}
     className={[
-      'bg-white rounded-[10px] border border-brand-border shadow-[0_1px_2px_rgba(20,30,25,0.04),0_6px_20px_-8px_rgba(20,30,25,0.12)]',
-      hover ? 'hover:border-accent/40 hover:shadow-md transition-all duration-150' : '',
+      'bg-surface rounded-[10px] border border-brand-border shadow-elevation-surface',
+      hover ? 'hover:border-accent/40 hover:shadow-elevation-raised transition-all duration-150' : '',
       onClick ? 'cursor-pointer' : '',
       paddingClasses[padding],
       className,
@@ -62,6 +62,8 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
   </div>
 );
 
+type StatCardVariant = 'default' | 'hero';
+
 interface StatCardProps {
   label: string;
   value: React.ReactNode;
@@ -72,40 +74,76 @@ interface StatCardProps {
   onClick?: () => void;
   trend?: React.ReactNode;
   deltaClass?: 'up' | 'down';
+  variant?: StatCardVariant;
 }
 
 export const StatCard: React.FC<StatCardProps> = ({
   label,
   value,
   subValue,
+  icon: Icon,
+  iconBg,
+  iconColor,
   onClick,
   trend,
   deltaClass = 'up',
-}) => (
-  <div
-    onClick={onClick}
-    className={[
-      'bg-white border border-brand-border rounded-[10px] p-4 shadow-[0_1px_2px_rgba(20,30,25,0.04),0_6px_20px_-8px_rgba(20,30,25,0.12)]',
-      onClick ? 'cursor-pointer hover:border-accent/40 transition-all' : '',
-    ].join(' ')}
-  >
-    <div className="text-xs text-ink-soft flex items-center justify-between font-medium">
-      <span>{label}</span>
-      {trend && <span>{trend}</span>}
-    </div>
-    <div className="font-serif text-[28px] font-bold text-ink mt-1.5 leading-none">
-      {value}
-    </div>
-    {subValue && (
-      <div
-        className={`text-[11.5px] mt-2 font-mono font-medium ${
-          deltaClass === 'down' ? 'text-brand-danger' : 'text-brand-success'
-        }`}
-      >
-        {subValue}
+  variant = 'default',
+}) => {
+  const isHero = variant === 'hero';
+  return (
+    <div
+      onClick={onClick}
+      className={[
+        isHero
+          ? 'bg-accent-soft/40 border-accent/30 shadow-elevation-raised'
+          : 'bg-surface border-brand-border shadow-elevation-surface',
+        'rounded-[10px] p-4 transition-all duration-150',
+        onClick ? 'cursor-pointer hover:border-accent/40 hover:shadow-elevation-raised' : '',
+      ].join(' ')}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div
+          className={
+            isHero
+              ? 'text-sm font-semibold text-accent-ink'
+              : 'text-xs text-ink-soft font-medium'
+          }
+        >
+          {label}
+        </div>
+        {Icon && (
+          <div
+            className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${
+              iconBg || 'bg-brand-teal-soft'
+            } ${iconColor || 'text-brand-teal'}`}
+          >
+            <Icon className="w-5 h-5" />
+          </div>
+        )}
+        {!Icon && trend && <div className="flex-shrink-0">{trend}</div>}
       </div>
-    )}
-  </div>
-);
+
+      <div
+        className={
+          isHero
+            ? 'font-serif text-[40px] font-bold text-ink leading-none mt-2'
+            : 'font-serif text-[28px] font-bold text-ink mt-1.5 leading-none'
+        }
+      >
+        {value}
+      </div>
+
+      {subValue && (
+        <div
+          className={`text-[11.5px] mt-2 font-mono font-medium ${
+            deltaClass === 'down' ? 'text-brand-danger' : 'text-brand-success'
+          }`}
+        >
+          {subValue}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default Card;
