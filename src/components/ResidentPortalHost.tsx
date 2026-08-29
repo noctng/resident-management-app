@@ -14,6 +14,7 @@ import type { AmenityLimitConfig } from './AmenityManager';
 import ResidentPortalPage from '../pages/ResidentPortalPage';
 import { ArrowLeftIcon, BuildingOfficeIcon, ArrowRightIcon } from './icons';
 import { useToast } from './ui';
+import PortalOnboarding from './PortalOnboarding';
 
 interface AuthenticatedData {
   resident: { id: string; name: string; canUseAmenities: boolean };
@@ -221,22 +222,28 @@ function ResidentPortalHost() {
     // ── Portal đầy đủ: chiếm toàn màn hình, không còn panel thương hiệu ──
     if (authenticatedData && selectedApartment) {
       return (
-        <ResidentPortalPage
-          authenticatedData={authenticatedData}
-          selectedApartment={selectedApartment}
-          utilityRecords={utilityRecords}
-          amenityUsages={amenityUsages}
-          feedbackList={feedbackList}
-          appConfig={appConfig}
-          onAddAmenityUsage={handleAddAmenityUsage}
-          onUpdateAmenityStatus={handleUpdateAmenityStatus}
-          onAddFeedback={handleAddFeedback}
-          onRefetchAmenityUsages={handleRefetchAmenityUsages}
-          isAmenityListLoading={isAmenityListLoading}
-          onLogout={handleLogout}
-          onChangeApartment={handleChangeApartment}
-          amenityLimits={amenityLimits}
-        />
+        <>
+          <ResidentPortalPage
+            authenticatedData={authenticatedData}
+            selectedApartment={selectedApartment}
+            utilityRecords={utilityRecords}
+            amenityUsages={amenityUsages}
+            feedbackList={feedbackList}
+            appConfig={appConfig}
+            onAddAmenityUsage={handleAddAmenityUsage}
+            onUpdateAmenityStatus={handleUpdateAmenityStatus}
+            onAddFeedback={handleAddFeedback}
+            onRefetchAmenityUsages={handleRefetchAmenityUsages}
+            isAmenityListLoading={isAmenityListLoading}
+            onLogout={handleLogout}
+            onChangeApartment={handleChangeApartment}
+            amenityLimits={amenityLimits}
+          />
+          <PortalOnboarding
+            apartmentCode={selectedApartment.code}
+            residentName={authenticatedData.resident.name}
+          />
+        </>
       );
     }
 

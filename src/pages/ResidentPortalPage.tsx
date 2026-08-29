@@ -513,7 +513,7 @@ function ResidentPortalPage({
   ];
 
   return (
-    <div className="w-full max-w-6xl mx-auto bg-surface border-0 sm:border border-brand-border sm:rounded-2xl sm:shadow-xl flex flex-col overflow-hidden transition-all duration-300 min-h-screen sm:min-h-[85vh]">
+    <div className="w-full max-w-6xl lg:max-w-7xl mx-auto bg-surface border-0 sm:border border-brand-border sm:rounded-2xl sm:shadow-xl flex flex-col overflow-hidden transition-all duration-300 min-h-screen sm:min-h-[85vh] lg:min-h-[90vh]">
       {/* ── TOP HEADER ── */}
       <header className="sticky top-0 z-30 bg-surface/95 backdrop-blur-md border-b border-brand-border px-4 py-3 sm:px-5 sm:py-3 shadow-sm flex-shrink-0">
         <div className="flex items-center justify-between gap-2">
@@ -621,10 +621,10 @@ function ResidentPortalPage({
               </button>
             )}
             {authenticatedData.apartments.length > 1 && (
-              <button onClick={() => { onChangeApartment(); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-2 text-xs font-semibold rounded-xl bg-surface-alt text-ink">Đổi căn hộ</button>
+              <button onClick={() => { onChangeApartment(); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-2 min-h-tap text-xs font-semibold rounded-xl bg-surface-alt text-ink">Đổi căn hộ</button>
             )}
-            <button onClick={() => { setChangePasswordModalOpen(true); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-2 text-xs font-semibold rounded-xl bg-surface-alt text-ink">Đổi mật khẩu</button>
-            <button onClick={() => { onLogout(); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-2 text-xs font-semibold rounded-xl bg-brand-danger-soft text-brand-danger">Đăng xuất</button>
+            <button onClick={() => { setChangePasswordModalOpen(true); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-2 min-h-tap text-xs font-semibold rounded-xl bg-surface-alt text-ink">Đổi mật khẩu</button>
+            <button onClick={() => { onLogout(); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-2 min-h-tap text-xs font-semibold rounded-xl bg-brand-danger-soft text-brand-danger">Đăng xuất</button>
           </div>
         )}
       </header>
@@ -643,7 +643,7 @@ function ResidentPortalPage({
                 <button
                   key={item.key}
                   onClick={() => setActiveTab(item.key)}
-                  className={`w-full flex items-center gap-3 px-2.5 py-2.5 rounded-xl text-sm font-medium transition-colors duration-200 relative cursor-pointer ${
+                  className={`w-full flex items-center gap-3 px-2.5 py-2.5 min-h-tap rounded-xl text-sm font-medium transition-colors duration-200 relative cursor-pointer ${
                     isActive
                       ? 'bg-accent-soft text-accent-ink'
                       : 'text-ink-soft hover:bg-surface-alt hover:text-ink'
@@ -719,7 +719,7 @@ function ResidentPortalPage({
                     <button
                       key={item.key}
                       onClick={() => { setActiveTab(item.key); setSidebarOpen(false); }}
-                      className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors cursor-pointer ${
+                      className={`w-full flex items-center gap-3 px-3 py-3 min-h-tap rounded-xl text-sm font-medium transition-colors cursor-pointer ${
                         isActive
                           ? 'bg-accent-soft text-accent-ink'
                           : 'text-ink-soft hover:bg-surface-alt hover:text-ink'

@@ -70,6 +70,10 @@ export default {
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
         mono: ['"IBM Plex Mono"', 'monospace'],
       },
+      // ── Touch target (accessibility: min 44px) ──────────────────────────────
+      spacing: {
+        tap: '44px',
+      },
       // ── Type Ramp (Quiet Luxury) ───────────────────────────────────────────
       // display/h1 = Playfair serif (premium anchors); h2/body/caption = Be Vietnam sans.
       fontSize: {
