@@ -139,7 +139,7 @@ export const HandoverManagementPage: React.FC<HandoverManagementPageProps> = ({ 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
             <BuildingOfficeIcon className="w-7 h-7 text-accent" />
             Nghiệm Thu Bàn Giao & Cầu Nối Vận Hành (Operations Bridge)
           </h1>

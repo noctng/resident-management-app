@@ -81,7 +81,7 @@ const ResidentHandbookView: React.FC = () => {
               <SparklesIcon className="w-3.5 h-3.5" />
               <span>TÀI LIỆU QUẢN LÝ VẬN HÀNH 2026</span>
             </div>
-            <h1 className="text-2xl font-serif font-semibold tracking-tight text-ink">
+            <h1 className=" font-seriftext-2xl font-serif font-semibold tracking-tight text-ink">
               {info.title || '📖 Sổ Tay Cư Dân Thành Phố Cà Phê'}
             </h1>
             <p className="text-sm text-ink-soft max-w-2xl leading-relaxed">

@@ -87,7 +87,7 @@ const CustomerListPage: React.FC<CustomerListPageProps> = ({ onNavigate, onBack,
             <ArrowLeftIcon className="w-6 h-6" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-ink">
+            <h1 className=" font-seriftext-2xl font-bold text-ink">
               Danh sách Khách hàng
             </h1>
             <p className="text-sm text-ink-soft">

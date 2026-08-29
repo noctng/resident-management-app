@@ -263,7 +263,7 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
       {/* Header & Tab Switcher */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
             <TagIcon className="w-7 h-7 text-accent" />
             <span>Bảng Giá Phiên Bản & Chiến Dịch Ưu Đãi</span>
           </h1>

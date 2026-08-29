@@ -143,7 +143,7 @@ export const SalesMatrixPage: React.FC<SalesMatrixPageProps> = ({ onNavigate, on
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
             <BuildingOfficeIcon className="w-7 h-7 text-primary-600" />
             Ma Trận Bán Hàng Trực Quan (Sales Matrix)
           </h1>

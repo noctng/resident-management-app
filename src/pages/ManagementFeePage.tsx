@@ -157,7 +157,7 @@ export default function ManagementFeePage() {
   return (
     <div className="p-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-ink">Quản Lý Phí Quản Lý & Dịch Vụ</h1>
+        <h1 className=" font-seriftext-2xl font-bold text-ink">Quản Lý Phí Quản Lý & Dịch Vụ</h1>
         <p className="text-ink-soft mt-1">Tạo và quản lý hóa đơn phí quản lý hàng tháng</p>
       </div>
 

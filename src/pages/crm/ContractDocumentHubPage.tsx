@@ -204,7 +204,7 @@ export const ContractDocumentHubPage: React.FC<ContractDocumentHubPageProps> = (
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
             <FolderIcon className="w-7 h-7 text-accent" />
             <span>Kho Lưu Trữ Bản Scan Hợp Đồng & Hồ Sơ Pháp Lý</span>
           </h1>

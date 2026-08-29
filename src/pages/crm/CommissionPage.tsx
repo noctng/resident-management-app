@@ -176,7 +176,7 @@ export const CommissionPage: React.FC<CommissionPageProps> = ({ onNavigate, onBa
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
             <SparklesIcon className="w-7 h-7 text-accent" />
             <span>Quản Lý Hoa Hồng Sale & Kênh Phân Phối</span>
           </h1>

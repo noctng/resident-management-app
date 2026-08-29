@@ -121,7 +121,7 @@ const ContractListPage: React.FC<ContractListPageProps> = ({ onNavigate, onBack,
             <ArrowLeftIcon className="w-6 h-6" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-ink">Danh sách Hợp đồng</h1>
+            <h1 className=" font-seriftext-2xl font-bold text-ink">Danh sách Hợp đồng</h1>
             <p className="text-sm text-ink-soft">
               Quản lý toàn bộ hợp đồng mua bán căn hộ
             </p>

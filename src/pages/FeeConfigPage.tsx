@@ -135,7 +135,7 @@ export default function FeeConfigPage() {
     <div className="max-w-7xl mx-auto p-6 space-y-8 animate-fade-in bg-bg/50 min-h-screen">
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-ink flex items-center gap-3">
+          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-3">
             <span className="p-2 bg-accent text-white rounded-xl">
               <CurrencyDollarIcon className="w-6 h-6" />
             </span>

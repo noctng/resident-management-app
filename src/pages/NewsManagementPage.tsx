@@ -701,7 +701,7 @@ function NewsManagementPage() {
                     <span className="text-sm text-ink-soft">Vừa xong</span>
                   </div>
 
-                  <h2 className="text-xl sm:text-2xl font-bold text-ink  leading-snug">
+                  <h2 className="text-xl sm: font-seriftext-2xl font-bold text-ink  leading-snug">
                     {previewModalPost.title || 'Tiêu đề bài viết'}
                   </h2>
 

@@ -184,7 +184,7 @@ const OverduePaymentsPage: React.FC<OverduePaymentsPageProps> = ({ onNavigate, o
         >
           <ArrowLeftIcon className="w-6 h-6 text-ink-soft" />
         </button>
-        <h1 className="text-2xl font-bold text-ink">Yêu cầu Thanh toán Nợ</h1>
+        <h1 className=" font-seriftext-2xl font-bold text-ink">Yêu cầu Thanh toán Nợ</h1>
       </div>
 
       {/* Summary Cards */}

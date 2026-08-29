@@ -283,7 +283,7 @@ const VehicleManagementPage: React.FC<VehicleManagementPageProps> = ({ apartment
             <span>Quay lại</span>
           </button>
           <div>
-            <h1 className="text-3xl font-bold text-ink flex items-center gap-2">
+            <h1 className=" font-seriftext-3xl font-bold text-ink flex items-center gap-2">
               <TruckIcon className="w-8 h-8 text-accent" />
               Quản lý Phương tiện
             </h1>

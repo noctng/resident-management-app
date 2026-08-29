@@ -158,7 +158,7 @@ const RevenueReportPage: React.FC<Props> = ({ onNavigate, onBack }) => {
           >
             <ChevronLeftIcon className="w-4 h-4" /> Quay lại
           </button>
-          <h1 className="text-3xl font-bold text-ink flex items-center gap-3">
+          <h1 className=" font-seriftext-3xl font-bold text-ink flex items-center gap-3">
             <ChartBarIcon className="w-6 h-6 text-accent" /> Báo Cáo Doanh Thu
           </h1>
         </div>

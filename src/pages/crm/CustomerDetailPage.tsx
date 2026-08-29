@@ -93,7 +93,7 @@ const CustomerDetailPage: React.FC<CustomerDetailPageProps> = ({ onNavigate, onB
         >
           <ArrowLeftIcon className="w-6 h-6" />
         </button>
-        <h1 className="text-2xl font-bold text-ink">Chi tiết Khách hàng</h1>
+        <h1 className=" font-seriftext-2xl font-bold text-ink">Chi tiết Khách hàng</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in">
