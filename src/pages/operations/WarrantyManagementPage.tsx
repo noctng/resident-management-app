@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import { useToast, useConfirm } from '../../components/ui';
+import { StatCard } from '../../components/ui/Card';
 import {
   WrenchScrewdriverIcon,
   PlusIcon,
@@ -238,49 +239,49 @@ export const WarrantyManagementPage: React.FC<WarrantyManagementPageProps> = () 
 
       {/* 4 Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <WrenchScrewdriverIcon className="w-4 h-4 text-accent" />
-            Tổng yêu cầu bảo hành
-          </span>
-          <div className="text-2xl font-bold font-mono text-ink tabular-nums">
-            {stats.totalClaims || 0} tickets
-          </div>
-          <p className="text-[11px] text-ink-soft">Tất cả các mốc sau bàn giao</p>
-        </div>
-
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <ClockIcon className="w-4 h-4 text-brand-warning" />
-            Đang xử lý trong hạn SLA
-          </span>
-          <div className="text-2xl font-bold font-mono text-brand-warning tabular-nums">
-            {stats.inProgressCount || 0} tickets
-          </div>
-          <p className="text-[11px] text-brand-warning font-medium">Nhà thầu đang khắc phục</p>
-        </div>
-
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <ExclamationTriangleIcon className="w-4 h-4 text-brand-danger" />
-            Cảnh báo quá hạn SLA
-          </span>
-          <div className="text-2xl font-bold font-mono text-brand-danger tabular-nums">
-            {stats.overdueSlaCount || 0} tickets
-          </div>
-          <p className="text-[11px] text-brand-danger font-medium">Cần đôn đốc khẩn cấp</p>
-        </div>
-
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <SparklesIcon className="w-4 h-4 text-brand-success" />
-            Đánh giá CSAT Cư Dân
-          </span>
-          <div className="text-2xl font-bold font-mono text-brand-success tabular-nums">
-            {stats.avgRating} / 5.0 ⭐
-          </div>
-          <p className="text-[11px] text-brand-success font-medium">Mức độ hài lòng sau sửa chữa</p>
-        </div>
+        <StatCard
+          label="Tổng yêu cầu bảo hành"
+          value={stats.totalClaims || 0}
+          unit="tickets"
+          icon={WrenchScrewdriverIcon}
+          iconBg="bg-accent-soft"
+          iconColor="text-accent"
+          subValue="Tất cả các mốc sau bàn giao"
+          subTone="neutral"
+        />
+        <StatCard
+          label="Đang xử lý trong hạn SLA"
+          value={stats.inProgressCount || 0}
+          unit="tickets"
+          icon={ClockIcon}
+          iconBg="bg-brand-warning-soft"
+          iconColor="text-brand-warning"
+          valueTone="warning"
+          subValue="Nhà thầu đang khắc phục"
+          subTone="warning"
+        />
+        <StatCard
+          label="Cảnh báo quá hạn SLA"
+          value={stats.overdueSlaCount || 0}
+          unit="tickets"
+          icon={ExclamationTriangleIcon}
+          iconBg="bg-brand-danger-soft"
+          iconColor="text-brand-danger"
+          valueTone="danger"
+          subValue="Cần đôn đốc khẩn cấp"
+          subTone="danger"
+        />
+        <StatCard
+          label="Đánh giá CSAT Cư Dân"
+          value={`${stats.avgRating} / 5.0`}
+          unit="⭐"
+          icon={SparklesIcon}
+          iconBg="bg-brand-success-soft"
+          iconColor="text-brand-success"
+          valueTone="success"
+          subValue="Mức độ hài lòng sau sửa chữa"
+          subTone="success"
+        />
       </div>
 
       {/* Filters Bar */}
