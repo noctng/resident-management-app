@@ -17,6 +17,7 @@ import {
   PrinterIcon,
   SparklesIcon,
 } from '../../components/icons';
+import { StatCard } from '../../components/ui/Card';
 
 interface PropertyTransferPageProps {
   onNavigate?: (route: string) => void;
@@ -249,49 +250,45 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
 
       {/* 4 Financial & Operational Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <ArrowsRightLeftIcon className="w-4 h-4 text-accent" />
-            Tổng hồ sơ chuyển nhượng
-          </span>
-          <div className="text-2xl font-bold font-mono text-ink tabular-nums">
-            {stats.totalTransfers || 0} hồ sơ
-          </div>
-          <p className="text-[11px] text-ink-soft">Đã thực hiện trên hệ thống</p>
-        </div>
-
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <CheckCircleIcon className="w-4 h-4 text-brand-success" />
-            Tổng giá trị đã kế thừa
-          </span>
-          <div className="text-xl font-bold font-mono text-brand-success tabular-nums">
-            {Number(stats.totalInheritedValue || 0).toLocaleString('vi-VN')} đ
-          </div>
-          <p className="text-[11px] text-brand-success font-medium">Bảo lưu lịch sử đã đóng</p>
-        </div>
-
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <ClockIcon className="w-4 h-4 text-accent" />
-            Chuyển nhượng trong tháng
-          </span>
-          <div className="text-2xl font-bold font-mono text-accent tabular-nums">
-            {stats.thisMonthTransfers || 0} hồ sơ
-          </div>
-          <p className="text-[11px] text-ink-soft">Phát sinh tháng này</p>
-        </div>
-
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <ExclamationTriangleIcon className="w-4 h-4 text-brand-warning" />
-            Căn chuyển nhượng &gt;2 lần
-          </span>
-          <div className="text-2xl font-bold font-mono text-brand-warning tabular-nums">
-            {stats.multiTransfersCount || 0} căn
-          </div>
-          <p className="text-[11px] text-brand-warning font-medium">Cảnh báo theo dõi đầu cơ</p>
-        </div>
+        <StatCard
+          label="Tổng hồ sơ chuyển nhượng"
+          value={`${stats.totalTransfers || 0} hồ sơ`}
+          subValue="Đã thực hiện trên hệ thống"
+          subTone="neutral"
+          icon={ArrowsRightLeftIcon}
+          iconBg="bg-accent-soft"
+          iconColor="text-accent-ink"
+        />
+        <StatCard
+          label="Tổng giá trị đã kế thừa"
+          value={`${Number(stats.totalInheritedValue || 0).toLocaleString('vi-VN')} đ`}
+          subValue="Bảo lưu lịch sử đã đóng"
+          subTone="success"
+          valueTone="success"
+          icon={CheckCircleIcon}
+          iconBg="bg-brand-success-soft"
+          iconColor="text-brand-success"
+        />
+        <StatCard
+          label="Chuyển nhượng trong tháng"
+          value={`${stats.thisMonthTransfers || 0} hồ sơ`}
+          subValue="Phát sinh tháng này"
+          subTone="neutral"
+          valueTone="accent"
+          icon={ClockIcon}
+          iconBg="bg-accent-soft"
+          iconColor="text-accent-ink"
+        />
+        <StatCard
+          label="Căn chuyển nhượng >2 lần"
+          value={`${stats.multiTransfersCount || 0} căn`}
+          subValue="Cảnh báo theo dõi đầu cơ"
+          subTone="danger"
+          valueTone="warning"
+          icon={ExclamationTriangleIcon}
+          iconBg="bg-brand-warning-soft"
+          iconColor="text-brand-warning"
+        />
       </div>
 
       {/* Filter Controls */}
