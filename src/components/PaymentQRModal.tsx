@@ -1,4 +1,5 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect , useRef} from 'react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 import { bankApps, findBankAppsByCode, type BankApp } from '../data/bankApps';
 import { XMarkIcon, QrCodeIcon, Squares2x2Icon, CheckCircleIcon } from './icons';
 import type { UtilityRecord } from '../types';
@@ -151,6 +152,8 @@ const PaymentQRModal: React.FC<PaymentQRModalProps> = ({
   qrConfig,
   onPaymentSuccess,
 }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, isOpen);
   const [showAllApps, setShowAllApps] = useState(false);
   const [isPaidSuccess, setIsPaidSuccess] = useState(false);
   const [downloading, setDownloading] = useState(false);
@@ -268,7 +271,7 @@ const PaymentQRModal: React.FC<PaymentQRModalProps> = ({
   // Render Celebratory Success View
   if (isPaidSuccess) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in" role="dialog" aria-modal="true">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in" ref={dialogRef} role="dialog" aria-modal="true">
         <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border p-6 max-w-sm w-full text-center space-y-4 animate-scale-up">
           <div className="w-20 h-20 bg-brand-success-soft text-brand-success rounded-full flex items-center justify-center mx-auto shadow-lg animate-bounce">
             <CheckCircleIcon className="w-10 h-10" />

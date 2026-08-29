@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useRef} from 'react';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { XMarkIcon } from '../icons';
 import { useToast } from '../ui';
 
@@ -21,6 +22,9 @@ const PaymentRestructureModal: React.FC<Props> = ({
   onConfirm,
   remainingAmount = 0,
 }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, isOpen);
+
   const toast = useToast();
   const [installments, setInstallments] = useState(3);
   const [rows, setRows] = useState<InstallmentRow[]>([]);
@@ -93,7 +97,7 @@ const PaymentRestructureModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" ref={dialogRef} role="dialog" aria-modal="true">
       <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-3xl max-h-[92vh] overflow-y-auto custom-scrollbar flex flex-col">
         <div className="flex justify-between items-center p-6 border-b border-brand-border">
           <h3 className="text-xl font-bold text-ink">

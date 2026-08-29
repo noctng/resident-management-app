@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 import {
   DocumentTextIcon,
   ArrowPathIcon,
@@ -33,6 +34,9 @@ export const InvoiceViewModal: React.FC<InvoiceViewModalProps> = ({
   month,
   year,
 }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, isOpen);
+
   const [loading, setLoading] = useState(true);
   const [publishing, setPublishing] = useState(false);
   const { confirm } = useConfirm();
@@ -188,7 +192,7 @@ export const InvoiceViewModal: React.FC<InvoiceViewModalProps> = ({
   const baseHeight = 880;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/50 backdrop-blur-sm animate-fade-in" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/50 backdrop-blur-sm animate-fade-in" ref={dialogRef} role="dialog" aria-modal="true">
       <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden animate-in">
         
         {/* Header - Mobile & Desktop friendly */}

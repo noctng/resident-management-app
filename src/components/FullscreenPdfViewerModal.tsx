@@ -1,4 +1,5 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback , useRef} from 'react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 import {
   DocumentTextIcon,
   XMarkIcon,
@@ -20,6 +21,9 @@ export const FullscreenPdfViewerModal: React.FC<FullscreenPdfViewerModalProps> =
   title = 'Sổ Tay Cư Dân - Thành Phố Cà Phê',
   fileName = 'So_Tay_Cu_Dan.pdf',
 }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, isOpen);
+
   // Handle Keyboard Shortcuts
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -47,7 +51,7 @@ export const FullscreenPdfViewerModal: React.FC<FullscreenPdfViewerModalProps> =
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-sidebar-bg-2/95 flex flex-col backdrop-blur-lg animate-fade-in select-none" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-[9999] bg-sidebar-bg-2/95 flex flex-col backdrop-blur-lg animate-fade-in select-none" ref={dialogRef} role="dialog" aria-modal="true">
       
       {/* Top Floating Control Bar */}
       <header className="h-14 px-4 sm:px-6 bg-sidebar-bg-2 border-b border-sidebar-line text-white flex items-center justify-between gap-3 shrink-0 shadow-elevation-overlay z-10">

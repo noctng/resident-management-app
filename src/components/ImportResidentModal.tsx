@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 import {
   XMarkIcon,
   DocumentArrowDownIcon,
@@ -23,6 +24,9 @@ export const ImportResidentModal: React.FC<ImportResidentModalProps> = ({
   onClose,
   onSuccess,
 }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, isOpen);
+
   const [file, setFile] = useState<File | null>(null);
   const [autoCreateAccount, setAutoCreateAccount] = useState<boolean>(true);
   const [updateExisting, setUpdateExisting] = useState<boolean>(true);
@@ -117,6 +121,7 @@ export const ImportResidentModal: React.FC<ImportResidentModalProps> = ({
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-xs animate-fade-in"
+      ref={dialogRef}
       role="dialog"
       aria-modal="true"
       aria-labelledby="import-resident-modal-title"

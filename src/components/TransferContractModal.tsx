@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useRef} from 'react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 import { api } from '../services/api';
 import { XMarkIcon, UserIcon, ArrowRightIcon } from './icons';
 import { useToast, useConfirm } from './ui';
@@ -30,6 +31,9 @@ const TransferContractModal: React.FC<TransferContractModalProps> = ({
   contract,
   onContractTransferred,
 }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, isOpen);
+
   const toast = useToast();
   const { confirm } = useConfirm();
   const [loading, setLoading] = useState(false);
@@ -111,7 +115,7 @@ const TransferContractModal: React.FC<TransferContractModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" ref={dialogRef} role="dialog" aria-modal="true">
       <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
         <div className="sticky top-0 z-10 px-5 py-4 border-b border-brand-border flex justify-between items-center bg-surface">
           <h2 className="text-base font-bold text-ink flex items-center gap-2.5">

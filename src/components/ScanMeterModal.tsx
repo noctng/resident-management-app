@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 import { createPortal } from 'react-dom';
 import type { Apartment, UtilityRecord } from '../types';
 import {
@@ -40,6 +41,9 @@ const ScanMeterModal: React.FC<ScanMeterModalProps> = ({
   initialYear,
   onRecordAdded,
 }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, isOpen);
+
   const currentDate = new Date();
   const [selectedMonth, setSelectedMonth] = useState<number>(
     initialMonth || currentDate.getMonth() + 1
@@ -401,7 +405,7 @@ const ScanMeterModal: React.FC<ScanMeterModalProps> = ({
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/50 backdrop-blur-sm animate-fade-in" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/50 backdrop-blur-sm animate-fade-in" ref={dialogRef} role="dialog" aria-modal="true">
       {/* Toast Notification */}
       {toastMessage && (
         <div

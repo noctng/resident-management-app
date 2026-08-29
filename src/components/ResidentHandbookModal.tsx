@@ -1,4 +1,5 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback , useRef} from 'react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 import {
   DocumentTextIcon,
   XMarkIcon,
@@ -11,6 +12,9 @@ interface ResidentHandbookModalProps {
 }
 
 const ResidentHandbookModal: React.FC<ResidentHandbookModalProps> = ({ isOpen, onClose }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, isOpen);
+
   const pdfUrl = '/api/config/handbook/file';
 
   const handleKeyDown = useCallback(
@@ -39,7 +43,7 @@ const ResidentHandbookModal: React.FC<ResidentHandbookModalProps> = ({ isOpen, o
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm animate-fade-in select-none" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm animate-fade-in select-none" ref={dialogRef} role="dialog" aria-modal="true">
       <div className="bg-sidebar-bg-2 rounded-none sm:rounded-3xl shadow-elevation-overlay border border-sidebar-line w-full max-w-6xl h-full sm:h-[95vh] flex flex-col overflow-hidden animate-scale-up">
         
         {/* Modal Header */}

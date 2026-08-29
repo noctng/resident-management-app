@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { XMarkIcon } from '../icons';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 
 type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
 
@@ -34,6 +35,8 @@ export const Modal: React.FC<ModalProps> = ({
   footer,
   disableBackdropClose = false,
 }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, isOpen);
   useEffect(() => {
     if (!isOpen) return;
     const prev = document.documentElement.style.overflow;
@@ -68,6 +71,7 @@ export const Modal: React.FC<ModalProps> = ({
 
       {/* Dialog */}
       <div
+        ref={dialogRef}
         className={[
           'relative w-full bg-white rounded-[14px] shadow-[0_20px_60px_-12px_rgba(10,15,13,0.4)] border border-brand-border',
           'flex flex-col max-h-[88vh] overflow-hidden',

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 import { XMarkIcon } from './icons';
 
 interface ImageViewerModalProps {
@@ -8,6 +9,9 @@ interface ImageViewerModalProps {
 }
 
 const ImageViewerModal: React.FC<ImageViewerModalProps> = ({ isOpen, onClose, imageUrl }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, isOpen);
+
   if (!isOpen || !imageUrl) return null;
 
   return (
@@ -15,6 +19,7 @@ const ImageViewerModal: React.FC<ImageViewerModalProps> = ({ isOpen, onClose, im
       className="fixed inset-0 bg-black/75 backdrop-blur-sm z-[60] flex justify-center items-center p-4"
       onClick={onClose}
       aria-modal="true"
+      ref={dialogRef}
       role="dialog"
     >
       <div

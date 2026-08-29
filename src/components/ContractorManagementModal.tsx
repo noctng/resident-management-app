@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useRef} from 'react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 import { api } from '../services/api';
 import { useToast, useConfirm } from './ui';
 import {
@@ -39,6 +40,9 @@ export const ContractorManagementModal: React.FC<ContractorManagementModalProps>
   onClose,
   onContractorUpdated,
 }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, isOpen);
+
   const toast = useToast();
   const { confirm } = useConfirm();
 
@@ -170,7 +174,7 @@ export const ContractorManagementModal: React.FC<ContractorManagementModalProps>
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in" ref={dialogRef} role="dialog" aria-modal="true">
       <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-4xl overflow-hidden animate-scale-up flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="px-6 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
