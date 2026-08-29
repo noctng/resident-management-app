@@ -18,6 +18,7 @@ const activityLogRoutes = require('./src/routes/activityLogRoutes');
 const userRoutes = require('./src/routes/userRoutes');
 const customerRoutes = require('./src/routes/customerRoutes');
 const contractRoutes = require('./src/routes/contractRoutes');
+const earlyPaymentRoutes = require('./src/routes/earlyPaymentRoutes');
 const configRoutes = require('./src/routes/configRoutes');
 const dashboardRoutes = require('./src/routes/dashboardRoutes');
 const reportRoutes = require('./src/routes/reportRoutes');
@@ -150,6 +151,7 @@ app.use('/api/activity-logs', activityLogRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/contracts', contractRoutes);
+app.use('/api/contracts', earlyPaymentRoutes); // Early payment routes (nested under contracts)
 app.use('/api/config', configRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/reports', reportRoutes);
@@ -171,6 +173,7 @@ app.use('/api/crm/leads', crmLeadRoutes); // CRM 3-Tier Leads & Pipeline
 app.use('/api/crm/bookings', salesBookingRoutes); // Cart & Atomic Bookings
 app.use('/api/crm/deposits', depositReceiptRoutes); // Deposit Receipts (PDC) & Accounting confirmations
 app.use('/api/crm/contracts', contractRoutes); // Real Estate Contracts list & CRUD
+app.use('/api/crm/contracts', earlyPaymentRoutes); // Early payment routes (nested under contracts)
 app.use('/api/crm/contracts', contractLifecycleRoutes); // Contract Lifecycle routes
 app.use('/api/crm/sales-contracts', salesContractRoutes); // Standard 18 Articles HĐMB & 10 Installments
 app.use('/api/crm/handover', handoverBridgeRoutes); // Handover, Snag List & Operations Bridge

@@ -3,7 +3,6 @@ const router = express.Router();
 const contractController = require('../controllers/contractController');
 const contractLifecycleController = require('../controllers/contractLifecycleController');
 const handoverController = require('../controllers/handoverController');
-const earlyPaymentController = require('../controllers/earlyPaymentController');
 const { authenticateToken, checkPermission } = require('../middleware/authMiddleware');
 
 const auth = [authenticateToken, checkPermission('crm')];
@@ -19,9 +18,6 @@ router.put('/:id', auth, contractController.updateContract);
 // Payment management
 router.post('/payments', auth, contractController.addPayment);
 router.put('/payments/:id', auth, contractController.updatePaymentStatus);
-
-// Early Payment
-router.post('/:id/payments/early-payment', auth, earlyPaymentController.processEarlyPayment);
 
 // Document management
 router.post('/:id/documents', auth, contractController.uploadContractDocument);
