@@ -603,7 +603,7 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
       {/* ── MODAL: CREATE PRICEBOOK ── */}
       {isCreatePbModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base">+ Tạo Phiên Bản Bảng Giá Mới</h3>
               <button onClick={() => setIsCreatePbModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
@@ -700,7 +700,7 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
       {/* ── MODAL: CREATE PROMOTION ── */}
       {isCreatePromoModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base">+ Tạo Chương Trình Ưu Đãi Mới</h3>
               <button onClick={() => setIsCreatePromoModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
@@ -839,7 +839,7 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
       {/* ── MODAL: VIEW PRICEBOOK DETAIL ── */}
       {isPbDetailModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-up">
             <div className="px-6 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <div>
                 <h3 className="font-bold text-ink text-base flex items-center gap-2">
@@ -929,7 +929,7 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
       {/* ── MODAL: DISCOUNT CALCULATOR ── */}
       {isCalcModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base flex items-center gap-2">
                 <CalculatorIcon className="w-5 h-5 text-accent" />

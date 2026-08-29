@@ -78,7 +78,7 @@ export const PortalFeedbackSection: React.FC<PortalFeedbackSectionProps> = ({
         </h3>
         <form
           onSubmit={handleSubmit}
-          className="space-y-4 p-5 bg-surface rounded-2xl shadow-xl border border-brand-border"
+          className="space-y-4 p-5 bg-surface rounded-2xl shadow-elevation-raised border border-brand-border"
         >
           <div>
             <label

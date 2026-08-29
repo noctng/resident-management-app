@@ -72,7 +72,7 @@ const ResidentHandbookView: React.FC = () => {
         </div>
       )}
       {/* Top Banner Card */}
-      <div className="bg-surface rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden border border-brand-border">
+      <div className="bg-surface rounded-3xl p-6 sm:p-8 shadow-elevation-raised relative overflow-hidden border border-brand-border">
         <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-accent-soft/60 rounded-full blur-3xl pointer-events-none"></div>
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">

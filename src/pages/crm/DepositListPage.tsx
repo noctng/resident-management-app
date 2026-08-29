@@ -405,7 +405,7 @@ export const DepositListPage: React.FC<DepositListPageProps> = ({ onNavigate, on
       {/* Confirm Payment Modal (Accountant) */}
       {isConfirmModalOpen && selectedDeposit && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-xl border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-raised border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base">
                 Xác Nhận Thu Tiền Cọc: {selectedDeposit.deposit_code}
@@ -478,7 +478,7 @@ export const DepositListPage: React.FC<DepositListPageProps> = ({ onNavigate, on
       {/* Transfer Modal */}
       {isTransferModalOpen && selectedDeposit && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-xl border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-raised border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base">
                 Cọc Chuyển Căn: Căn hiện tại {selectedDeposit.apartments?.code}
@@ -545,7 +545,7 @@ export const DepositListPage: React.FC<DepositListPageProps> = ({ onNavigate, on
       {/* Create Deposit Modal */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-xl border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-raised border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base">
                 + Lập Phiếu Đặt Cọc (PDC)

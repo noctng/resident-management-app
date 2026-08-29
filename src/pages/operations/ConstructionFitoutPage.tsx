@@ -549,7 +549,7 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
       {/* ── MODAL: CREATE REGISTRATION ── */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base flex items-center gap-2">
                 <BuildingOfficeIcon className="w-5 h-5 text-accent" />
@@ -661,7 +661,7 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
       {/* ── MODAL: CONFIRM 100M DEPOSIT ── */}
       {isDepositModalOpen && selectedReg && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base flex items-center gap-2">
                 <BanknotesIcon className="w-5 h-5 text-brand-success" />
@@ -713,7 +713,7 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
       {/* ── MODAL: CREATE VIOLATION ── */}
       {isViolationModalOpen && selectedReg && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base flex items-center gap-2">
                 <ExclamationTriangleIcon className="w-5 h-5 text-brand-danger" />
@@ -786,7 +786,7 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
       {/* ── MODAL: ADD WORKER ── */}
       {isWorkerModalOpen && selectedReg && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base flex items-center gap-2">
                 <UsersIcon className="w-5 h-5 text-accent" />
@@ -864,7 +864,7 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
       {/* ── MODAL: SETTLEMENT & REFUND ── */}
       {isSettleModalOpen && selectedReg && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base flex items-center gap-2">
                 <CheckCircleIcon className="w-5 h-5 text-brand-success" />

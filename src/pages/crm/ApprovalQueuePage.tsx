@@ -258,7 +258,7 @@ const ApprovalQueuePage: React.FC<Props> = ({ onBack }) => {
       {/* Rejection Modal */}
       {selectedApproval && (
         <div className="fixed inset-0 bg-ink/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
-          <div className="bg-surface rounded-xl shadow-xl w-full max-w-md overflow-hidden transition-all">
+          <div className="bg-surface rounded-xl shadow-elevation-raised w-full max-w-md overflow-hidden transition-all">
             <div className="p-6">
               <h3 className="text-lg font-bold text-ink mb-2">Từ chối yêu cầu</h3>
               <p className="text-sm text-ink-soft mb-4">

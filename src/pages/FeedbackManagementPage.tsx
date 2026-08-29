@@ -65,7 +65,7 @@ const ResolveFeedbackModal: React.FC<{
         onClick={onClose}
       >
         <div
-          className="bg-surface rounded-2xl border border-brand-border shadow-xl w-full max-w-lg max-h-[92vh] overflow-y-auto custom-scrollbar animate-slide-up"
+          className="bg-surface rounded-2xl border border-brand-border shadow-elevation-raised w-full max-w-lg max-h-[92vh] overflow-y-auto custom-scrollbar animate-slide-up"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex justify-between items-center p-5 border-b border-brand-border bg-surface">

@@ -436,7 +436,7 @@ export const CartAndBookingPage: React.FC<CartAndBookingPageProps> = ({ onNaviga
       {/* Booking Form Modal */}
       {isBookingModalOpen && selectedCartItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-xl border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-raised border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base">
                 Lập Phiếu Khóa Giữ Chỗ Căn {selectedCartItem.apartments?.code}
@@ -544,7 +544,7 @@ export const CartAndBookingPage: React.FC<CartAndBookingPageProps> = ({ onNaviga
       {/* Extend Modal */}
       {isExtendModalOpen && selectedBooking && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-xl border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-raised border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base">
                 Gia Hạn Giữ Chỗ Căn {selectedBooking.apartments?.code}

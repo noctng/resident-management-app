@@ -408,7 +408,7 @@ export const ContractDocumentHubPage: React.FC<ContractDocumentHubPageProps> = (
       {/* ── MODAL: UPLOAD SCAN ── */}
       {isUploadModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base flex items-center gap-2">
                 <DocumentArrowUpIcon className="w-5 h-5 text-accent" />

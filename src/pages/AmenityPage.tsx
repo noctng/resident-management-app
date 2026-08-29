@@ -170,7 +170,7 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ booking, onClose, o
       onClick={onClose}
     >
       <div
-        className="bg-surface border border-brand-border rounded-2xl shadow-xl w-full max-w-md animate-slide-up overflow-hidden"
+        className="bg-surface border border-brand-border rounded-2xl shadow-elevation-raised w-full max-w-md animate-slide-up overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="bg-accent p-4 flex justify-between items-center">
@@ -714,7 +714,7 @@ const AmenityPage: React.FC<AmenityPageProps> = ({
           onClick={() => setIsPendingModalOpen(false)}
         >
           <div
-            className="bg-surface border border-brand-border rounded-2xl shadow-xl w-full max-w-2xl max-h-[85vh] flex flex-col animate-slide-up"
+            className="bg-surface border border-brand-border rounded-2xl shadow-elevation-raised w-full max-w-2xl max-h-[85vh] flex flex-col animate-slide-up"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-5 border-b border-brand-border  flex justify-between items-center bg-surface-alt rounded-t-2xl">
@@ -836,7 +836,7 @@ const AmenityPage: React.FC<AmenityPageProps> = ({
           onClick={() => setViewingStatAmenity(null)}
         >
           <div
-            className="bg-surface border border-brand-border rounded-2xl shadow-xl w-full max-w-2xl max-h-[85vh] flex flex-col animate-slide-up"
+            className="bg-surface border border-brand-border rounded-2xl shadow-elevation-raised w-full max-w-2xl max-h-[85vh] flex flex-col animate-slide-up"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-5 border-b border-brand-border  flex justify-between items-center bg-surface-alt rounded-t-2xl">

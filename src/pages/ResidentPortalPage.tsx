@@ -513,7 +513,7 @@ function ResidentPortalPage({
   ];
 
   return (
-    <div className="w-full max-w-6xl lg:max-w-7xl mx-auto bg-surface border-0 sm:border border-brand-border sm:rounded-2xl sm:shadow-xl flex flex-col overflow-hidden transition-all duration-300 min-h-screen sm:min-h-[85vh] lg:min-h-[90vh]">
+    <div className="w-full max-w-6xl lg:max-w-7xl mx-auto bg-surface border-0 sm:border border-brand-border sm:rounded-2xl sm:shadow-elevation-raised flex flex-col overflow-hidden transition-all duration-300 min-h-screen sm:min-h-[85vh] lg:min-h-[90vh]">
       {/* ── TOP HEADER ── */}
       <header className="sticky top-0 z-30 bg-surface/95 backdrop-blur-md border-b border-brand-border px-4 py-3 sm:px-5 sm:py-3 shadow-sm flex-shrink-0">
         <div className="flex items-center justify-between gap-2">
@@ -694,7 +694,7 @@ function ResidentPortalPage({
               onClick={() => setSidebarOpen(false)}
             />
             {/* Drawer */}
-            <div className="sm:hidden fixed inset-y-0 left-0 z-50 w-64 bg-surface shadow-2xl flex flex-col">
+            <div className="sm:hidden fixed inset-y-0 left-0 z-50 w-64 bg-surface shadow-elevation-overlay flex flex-col">
               {/* Drawer header */}
               <div className="flex items-center justify-between px-4 py-4 border-b border-brand-border">
                 <div>
@@ -1336,7 +1336,7 @@ function ResidentPortalPage({
       />
       {/* Floating Push Notification Banner */}
       {pushNotificationBanner && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-lg w-[92%] bg-brand-success text-white p-4 rounded-2xl shadow-xl flex items-center justify-between gap-3 animate-slide-down border border-white/20">
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-lg w-[92%] bg-brand-success text-white p-4 rounded-2xl shadow-elevation-raised flex items-center justify-between gap-3 animate-slide-down border border-white/20">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
               <DocumentChartBarIcon className="w-5 h-5" />

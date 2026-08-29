@@ -171,7 +171,7 @@ function PortalNewsSection({ onMarkRead }: Props) {
       {/* Post Detail Modal */}
       {viewing && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
-          <div className="bg-surface w-full sm:max-w-2xl max-h-[92vh] rounded-t-2xl sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+          <div className="bg-surface w-full sm:max-w-2xl max-h-[92vh] rounded-t-2xl sm:rounded-2xl shadow-elevation-overlay flex flex-col overflow-hidden">
             {/* Modal Header */}
             <div className="flex items-start justify-between px-5 pt-5 pb-3 flex-shrink-0">
               <div className="flex-1 min-w-0 pr-4">

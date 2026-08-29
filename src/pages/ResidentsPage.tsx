@@ -552,7 +552,7 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
       {/* Custom Delete Resident Confirmation Modal */}
       {selectedResidentForDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-surface rounded-2xl max-w-md w-full shadow-xl border border-brand-border overflow-hidden max-h-[90vh] overflow-y-auto custom-scrollbar">
+          <div className="bg-surface rounded-2xl max-w-md w-full shadow-elevation-raised border border-brand-border overflow-hidden max-h-[90vh] overflow-y-auto custom-scrollbar">
             {/* Header */}
             <div className="bg-brand-danger-soft p-5 border-b border-brand-danger/20 flex items-center gap-3">
               <span className="p-2.5 bg-surface rounded-xl text-brand-danger">

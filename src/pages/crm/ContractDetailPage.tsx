@@ -778,7 +778,7 @@ export const ContractDetailPage: React.FC<ContractDetailPageProps> = ({ onNaviga
       {/* Transfer Contract Modal */}
       {isTransferModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface border border-brand-border rounded-xl shadow-xl w-full max-w-lg overflow-hidden animate-scale-up">
+          <div className="bg-surface border border-brand-border rounded-xl shadow-elevation-raised w-full max-w-lg overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base flex items-center gap-2">
                 <ArrowPathIcon className="w-4 h-4 text-accent" />
@@ -884,7 +884,7 @@ export const ContractDetailPage: React.FC<ContractDetailPageProps> = ({ onNaviga
       {/* QR Payment Modal */}
       {selectedPaymentForQr && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface border border-brand-border rounded-xl shadow-xl w-full max-w-sm overflow-hidden text-center p-6 space-y-4 animate-scale-up">
+          <div className="bg-surface border border-brand-border rounded-xl shadow-elevation-raised w-full max-w-sm overflow-hidden text-center p-6 space-y-4 animate-scale-up">
             <h3 className="font-bold text-ink text-base">
               Thanh Toán Đợt {selectedPaymentForQr.installment}
             </h3>
@@ -924,7 +924,7 @@ export const ContractDetailPage: React.FC<ContractDetailPageProps> = ({ onNaviga
       {/* Accountant Confirm Payment Modal */}
       {selectedPaymentForConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-brand-success-soft flex items-center justify-between">
               <h3 className="font-bold text-brand-success text-base flex items-center gap-2">
                 <CheckCircleIcon className="w-5 h-5" />
@@ -1051,7 +1051,7 @@ export const ContractDetailPage: React.FC<ContractDetailPageProps> = ({ onNaviga
       {/* Upload Document Scan Modal */}
       {isUploadDocModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base flex items-center gap-2">
                 <DocumentArrowUpIcon className="w-5 h-5 text-accent" />

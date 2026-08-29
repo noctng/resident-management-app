@@ -132,7 +132,7 @@ export const PortalVehicleSection: React.FC<PortalVehicleSectionProps> = ({
       {/* ── MODAL: REGISTER VEHICLE ── */}
       {isRegisterModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-sm flex items-center gap-2">
                 <TruckIcon className="w-5 h-5 text-accent" />

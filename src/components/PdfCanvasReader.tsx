@@ -113,7 +113,7 @@ const PdfPage: React.FC<PageProps> = ({ pdfDoc, pageNumber, scale, containerWidt
 
   return (
     <div
-      className="flex flex-col items-center bg-white shadow-2xl rounded-xl overflow-hidden my-3 border border-brand-border/30 transition-all"
+      className="flex flex-col items-center bg-white shadow-elevation-overlay rounded-xl overflow-hidden my-3 border border-brand-border/30 transition-all"
       style={{
         width: dimensions ? `${dimensions.width}px` : '100%',
         minHeight: dimensions ? `${dimensions.height}px` : '300px',
@@ -245,7 +245,7 @@ export const PdfCanvasReader: React.FC<PdfCanvasReaderProps> = ({
   const zoomPercent = Math.round(scale * 100);
 
   return (
-    <div className="flex flex-col h-full w-full bg-surface-alt text-white rounded-2xl overflow-hidden shadow-xl border border-brand-border">
+    <div className="flex flex-col h-full w-full bg-surface-alt text-white rounded-2xl overflow-hidden shadow-elevation-raised border border-brand-border">
       
       {/* Reader Toolbar */}
       {showControls && (

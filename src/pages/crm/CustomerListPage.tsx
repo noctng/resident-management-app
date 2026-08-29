@@ -202,7 +202,7 @@ const CustomerListPage: React.FC<CustomerListPageProps> = ({ onNavigate, onBack,
       {/* Add Customer Modal */}
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-opacity">
-          <div className="bg-surface border border-brand-border rounded-xl shadow-xl w-full max-w-2xl overflow-hidden transition-all duration-200">
+          <div className="bg-surface border border-brand-border rounded-xl shadow-elevation-raised w-full max-w-2xl overflow-hidden transition-all duration-200">
             <div className="px-6 py-4 border-b border-brand-border flex justify-between items-center bg-surface-alt/60">
               <h2 className="text-base font-bold text-ink">
                 Thêm Khách hàng mới

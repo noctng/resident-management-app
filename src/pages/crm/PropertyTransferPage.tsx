@@ -422,7 +422,7 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
       {/* ── MODAL: CREATE TRANSFER ── */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-up">
             <div className="px-6 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base flex items-center gap-2">
                 <ArrowsRightLeftIcon className="w-5 h-5 text-accent" />
@@ -663,7 +663,7 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
       {/* ── MODAL: APARTMENT TRANSFER CHAIN (LINEAGE TIMELINE) ── */}
       {isChainModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-scale-up">
             <div className="px-6 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <div>
                 <h3 className="font-bold text-ink text-base flex items-center gap-2">
@@ -751,7 +751,7 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
       {/* ── MODAL: DOCUMENT PREVIEW (VĂN BẢN XÁC NHẬN 3 BÊN) ── */}
       {isDocPreviewModalOpen && selectedTransferForDoc && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-up">
             <div className="px-6 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base flex items-center gap-2">
                 <PrinterIcon className="w-5 h-5 text-accent" />

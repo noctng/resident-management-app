@@ -382,7 +382,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
             className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity"
             onClick={() => setMobileOpen(false)}
           />
-          <aside className="lg:hidden fixed inset-y-0 left-0 z-50 w-[260px] shadow-2xl animate-in">
+          <aside className="lg:hidden fixed inset-y-0 left-0 z-50 w-[260px] shadow-elevation-overlay animate-in">
             <SidebarContent
               currentUser={currentUser}
               onLogout={onLogout}

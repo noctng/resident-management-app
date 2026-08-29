@@ -431,7 +431,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       {/* Link Modal */}
       {isLinkModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-surface border border-brand-border w-full max-w-md rounded-2xl shadow-xl p-5 space-y-4">
+          <div className="bg-surface border border-brand-border w-full max-w-md rounded-2xl shadow-elevation-raised p-5 space-y-4">
             <h3 className="font-bold text-base text-ink ">Nhập đường dẫn liên kết (URL)</h3>
             <input
               autoFocus
@@ -471,7 +471,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       {/* Media Modal */}
       {isMediaModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-surface border border-brand-border w-full max-w-xl rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+          <div className="bg-surface border border-brand-border w-full max-w-xl rounded-2xl shadow-elevation-raised overflow-hidden flex flex-col max-h-[90vh]">
             <div className="px-5 py-4 border-b border-brand-border flex items-center justify-between flex-shrink-0">
               <h3 className="font-bold text-base text-ink flex items-center gap-2">
                 <PhotoIcon className="w-5 h-5 text-accent" />

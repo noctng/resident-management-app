@@ -283,7 +283,7 @@ function NewsManagementPage() {
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
       {/* Toast Notification */}
       {toast && (
-        <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-2xl shadow-xl text-white text-sm font-semibold transition-all animate-bounce ${toast.type === 'error' ? 'bg-brand-danger' : 'bg-brand-success'}`}>
+        <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-2xl shadow-elevation-raised text-white text-sm font-semibold transition-all animate-bounce ${toast.type === 'error' ? 'bg-brand-danger' : 'bg-brand-success'}`}>
           {toast.msg}
         </div>
       )}
@@ -644,7 +644,7 @@ function NewsManagementPage() {
       {/* ────────────────────────────────────────────────────────────── */}
       {previewModalPost && (
         <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
-          <div className="bg-surface w-full max-w-3xl max-h-[94vh] rounded-2xl shadow-xl flex flex-col overflow-hidden border border-brand-border">
+          <div className="bg-surface w-full max-w-3xl max-h-[94vh] rounded-2xl shadow-elevation-raised flex flex-col overflow-hidden border border-brand-border">
             {/* Preview Modal Header with Device Switcher */}
             <div className="px-5 py-3.5 border-b border-brand-border flex items-center justify-between gap-3 bg-surface-alt flex-shrink-0">
               <div className="flex items-center gap-2">
@@ -718,7 +718,7 @@ function NewsManagementPage() {
 
               {/* MODE 2: MOBILE SMARTPHONE FRAME VIEW */}
               {previewDevice === 'mobile' && (
-                <div className="w-[360px] sm:w-[380px] bg-black p-3.5 rounded-[40px] shadow-2xl border-4 border-black relative">
+                <div className="w-[360px] sm:w-[380px] bg-black p-3.5 rounded-[40px] shadow-elevation-overlay border-4 border-black relative">
                   {/* Phone Notch */}
                   <div className="w-28 h-4 bg-black mx-auto rounded-b-xl absolute top-3.5 left-1/2 -translate-x-1/2 z-20" />
                   {/* Phone Screen */}

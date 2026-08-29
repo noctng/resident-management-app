@@ -337,7 +337,7 @@ export const SalesMatrixPage: React.FC<SalesMatrixPageProps> = ({ onNavigate, on
       {/* Consultation & Unit Detail Drawer Modal */}
       {selectedUnit && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden animate-scale-up">
             
             {/* Modal Header */}
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
@@ -525,7 +525,7 @@ export const SalesMatrixPage: React.FC<SalesMatrixPageProps> = ({ onNavigate, on
       {/* Quick Booking Prompt Modal */}
       {isQuickBookingOpen && selectedUnit && (
         <div className="fixed inset-0 z-[55] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-surface rounded-2xl shadow-2xl border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
+          <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <h3 className="font-bold text-ink text-base flex items-center gap-1.5">
                 <PinIcon className="w-4 h-4 text-accent" />

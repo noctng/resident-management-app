@@ -609,7 +609,7 @@ export const TechnicianMeterPage: React.FC<TechnicianMeterPageProps> = ({
 
               {/* Expandable Searchable Dropdown Popup */}
               {isPickerOpen && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-surface rounded-2xl shadow-xl border border-brand-border z-40 p-3 space-y-2 animate-in fade-in zoom-in-95 duration-100">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-surface rounded-2xl shadow-elevation-raised border border-brand-border z-40 p-3 space-y-2 animate-in fade-in zoom-in-95 duration-100">
                   {/* Search Bar at Top */}
                   <div className="relative">
                     <MagnifyingGlassIcon className="w-4 h-4 text-ink-faint absolute left-3 top-1/2 -translate-y-1/2" />
