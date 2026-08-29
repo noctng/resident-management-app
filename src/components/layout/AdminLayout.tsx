@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   UsersIcon,
@@ -19,7 +19,9 @@ import {
   BoltIcon,
   MegaphoneIcon,
   ChartBarIcon,
+  MagnifyingGlassIcon,
 } from '../icons';
+import CommandPalette, { useCommandPalette, type CommandItem } from '../ui/CommandPalette';
 import type { User, Permission } from '../../types';
 
 // ── Nav Definition ────────────────────────────────────────────────────────────
@@ -36,7 +38,7 @@ interface NavGroup {
   items: NavItem[];
 }
 
-const NAV_CONFIG: NavGroup[] = [
+export const NAV_CONFIG: NavGroup[] = [
   {
     group: null,
     items: [
@@ -331,12 +333,36 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
 }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { open: paletteOpen, setOpen: setPaletteOpen } = useCommandPalette();
 
   const currentPath = location.pathname.replace(/^\/admin\/?/, '') || 'dashboard';
   const [pageTitle, pageSub] = PAGE_METADATA[currentPath] || [
     'Quản lý toà nhà',
     'Hệ thống vận hành',
   ];
+
+  const can = (permission: Permission): boolean =>
+    currentUser.role === 0 || (currentUser.permissions?.includes(permission) ?? false);
+
+  // ── Command palette commands: nav routes (permission-filtered) + account actions ──
+  const commands: CommandItem[] = useMemo(() => {
+    const nav: CommandItem[] = NAV_CONFIG.flatMap((g) => g.items)
+      .filter((it) => can(it.permission))
+      .map((it) => ({
+        id: `nav-${it.id}`,
+        label: it.label,
+        hint: 'Điều hướng',
+        icon: it.icon,
+        keywords: it.id,
+        onSelect: () => navigate(`/admin/${it.id}`),
+      }));
+    const actions: CommandItem[] = [
+      { id: 'action-change-password', label: 'Đổi mật khẩu', hint: 'Tài khoản', icon: KeyIcon, onSelect: onChangePassword },
+      { id: 'action-logout', label: 'Đăng xuất', hint: 'Tài khoản', onSelect: onLogout },
+    ];
+    return [...nav, ...actions];
+  }, [currentUser, navigate, onChangePassword, onLogout]);
 
   return (
     <div className="flex h-screen bg-bg overflow-hidden">
@@ -396,6 +422,17 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
           </div>
 
           <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setPaletteOpen(true)}
+              className="hidden md:flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-full bg-surface-alt border border-brand-border text-ink-soft text-xs hover:bg-surface transition-colors cursor-pointer"
+            >
+              <MagnifyingGlassIcon className="w-4 h-4" />
+              <span>Tìm kiếm...</span>
+              <kbd className="font-mono text-[10px] text-ink-soft border border-brand-border rounded px-1">
+                ⌘K
+              </kbd>
+            </button>
             <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white border border-brand-border shadow-sm">
               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-brand-teal to-secondary-700 text-white flex items-center justify-center text-xs font-bold font-mono">
                 {currentUser.username.slice(0, 2).toUpperCase()}
@@ -415,6 +452,12 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
           <div className="max-w-[1400px] mx-auto space-y-6">{children}</div>
         </main>
       </div>
+
+      <CommandPalette
+        open={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+        commands={commands}
+      />
     </div>
   );
 };
