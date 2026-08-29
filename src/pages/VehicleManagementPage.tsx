@@ -14,6 +14,7 @@ import {
 import { api } from '../services/api';
 import SearchableSelect from '../components/SearchableSelect';
 import { useToast, useConfirm } from '../components/ui';
+import { StatCard } from '../components/ui/Card';
 
 interface VehicleManagementPageProps {
   apartments: Apartment[];
@@ -305,92 +306,57 @@ const VehicleManagementPage: React.FC<VehicleManagementPageProps> = ({ apartment
 
       {/* ── KPI Summary Dashboard Cards ── */}
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4">
-        {/* Card 1: Tổng Phương Tiện */}
-        <div className="bg-surface rounded-xl p-4 border border-brand-border shadow-sm hover:shadow-md transition-shadow duration-200">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-ink-soft uppercase tracking-wider">Tổng phương tiện</span>
-            <div className="w-8 h-8 rounded-lg bg-brand-success-soft text-brand-success flex items-center justify-center">
-              <TruckIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-2 flex items-baseline gap-1.5">
-            <span className="text-2xl font-bold text-ink font-mono tabular-nums">{stats.total}</span>
-            <span className="text-xs text-ink-soft">xe</span>
-          </div>
-          <div className="mt-1.5 text-[11.5px] text-brand-success font-medium">
-            Đã đăng ký trong tòa nhà
-          </div>
-        </div>
-
-        {/* Card 2: Ô Tô */}
-        <div className="bg-surface rounded-xl p-4 border border-brand-border shadow-sm hover:shadow-md transition-shadow duration-200">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-ink-soft uppercase tracking-wider">Ô tô</span>
-            <div className="w-8 h-8 rounded-lg bg-accent-soft text-accent-ink flex items-center justify-center">
-              <TruckIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-2 flex items-baseline gap-1.5">
-            <span className="text-2xl font-bold text-ink font-mono tabular-nums">{stats.cars}</span>
-            <span className="text-xs text-ink-soft">xe</span>
-          </div>
-          <div className="mt-1.5 text-[11.5px] text-accent font-medium">
-            Chiếm {stats.carsPercent}% tổng xe
-          </div>
-        </div>
-
-        {/* Card 3: Xe Máy */}
-        <div className="bg-surface rounded-xl p-4 border border-brand-border shadow-sm hover:shadow-md transition-shadow duration-200">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-ink-soft uppercase tracking-wider">Xe máy</span>
-            <div className="w-8 h-8 rounded-lg bg-brand-teal-soft text-brand-teal flex items-center justify-center">
-              <TruckIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-2 flex items-baseline gap-1.5">
-            <span className="text-2xl font-bold text-ink font-mono tabular-nums">{stats.motorbikes}</span>
-            <span className="text-xs text-ink-soft">xe</span>
-          </div>
-          <div className="mt-1.5 text-[11.5px] text-brand-teal font-medium">
-            Chiếm {stats.motorbikesPercent}% tổng xe
-          </div>
-        </div>
-
-        {/* Card 4: Căn Hộ Có Xe */}
-        <div className="bg-surface rounded-xl p-4 border border-brand-border shadow-sm hover:shadow-md transition-shadow duration-200">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-ink-soft uppercase tracking-wider">Căn hộ có xe</span>
-            <div className="w-8 h-8 rounded-lg bg-brand-teal-soft text-brand-teal flex items-center justify-center">
-              <BuildingOfficeIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-2 flex items-baseline gap-1.5">
-            <span className="text-2xl font-bold text-ink font-mono tabular-nums">{stats.apartmentsWithVehicles}</span>
-            <span className="text-xs text-ink-soft">căn</span>
-          </div>
-          <div className="mt-1.5 text-[11.5px] text-brand-teal font-medium">
-            Đạt {stats.aptPercent}% tổng số căn hộ
-          </div>
-        </div>
-
-        {/* Card 5: Tỷ Lệ Xe / Căn Hộ */}
-        <div className="bg-surface rounded-xl p-4 border border-brand-border shadow-sm hover:shadow-md transition-shadow duration-200 col-span-2 sm:col-span-1 lg:col-span-1">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-ink-soft uppercase tracking-wider">Mật độ phương tiện</span>
-            <div className="w-8 h-8 rounded-lg bg-surface-alt text-ink-soft flex items-center justify-center">
-              <ChartBarIcon className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-2 flex items-baseline gap-1.5">
-            <span className="text-2xl font-bold text-ink font-mono tabular-nums">
-              ~{stats.apartmentsWithVehicles > 0 ? (stats.total / stats.apartmentsWithVehicles).toFixed(1) : 0}
-            </span>
-            <span className="text-xs text-ink-soft">xe/căn có xe</span>
-          </div>
-          <div className="mt-1.5 text-[11.5px] text-ink-faint font-medium">
-            Phục vụ cư dân tòa nhà
-          </div>
-        </div>
+        <StatCard
+          label="Tổng phương tiện"
+          value={stats.total}
+          unit="xe"
+          icon={TruckIcon}
+          iconBg="bg-brand-success-soft"
+          iconColor="text-brand-success"
+          subValue="Đã đăng ký trong tòa nhà"
+          subTone="success"
+        />
+        <StatCard
+          label="Ô tô"
+          value={stats.cars}
+          unit="xe"
+          icon={TruckIcon}
+          iconBg="bg-accent-soft"
+          iconColor="text-accent-ink"
+          subValue={`Chiếm ${stats.carsPercent}% tổng xe`}
+          subTone="accent"
+        />
+        <StatCard
+          label="Xe máy"
+          value={stats.motorbikes}
+          unit="xe"
+          icon={TruckIcon}
+          iconBg="bg-brand-teal-soft"
+          iconColor="text-brand-teal"
+          subValue={`Chiếm ${stats.motorbikesPercent}% tổng xe`}
+          subTone="teal"
+        />
+        <StatCard
+          label="Căn hộ có xe"
+          value={stats.apartmentsWithVehicles}
+          unit="căn"
+          icon={BuildingOfficeIcon}
+          iconBg="bg-brand-teal-soft"
+          iconColor="text-brand-teal"
+          subValue={`Đạt ${stats.aptPercent}% tổng số căn hộ`}
+          subTone="teal"
+        />
+        <StatCard
+          label="Mật độ phương tiện"
+          value={`~${stats.apartmentsWithVehicles > 0 ? (stats.total / stats.apartmentsWithVehicles).toFixed(1) : 0}`}
+          unit="xe/căn có xe"
+          icon={ChartBarIcon}
+          iconBg="bg-surface-alt"
+          iconColor="text-ink-soft"
+          subValue="Phục vụ cư dân tòa nhà"
+          subTone="faint"
+          className="col-span-2 sm:col-span-1 lg:col-span-1"
+        />
       </div>
 
       {/* ── Filter & Search Toolbar ── */}
