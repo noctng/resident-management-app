@@ -12,6 +12,7 @@ import {
   MegaphoneIcon,
   ArrowRightIcon,
 } from '../components/icons';
+import { StatCard } from '../components/ui/Card';
 
 interface DashboardPageProps {
   apartments: Apartment[];
@@ -111,14 +112,18 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
       {/* ── KPI Row ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <button onClick={() => onNavigate?.('residents')} className={`${cardBase} motion-safe:animate-fade-in [animation-fill-mode:both]`} style={{ animationDelay: '0ms' }}>
-          <span className="inline-flex p-2 bg-accent-soft rounded-lg text-accent-ink mb-3">
-            <UsersIcon className="w-5 h-5" />
-          </span>
-          <p className="text-xs font-medium text-ink-soft">Cư dân đang ở</p>
-          <p className="text-3xl font-mono tabular-nums font-bold text-ink mt-1 leading-none">{activeResidents}</p>
-          <p className="text-xs text-ink-soft mt-2">{residents.length} hồ sơ cư dân</p>
-        </button>
+        <StatCard
+          label="Cư dân đang ở"
+          value={activeResidents}
+          unit="người"
+          subValue={`${residents.length} hồ sơ cư dân`}
+          subTone="neutral"
+          icon={UsersIcon}
+          iconBg="bg-accent-soft"
+          iconColor="text-accent-ink"
+          onClick={() => onNavigate?.('residents')}
+          className="motion-safe:animate-fade-in [animation-fill-mode:both]"
+        />
 
         <button onClick={() => onNavigate?.('apartments')} className={`${cardBase} flex items-center justify-between gap-3 motion-safe:animate-fade-in [animation-fill-mode:both]`} style={{ animationDelay: '60ms' }}>
           <div>
@@ -146,25 +151,31 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </svg>
         </button>
 
-        <button onClick={() => onNavigate?.('feedback')} className={`${cardBase} motion-safe:animate-fade-in [animation-fill-mode:both]`} style={{ animationDelay: '120ms' }}>
-          <span className="inline-flex p-2 bg-brand-danger-soft rounded-lg text-brand-danger mb-3">
-            <ExclamationTriangleIcon className="w-5 h-5" />
-          </span>
-          <p className="text-xs font-medium text-ink-soft">Phản ánh đang mở</p>
-          <p className="text-3xl font-mono tabular-nums font-bold text-brand-danger mt-1 leading-none">{openFeedback.length}</p>
-          <p className="text-xs text-ink-soft mt-2">Cần được xử lý</p>
-        </button>
+        <StatCard
+          label="Phản ánh đang mở"
+          value={openFeedback.length}
+          subValue="Cần được xử lý"
+          subTone="neutral"
+          valueTone="danger"
+          icon={ExclamationTriangleIcon}
+          iconBg="bg-brand-danger-soft"
+          iconColor="text-brand-danger"
+          onClick={() => onNavigate?.('feedback')}
+          className="motion-safe:animate-fade-in [animation-fill-mode:both]"
+        />
 
-        <button onClick={() => onNavigate?.('amenities')} className={`${cardBase} motion-safe:animate-fade-in [animation-fill-mode:both]`} style={{ animationDelay: '180ms' }}>
-          <span className="inline-flex p-2 bg-brand-warning-soft rounded-lg text-brand-warning mb-3">
-            <ChatBubbleBottomCenterTextIcon className="w-5 h-5" />
-          </span>
-          <p className="text-xs font-medium text-ink-soft">Đặt tiện ích chờ duyệt</p>
-          <p className="text-3xl font-mono tabular-nums font-bold text-ink mt-1 leading-none">
-            {(amenityUsages || []).filter((u) => u.status === 'PENDING').length}
-          </p>
-          <p className="text-xs text-ink-soft mt-2">Toàn bộ thời gian</p>
-        </button>
+        <StatCard
+          label="Đặt tiện ích chờ duyệt"
+          value={(amenityUsages || []).filter((u) => u.status === 'PENDING').length}
+          subValue="Toàn bộ thời gian"
+          subTone="neutral"
+          valueTone="warning"
+          icon={ChatBubbleBottomCenterTextIcon}
+          iconBg="bg-brand-warning-soft"
+          iconColor="text-brand-warning"
+          onClick={() => onNavigate?.('amenities')}
+          className="motion-safe:animate-fade-in [animation-fill-mode:both]"
+        />
       </div>
 
       {/* ── Row 2: Doanh thu (demo) + Phản ánh mới nhất ── */}
