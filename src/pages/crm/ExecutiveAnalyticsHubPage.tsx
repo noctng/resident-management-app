@@ -274,10 +274,10 @@ export const ExecutiveAnalyticsHubPage: React.FC<ExecutiveAnalyticsHubPageProps>
         <div className="space-y-6">
           {/* Funnel Visual Pipeline */}
           <div className="bg-surface rounded-2xl border border-brand-border p-6 shadow-sm space-y-4">
-            <h3 className="font-bold text-ink text-sm flex items-center gap-2">
+            <h2 className="font-bold text-ink text-sm flex items-center gap-2">
               <ChartBarIcon className="w-5 h-5 text-accent" />
               <span>Phễu Chuyển Đổi Kinh Doanh Toàn Dự Án (Sales Conversion Funnel)</span>
-            </h3>
+            </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
               {salesFunnel?.funnel?.map((item: any, idx: number) => (
@@ -303,10 +303,10 @@ export const ExecutiveAnalyticsHubPage: React.FC<ExecutiveAnalyticsHubPageProps>
           {/* Phase Revenue & Commissions Breakdown */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="bg-surface rounded-2xl border border-brand-border p-6 shadow-sm space-y-4">
-              <h3 className="font-bold text-ink text-sm flex items-center gap-2">
+              <h2 className="font-bold text-ink text-sm flex items-center gap-2">
                 <BuildingOfficeIcon className="w-5 h-5 text-accent" />
                 <span>Cơ Cấu Doanh Số Theo Phân Kỳ</span>
-              </h3>
+              </h2>
               <div className="space-y-3">
                 {salesFunnel?.phaseRevenue?.map((pr: any, idx: number) => (
                   <div key={idx} className="p-3 bg-surface-alt rounded-xl border border-brand-border flex items-center justify-between text-xs">
@@ -323,10 +323,10 @@ export const ExecutiveAnalyticsHubPage: React.FC<ExecutiveAnalyticsHubPageProps>
             </div>
 
             <div className="bg-surface rounded-2xl border border-brand-border p-6 shadow-sm space-y-4">
-              <h3 className="font-bold text-ink text-sm flex items-center gap-2">
+              <h2 className="font-bold text-ink text-sm flex items-center gap-2">
                 <SparklesIcon className="w-5 h-5 text-accent" />
                 <span>Bảng Kê Hoa Hồng & Chiết Khấu Bán Hàng</span>
-              </h3>
+              </h2>
               <div className="space-y-3 text-xs">
                 <div className="p-3 bg-surface-alt rounded-xl border border-brand-border flex justify-between items-center">
                   <span>Tổng ngân sách hoa hồng phát sinh:</span>
@@ -357,10 +357,10 @@ export const ExecutiveAnalyticsHubPage: React.FC<ExecutiveAnalyticsHubPageProps>
         <div className="space-y-6">
           {/* Aging Matrix Buckets */}
           <div className="bg-surface rounded-2xl border border-brand-border p-6 shadow-sm space-y-4">
-            <h3 className="font-bold text-ink text-sm flex items-center gap-2">
+            <h2 className="font-bold text-ink text-sm flex items-center gap-2">
               <BanknotesIcon className="w-5 h-5 text-brand-danger" />
               <span>Ma Trận Phân Loại Tuổi Nợ Phải Thu (Aging Receivables Matrix)</span>
-            </h3>
+            </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
               <div className="p-4 bg-brand-warning-soft text-brand-warning rounded-xl border border-brand-warning/30 space-y-1">
@@ -399,10 +399,10 @@ export const ExecutiveAnalyticsHubPage: React.FC<ExecutiveAnalyticsHubPageProps>
 
           {/* Cash Flow Forecast for Next 30/60/90 Days */}
           <div className="bg-surface rounded-2xl border border-brand-border p-6 shadow-sm space-y-4">
-            <h3 className="font-bold text-ink text-sm flex items-center gap-2">
+            <h2 className="font-bold text-ink text-sm flex items-center gap-2">
               <ClockIcon className="w-5 h-5 text-accent" />
               <span>Dự Thu Dòng Tiền Theo Tiến Độ Các Kỳ Tới (Cash Flow Forecast)</span>
-            </h3>
+            </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
               <div className="p-4 bg-surface-alt rounded-xl border border-brand-border space-y-1">
@@ -436,10 +436,10 @@ export const ExecutiveAnalyticsHubPage: React.FC<ExecutiveAnalyticsHubPageProps>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Pareto Defect Breakdown */}
             <div className="bg-surface rounded-2xl border border-brand-border p-6 shadow-sm space-y-4">
-              <h3 className="font-bold text-ink text-sm flex items-center gap-2">
+              <h2 className="font-bold text-ink text-sm flex items-center gap-2">
                 <WrenchScrewdriverIcon className="w-5 h-5 text-accent" />
                 <span>Biểu Đồ Pareto: Top Sự Cố Bảo Hành Phổ Biến</span>
-              </h3>
+              </h2>
 
               <div className="space-y-3">
                 {operationsSla?.pareto?.map((item: any, idx: number) => (
@@ -461,10 +461,10 @@ export const ExecutiveAnalyticsHubPage: React.FC<ExecutiveAnalyticsHubPageProps>
 
             {/* Contractor Quality Rankings */}
             <div className="bg-surface rounded-2xl border border-brand-border p-6 shadow-sm space-y-4">
-              <h3 className="font-bold text-ink text-sm flex items-center gap-2">
+              <h2 className="font-bold text-ink text-sm flex items-center gap-2">
                 <ShieldCheckIcon className="w-5 h-5 text-brand-success" />
                 <span>Bảng Xếp Hạng & Điểm SLA Nhà Thầu</span>
-              </h3>
+              </h2>
 
               <div className="space-y-3 text-xs">
                 {operationsSla?.contractorRanking?.map((ctr: any, idx: number) => (

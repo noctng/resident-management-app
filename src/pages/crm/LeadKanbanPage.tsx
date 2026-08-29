@@ -269,9 +269,9 @@ export const LeadKanbanPage: React.FC<LeadKanbanPageProps> = ({ onNavigate, onBa
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-raised border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base">
+              <h2 className="font-bold text-ink text-base">
                 + Thêm Khách Hàng Tiềm Năng (Lead)
-              </h3>
+              </h2>
               <button
                 onClick={() => setIsAddModalOpen(false)}
                 className="p-1.5 rounded-lg border border-brand-border text-ink-soft hover:text-accent hover:border-accent/40 transition-colors duration-150 cursor-pointer"

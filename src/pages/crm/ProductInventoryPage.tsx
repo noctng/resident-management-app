@@ -426,9 +426,9 @@ export const ProductInventoryPage: React.FC<ProductInventoryPageProps> = ({ onNa
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-scale-up">
             <div className="px-6 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between sticky top-0 z-10">
-              <h3 className="font-bold text-ink text-base">
+              <h2 className="font-bold text-ink text-base">
                 {isCreateModalOpen ? '+ Thêm Mới Sản Phẩm BĐS Vào Kho' : `Cập Nhật Thông Số Căn ${selectedUnit?.code}`}
-              </h3>
+              </h2>
               <button
                 onClick={() => {
                   setIsCreateModalOpen(false);

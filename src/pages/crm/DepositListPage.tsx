@@ -407,9 +407,9 @@ export const DepositListPage: React.FC<DepositListPageProps> = ({ onNavigate, on
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-raised border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base">
+              <h2 className="font-bold text-ink text-base">
                 Xác Nhận Thu Tiền Cọc: {selectedDeposit.deposit_code}
-              </h3>
+              </h2>
               <button onClick={() => setIsConfirmModalOpen(false)} className="p-1.5 rounded-lg border border-brand-border text-ink-soft hover:text-accent hover:border-accent/40 transition-colors duration-150 cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -480,9 +480,9 @@ export const DepositListPage: React.FC<DepositListPageProps> = ({ onNavigate, on
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-raised border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base">
+              <h2 className="font-bold text-ink text-base">
                 Cọc Chuyển Căn: Căn hiện tại {selectedDeposit.apartments?.code}
-              </h3>
+              </h2>
               <button onClick={() => setIsTransferModalOpen(false)} className="p-1.5 rounded-lg border border-brand-border text-ink-soft hover:text-accent hover:border-accent/40 transition-colors duration-150 cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -547,9 +547,9 @@ export const DepositListPage: React.FC<DepositListPageProps> = ({ onNavigate, on
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-raised border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base">
+              <h2 className="font-bold text-ink text-base">
                 + Lập Phiếu Đặt Cọc (PDC)
-              </h3>
+              </h2>
               <button onClick={() => setIsCreateModalOpen(false)} className="p-1.5 rounded-lg border border-brand-border text-ink-soft hover:text-accent hover:border-accent/40 transition-colors duration-150 cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>

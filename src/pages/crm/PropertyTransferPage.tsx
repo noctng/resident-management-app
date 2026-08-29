@@ -432,10 +432,10 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-up">
             <div className="px-6 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base flex items-center gap-2">
+              <h2 className="font-bold text-ink text-base flex items-center gap-2">
                 <ArrowsRightLeftIcon className="w-5 h-5 text-accent" />
                 <span>Lập Hồ Sơ Chuyển Nhượng Hợp Đồng Mua Bán (B.7)</span>
-              </h3>
+              </h2>
               <button onClick={() => setIsCreateModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -674,10 +674,10 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-scale-up">
             <div className="px-6 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <div>
-                <h3 className="font-bold text-ink text-base flex items-center gap-2">
+                <h2 className="font-bold text-ink text-base flex items-center gap-2">
                   <ClockIcon className="w-5 h-5 text-accent" />
                   <span>Cây Lịch Sử Sở Hữu Căn Hộ: {chainData?.apartment?.code}</span>
-                </h3>
+                </h2>
                 <p className="text-sm text-ink-soft mt-0.5">
                   Phân kỳ: {chainData?.apartment?.phase_code} • Tổng số lần chuyển nhượng: {chainData?.apartment?.total_transfers || 0}
                 </p>
@@ -761,10 +761,10 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-up">
             <div className="px-6 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base flex items-center gap-2">
+              <h2 className="font-bold text-ink text-base flex items-center gap-2">
                 <PrinterIcon className="w-5 h-5 text-accent" />
                 <span>Văn Bản Xác Nhận Chuyển Nhượng HĐMB (3 Bên)</span>
-              </h3>
+              </h2>
               <button onClick={() => setIsDocPreviewModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -778,9 +778,9 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
               </div>
 
               <div className="text-center pt-2">
-                <h3 className="text-base font-bold uppercase text-ink">
+                <h2 className="text-base font-bold uppercase text-ink">
                   VĂN BẢN XÁC NHẬN CHUYỂN NHƯỢNG HỢP ĐỒNG MUA BÁN
-                </h3>
+                </h2>
                 <p className="text-xs font-mono text-ink-soft mt-0.5">Số: {selectedTransferForDoc.transfer_code || selectedTransferForDoc.id}</p>
               </div>
 

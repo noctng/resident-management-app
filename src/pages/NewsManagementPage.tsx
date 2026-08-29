@@ -576,12 +576,12 @@ function NewsManagementPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-1">
                         {post.is_pinned && <PinIcon className="w-4 h-4 text-brand-warning flex-shrink-0" />}
-                        <h3
+                        <h2
                           onClick={() => openEdit(post)}
                           className="font-semibold text-sm text-ink hover:text-accent cursor-pointer line-clamp-2"
                         >
                           {post.title}
-                        </h3>
+                        </h2>
                         {categoryBadge(post.category)}
                       </div>
 
@@ -651,7 +651,7 @@ function NewsManagementPage() {
             <div className="px-5 py-3.5 border-b border-brand-border flex items-center justify-between gap-3 bg-surface-alt flex-shrink-0">
               <div className="flex items-center gap-2">
                 <EyeIcon className="w-4 h-4 text-ink-soft" />
-                <h3 className="font-bold text-sm text-ink ">Xem trước hiển thị trên Cổng Cư Dân</h3>
+                <h2 className="font-bold text-sm text-ink ">Xem trước hiển thị trên Cổng Cư Dân</h2>
               </div>
 
               {/* Device Mode Switcher */}
@@ -770,9 +770,9 @@ function NewsManagementPage() {
                           {categoryBadge(previewModalPost.category || 'general')}
                           <span className="text-[11px] bg-brand-danger-soft text-brand-danger px-2 py-0.5 rounded-full font-bold">MỚI</span>
                         </div>
-                        <h3 className="font-semibold text-sm text-ink  leading-snug line-clamp-2">
+                        <h2 className="font-semibold text-sm text-ink  leading-snug line-clamp-2">
                           {previewModalPost.title || 'Tiêu đề bài viết'}
-                        </h3>
+                        </h2>
                         {previewModalPost.summary && (
                           <p className="text-sm text-ink-soft  mt-1 line-clamp-2">{previewModalPost.summary}</p>
                         )}

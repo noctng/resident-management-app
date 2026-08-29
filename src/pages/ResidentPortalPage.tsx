@@ -800,9 +800,9 @@ function ResidentPortalPage({
                   BQL.
                 </div>
               )}
-              <h3 className="text-base font-bold text-ink mb-3 flex items-center justify-between">
+              <h2 className="text-base font-bold text-ink mb-3 flex items-center justify-between">
                 <span>Chọn Tiện Ích &amp; Đặt Lịch (Tháng {new Date().getMonth() + 1}/{new Date().getFullYear()})</span>
-              </h3>
+              </h2>
               <AmenityManager
                 apartmentId={selectedApartment.id}
                 amenityUsages={usagesForSelectedApartment}
@@ -815,9 +815,9 @@ function ResidentPortalPage({
 
             <div className="border-t border-brand-border pt-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-base font-bold text-ink">
+                <h2 className="text-base font-bold text-ink">
                   Lịch sử Đặt chỗ
-                </h3>
+                </h2>
                 <button
                   onClick={onRefetchAmenityUsages}
                   disabled={isAmenityListLoading}
@@ -902,9 +902,9 @@ function ResidentPortalPage({
 
         {activeTab === 'utilities' && (
           <div className="space-y-4">
-            <h3 className="text-base font-bold text-ink">
+            <h2 className="text-base font-bold text-ink">
               Chi tiết tiêu thụ Điện Nước
-            </h3>
+            </h2>
             {localUtilityRecords.length === 0 ? (
               <p className="text-sm text-ink-soft py-8 text-center bg-surface rounded-xl border border-brand-border">
                 Chưa có dữ liệu điện nước cho căn hộ này.
@@ -1084,9 +1084,9 @@ function ResidentPortalPage({
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-base font-bold text-ink flex items-center gap-2">
+                <h2 className="text-base font-bold text-ink flex items-center gap-2">
                   <span>Hóa Đơn Tổng Hợp Căn Hộ</span>
-                </h3>
+                </h2>
                 <p className="text-sm text-ink-soft mt-0.5">
                   Tổng hợp toàn bộ phí quản lý, phí gửi xe, tiền điện và tiền nước trong kỳ
                 </p>

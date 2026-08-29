@@ -267,9 +267,9 @@ export const CartAndBookingPage: React.FC<CartAndBookingPageProps> = ({ onNaviga
                         <span className="font-mono text-xs font-semibold text-ink block">
                           {booking.booking_code}
                         </span>
-                        <h3 className="font-bold text-ink text-sm mt-0.5">
+                        <h2 className="font-bold text-ink text-sm mt-0.5">
                           Căn: {booking.apartments?.code} ({booking.apartments?.phase_code || 'CANTATA'})
-                        </h3>
+                        </h2>
                       </div>
 
                       <span
@@ -383,9 +383,9 @@ export const CartAndBookingPage: React.FC<CartAndBookingPageProps> = ({ onNaviga
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h3 className="font-bold text-ink text-base">
+                      <h2 className="font-bold text-ink text-base">
                         Căn: {item.apartments?.code}
-                      </h3>
+                      </h2>
                       <p className="text-sm text-ink-soft">
                         Phân khu: <strong>{item.apartments?.phase_code || 'CANTATA'}</strong> • Dãy: {item.apartments?.block_code || 'N/A'}
                       </p>
@@ -438,9 +438,9 @@ export const CartAndBookingPage: React.FC<CartAndBookingPageProps> = ({ onNaviga
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-raised border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base">
+              <h2 className="font-bold text-ink text-base">
                 Lập Phiếu Khóa Giữ Chỗ Căn {selectedCartItem.apartments?.code}
-              </h3>
+              </h2>
               <button
                 onClick={() => setIsBookingModalOpen(false)}
                 className="p-1.5 rounded-lg border border-brand-border text-ink-soft hover:text-accent hover:border-accent/40 transition-colors duration-150 cursor-pointer"
@@ -546,9 +546,9 @@ export const CartAndBookingPage: React.FC<CartAndBookingPageProps> = ({ onNaviga
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-raised border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base">
+              <h2 className="font-bold text-ink text-base">
                 Gia Hạn Giữ Chỗ Căn {selectedBooking.apartments?.code}
-              </h3>
+              </h2>
               <button
                 onClick={() => setIsExtendModalOpen(false)}
                 className="p-1.5 rounded-lg border border-brand-border text-ink-soft hover:text-accent hover:border-accent/40 transition-colors duration-150 cursor-pointer"

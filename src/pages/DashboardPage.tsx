@@ -182,7 +182,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 bg-surface border border-brand-border rounded-xl shadow-sm p-5">
           <div className="flex items-center justify-between border-b border-brand-border pb-3.5 mb-4">
-            <h3 className="text-base font-bold text-ink">Doanh thu 6 tháng gần nhất</h3>
+            <h2 className="text-base font-bold text-ink">Doanh thu 6 tháng gần nhất</h2>
             <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-brand-warning-soft text-brand-warning">
               Dữ liệu mẫu
             </span>
@@ -221,9 +221,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         </div>
 
         <div className="bg-surface border border-brand-border rounded-xl shadow-sm p-5 flex flex-col">
-          <h3 className="text-base font-bold text-ink border-b border-brand-border pb-3.5 mb-4">
+          <h2 className="text-base font-bold text-ink border-b border-brand-border pb-3.5 mb-4">
             Phản ánh mới nhất
-          </h3>
+          </h2>
           {latestFeedback.length === 0 ? (
             <p className="text-sm text-ink-soft py-10 text-center">Không có phản ánh đang mở</p>
           ) : (
@@ -256,7 +256,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-surface border border-brand-border rounded-xl shadow-sm p-5">
           <div className="flex items-center justify-between border-b border-brand-border pb-3.5 mb-4">
-            <h3 className="text-base font-bold text-ink">Phân bổ cư dân theo Tòa</h3>
+            <h2 className="text-base font-bold text-ink">Phân bổ cư dân theo Tòa</h2>
             <span className="text-xs font-medium text-ink-soft bg-surface-alt px-2.5 py-0.5 rounded-md">
               Real-time
             </span>
@@ -286,9 +286,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         </div>
 
         <div className="bg-surface border border-brand-border rounded-xl shadow-sm p-5">
-          <h3 className="text-base font-bold text-ink border-b border-brand-border pb-3.5 mb-4">
+          <h2 className="text-base font-bold text-ink border-b border-brand-border pb-3.5 mb-4">
             Truy cập nhanh
-          </h3>
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {quickActions.map(({ label, sub, Icon, target }) => (
               <button

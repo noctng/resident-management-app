@@ -564,13 +564,13 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
           <div className="bg-surface rounded-xl shadow-lg border border-brand-border w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-scale-up">
             <div className="px-6 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between sticky top-0 z-10">
               <div>
-                <h3 className="font-bold text-ink text-base flex items-center gap-2">
+                <h2 className="font-bold text-ink text-base flex items-center gap-2">
                   <span>Hồ Sơ BĐS Bàn Giao: {selectedApartmentDetail.code}</span>
                   <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-brand-success-soft text-brand-success text-xs rounded-full font-bold">
                     <span className="w-1.5 h-1.5 rounded-full bg-brand-success"></span>
                     ĐÃ BÀN GIAO
                   </span>
-                </h3>
+                </h2>
                 <span className="text-sm text-ink-soft">
                   Phân khu {selectedApartmentDetail.phase_code || selectedApartmentDetail.phaseCode || 'CANTATA'} • Dãy {selectedApartmentDetail.block_code || selectedApartmentDetail.blockCode || 'Dãy 01'}
                 </span>

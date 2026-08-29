@@ -166,7 +166,7 @@ const ApprovalQueuePage: React.FC<Props> = ({ onBack }) => {
             <div className="mx-auto w-12 h-12 bg-surface-alt rounded-full flex items-center justify-center mb-3">
               <ClockIcon className="w-6 h-6 text-ink-soft" />
             </div>
-            <h3 className="text-sm font-medium text-ink">Không có yêu cầu nào</h3>
+            <h2 className="text-sm font-medium text-ink">Không có yêu cầu nào</h2>
             <p className="text-sm text-ink-soft mt-1">
               {filter === 'ALL'
                 ? 'Không có yêu cầu phê duyệt nào trong hệ thống.'
@@ -182,9 +182,9 @@ const ApprovalQueuePage: React.FC<Props> = ({ onBack }) => {
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-lg font-bold text-ink">
+                    <h2 className="text-lg font-bold text-ink">
                       {getRequestTypeLabel(approval.request_type)}
-                    </h3>
+                    </h2>
                     {getStatusBadge(approval.status)}
                   </div>
                   <div className="flex flex-wrap gap-y-1 gap-x-4 text-sm text-ink-soft">
@@ -260,7 +260,7 @@ const ApprovalQueuePage: React.FC<Props> = ({ onBack }) => {
         <div className="fixed inset-0 bg-ink/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
           <div className="bg-surface rounded-xl shadow-elevation-raised w-full max-w-md overflow-hidden transition-all">
             <div className="p-6">
-              <h3 className="text-lg font-bold text-ink mb-2">Từ chối yêu cầu</h3>
+              <h2 className="text-lg font-bold text-ink mb-2">Từ chối yêu cầu</h2>
               <p className="text-sm text-ink-soft mb-4">
                 Vui lòng nhập lý do từ chối yêu cầu này. Lý do sẽ được gửi thông báo đến người yêu
                 cầu.

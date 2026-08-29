@@ -1075,10 +1075,10 @@ export const TechnicianMeterPage: React.FC<TechnicianMeterPageProps> = ({
         {/* Tab 3: History of selected apartment */}
         {activeTab === 'history' && selectedApartment && (
           <div className="space-y-3 animate-fade-in">
-            <h3 className="text-sm font-bold text-ink flex items-center justify-between">
+            <h2 className="text-sm font-bold text-ink flex items-center justify-between">
               <span>Lịch sử: <strong className="font-mono">{selectedApartment.code}</strong></span>
               <span className="text-sm text-ink-soft">Tất cả các kỳ</span>
-            </h3>
+            </h2>
 
             {utilityRecords.filter((r) => r.apartmentId === selectedApartment.id).length === 0 ? (
               <p className="text-sm text-ink-soft py-8 text-center bg-surface-alt rounded-xl">

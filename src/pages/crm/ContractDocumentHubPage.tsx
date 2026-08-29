@@ -341,9 +341,9 @@ export const ContractDocumentHubPage: React.FC<ContractDocumentHubPageProps> = (
                       <DocumentTextIcon className="w-6 h-6" />
                     </div>
                     <div className="overflow-hidden">
-                      <h3 className="font-bold text-ink text-sm truncate" title={doc.document_name}>
+                      <h2 className="font-bold text-ink text-sm truncate" title={doc.document_name}>
                         {doc.document_name}
-                      </h3>
+                      </h2>
                       <p className="text-[11px] text-ink-soft font-mono">
                         {doc.contracts?.contract_code || 'Không gắn HĐ cụ thể'}
                       </p>
@@ -410,10 +410,10 @@ export const ContractDocumentHubPage: React.FC<ContractDocumentHubPageProps> = (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base flex items-center gap-2">
+              <h2 className="font-bold text-ink text-base flex items-center gap-2">
                 <DocumentArrowUpIcon className="w-5 h-5 text-accent" />
                 <span>Tải Lên Bản Scan PDF Cứng</span>
-              </h3>
+              </h2>
               <button onClick={() => setIsUploadModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>

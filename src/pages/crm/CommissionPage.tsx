@@ -424,7 +424,7 @@ export const CommissionPage: React.FC<CommissionPageProps> = ({ onNavigate, onBa
       {activeTab === 'policies' && (
         <div className="space-y-4">
           <div className="flex justify-between items-center bg-surface p-4 rounded-xl border border-brand-border shadow-xs">
-            <h3 className="font-bold text-ink text-sm">Chính Sách Hoa Hồng Định Mức</h3>
+            <h2 className="font-bold text-ink text-sm">Chính Sách Hoa Hồng Định Mức</h2>
             <button
               onClick={() => setIsCreatePolicyModalOpen(true)}
               className="px-4 py-2 bg-accent hover:bg-accent-hover text-white rounded-xl text-xs font-bold transition-all duration-200 shadow-sm cursor-pointer inline-flex items-center gap-1.5"
@@ -482,7 +482,7 @@ export const CommissionPage: React.FC<CommissionPageProps> = ({ onNavigate, onBa
         <div className="space-y-4">
           <div className="bg-surface rounded-2xl border border-brand-border shadow-sm overflow-hidden">
             <div className="p-4 border-b border-brand-border bg-surface-alt">
-              <h3 className="font-bold text-ink text-sm">Lịch Sử Chi Trả Giải Ngân Hoa Hồng</h3>
+              <h2 className="font-bold text-ink text-sm">Lịch Sử Chi Trả Giải Ngân Hoa Hồng</h2>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs divide-y divide-brand-border">
@@ -532,7 +532,7 @@ export const CommissionPage: React.FC<CommissionPageProps> = ({ onNavigate, onBa
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base">+ Thêm Chính Sách Hoa Hồng</h3>
+              <h2 className="font-bold text-ink text-base">+ Thêm Chính Sách Hoa Hồng</h2>
               <button onClick={() => setIsCreatePolicyModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -631,10 +631,10 @@ export const CommissionPage: React.FC<CommissionPageProps> = ({ onNavigate, onBa
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-accent-soft flex items-center justify-between">
-              <h3 className="font-bold text-accent-ink text-base flex items-center gap-2">
+              <h2 className="font-bold text-accent-ink text-base flex items-center gap-2">
                 <BanknotesIcon className="w-5 h-5 text-accent" />
                 <span>Lập Phiếu Chi Trả Hoa Hồng</span>
-              </h3>
+              </h2>
               <button onClick={() => setSelectedCmsForPayout(null)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>

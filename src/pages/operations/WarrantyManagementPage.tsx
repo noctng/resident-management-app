@@ -494,10 +494,10 @@ export const WarrantyManagementPage: React.FC<WarrantyManagementPageProps> = () 
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base flex items-center gap-2">
+              <h2 className="font-bold text-ink text-base flex items-center gap-2">
                 <WrenchScrewdriverIcon className="w-5 h-5 text-accent" />
                 <span>Tiếp Nhận Sự Cố Bảo Hành Sau Bàn Giao (B.8.4)</span>
-              </h3>
+              </h2>
               <button onClick={() => setIsCreateModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -604,10 +604,10 @@ export const WarrantyManagementPage: React.FC<WarrantyManagementPageProps> = () 
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base flex items-center gap-2">
+              <h2 className="font-bold text-ink text-base flex items-center gap-2">
                 <UserIcon className="w-5 h-5 text-accent" />
                 <span>Điều Phối Nhà Thầu: {selectedClaim.claim_code}</span>
-              </h3>
+              </h2>
               <button onClick={() => setIsAssignModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -679,10 +679,10 @@ export const WarrantyManagementPage: React.FC<WarrantyManagementPageProps> = () 
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base flex items-center gap-2">
+              <h2 className="font-bold text-ink text-base flex items-center gap-2">
                 <CheckCircleIcon className="w-5 h-5 text-brand-success" />
                 <span>Nghiệm Thu Đóng Phiếu: {selectedClaim.claim_code}</span>
-              </h3>
+              </h2>
               <button onClick={() => setIsCompleteModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>

@@ -377,7 +377,7 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <div className="flex items-center gap-2">
-                          <h3 className="font-bold text-ink text-base">{pb.name}</h3>
+                          <h2 className="font-bold text-ink text-base">{pb.name}</h2>
                         </div>
                         <span className="font-mono text-sm text-ink-soft font-semibold">{pb.code}</span>
                       </div>
@@ -524,7 +524,7 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <h3 className="font-bold text-ink text-base">{p.name}</h3>
+                        <h2 className="font-bold text-ink text-base">{p.name}</h2>
                         <span className="font-mono text-xs text-accent font-semibold">{p.code}</span>
                       </div>
 
@@ -605,7 +605,7 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base">+ Tạo Phiên Bản Bảng Giá Mới</h3>
+              <h2 className="font-bold text-ink text-base">+ Tạo Phiên Bản Bảng Giá Mới</h2>
               <button onClick={() => setIsCreatePbModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -702,7 +702,7 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base">+ Tạo Chương Trình Ưu Đãi Mới</h3>
+              <h2 className="font-bold text-ink text-base">+ Tạo Chương Trình Ưu Đãi Mới</h2>
               <button onClick={() => setIsCreatePromoModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -842,10 +842,10 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-up">
             <div className="px-6 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
               <div>
-                <h3 className="font-bold text-ink text-base flex items-center gap-2">
+                <h2 className="font-bold text-ink text-base flex items-center gap-2">
                   <span>Chi Tiết Bảng Giá: {selectedPbDetail?.name || 'Đang tải...'}</span>
                   <span className="font-mono text-xs text-accent">({selectedPbDetail?.code})</span>
-                </h3>
+                </h2>
                 <p className="text-sm text-ink-soft mt-0.5">
                   Phân kỳ: {selectedPbDetail?.phase_code} • Phiên bản v{selectedPbDetail?.version} • Hiệu lực từ: {selectedPbDetail?.effective_from ? new Date(selectedPbDetail.effective_from).toLocaleDateString('vi-VN') : ''}
                 </p>
@@ -931,10 +931,10 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base flex items-center gap-2">
+              <h2 className="font-bold text-ink text-base flex items-center gap-2">
                 <CalculatorIcon className="w-5 h-5 text-accent" />
                 <span>Công Cụ Tính Thử Chiết Khấu (Discount Engine)</span>
-              </h3>
+              </h2>
               <button onClick={() => setIsCalcModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>

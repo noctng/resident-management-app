@@ -290,9 +290,9 @@ export const SalesMatrixPage: React.FC<SalesMatrixPageProps> = ({ onNavigate, on
                 <div className="flex items-center justify-between border-b border-brand-border pb-3">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-accent" />
-                    <h3 className="font-bold text-ink text-base">
+                    <h2 className="font-bold text-ink text-base">
                       {activePhase === 'NOXH' ? `Tòa / Tầng: ${blockName}` : `Dãy / Block: ${blockName}`}
-                    </h3>
+                    </h2>
                     <span className="text-sm text-ink-soft bg-surface-alt px-2 py-0.5 rounded-full font-medium">
                       {unitsInBlock.length} căn/lô
                     </span>
@@ -346,13 +346,13 @@ export const SalesMatrixPage: React.FC<SalesMatrixPageProps> = ({ onNavigate, on
                   <BuildingOfficeIcon className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-ink text-base flex items-center gap-2">
+                  <h2 className="font-bold text-ink text-base flex items-center gap-2">
                     Căn / Lô: {selectedUnit.code}
                     <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold border ${getStatusBadge(selectedUnit.effectiveStatus).cell}`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${getStatusBadge(selectedUnit.effectiveStatus).dot}`} />
                       {getStatusBadge(selectedUnit.effectiveStatus).label}
                     </span>
-                  </h3>
+                  </h2>
                   <p className="text-sm text-ink-soft">
                     Phân khu: <strong className="text-ink">{selectedUnit.phase_code || activePhase}</strong> • Dãy: <strong className="text-ink">{selectedUnit.block_code || 'N/A'}</strong>
                   </p>
@@ -527,10 +527,10 @@ export const SalesMatrixPage: React.FC<SalesMatrixPageProps> = ({ onNavigate, on
         <div className="fixed inset-0 z-[55] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base flex items-center gap-1.5">
+              <h2 className="font-bold text-ink text-base flex items-center gap-1.5">
                 <PinIcon className="w-4 h-4 text-accent" />
                 Giữ Chỗ Căn {selectedUnit.code}
-              </h3>
+              </h2>
               <button
                 onClick={() => setIsQuickBookingOpen(false)}
                 className="p-1.5 rounded-lg border border-brand-border text-ink-soft hover:text-accent hover:border-accent/40 transition-all duration-200 cursor-pointer"

@@ -480,10 +480,10 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
       {/* TAB 2: WORKERS LIST */}
       {activeTab === 'workers' && (
         <div className="bg-surface rounded-2xl border border-brand-border p-6 shadow-sm space-y-4">
-          <h3 className="font-bold text-ink text-sm flex items-center gap-2">
+          <h2 className="font-bold text-ink text-sm flex items-center gap-2">
             <UsersIcon className="w-5 h-5 text-accent" />
             <span>Danh Sách Thẻ Tạm Thi Công Cấp Cho Công Nhân</span>
-          </h3>
+          </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {registrations.flatMap((r) => r.construction_workers?.map((w: any) => ({ ...w, reg: r })) || []).map((worker: any) => (
@@ -510,10 +510,10 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
       {/* TAB 3: VIOLATIONS LIST */}
       {activeTab === 'violations' && (
         <div className="bg-surface rounded-2xl border border-brand-border p-6 shadow-sm space-y-4">
-          <h3 className="font-bold text-ink text-sm flex items-center gap-2">
+          <h2 className="font-bold text-ink text-sm flex items-center gap-2">
             <ExclamationTriangleIcon className="w-5 h-5 text-brand-danger" />
             <span>Biên Bản Vi Phạm Thi Công & Khấu Trừ Ký Quỹ (Phụ Lục E.5.6)</span>
-          </h3>
+          </h2>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs divide-y divide-brand-border">
@@ -559,10 +559,10 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-lg overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base flex items-center gap-2">
+              <h2 className="font-bold text-ink text-base flex items-center gap-2">
                 <BuildingOfficeIcon className="w-5 h-5 text-accent" />
                 <span>Đăng Ký Thi Công Hoàn Thiện & Ký Quỹ 100Tr (C.9)</span>
-              </h3>
+              </h2>
               <button onClick={() => setIsCreateModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -671,10 +671,10 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base flex items-center gap-2">
+              <h2 className="font-bold text-ink text-base flex items-center gap-2">
                 <BanknotesIcon className="w-5 h-5 text-brand-success" />
                 <span>Xác Nhận Nộp Tiền Ký Quỹ: {selectedReg.reg_code}</span>
-              </h3>
+              </h2>
               <button onClick={() => setIsDepositModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -723,10 +723,10 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base flex items-center gap-2">
+              <h2 className="font-bold text-ink text-base flex items-center gap-2">
                 <ExclamationTriangleIcon className="w-5 h-5 text-brand-danger" />
                 <span>Lập Biên Bản Vi Phạm: {selectedReg.reg_code}</span>
-              </h3>
+              </h2>
               <button onClick={() => setIsViolationModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -796,10 +796,10 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base flex items-center gap-2">
+              <h2 className="font-bold text-ink text-base flex items-center gap-2">
                 <UsersIcon className="w-5 h-5 text-accent" />
                 <span>Cấp Thẻ Tạm Cho Công Nhân: {selectedReg.reg_code}</span>
-              </h3>
+              </h2>
               <button onClick={() => setIsWorkerModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -874,10 +874,10 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-md overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-brand-border bg-surface-alt flex items-center justify-between">
-              <h3 className="font-bold text-ink text-base flex items-center gap-2">
+              <h2 className="font-bold text-ink text-base flex items-center gap-2">
                 <CheckCircleIcon className="w-5 h-5 text-brand-success" />
                 <span>Nghiệm Thu Hoàn Công & Hoàn Ký Quỹ</span>
-              </h3>
+              </h2>
               <button onClick={() => setIsSettleModalOpen(false)} className="p-1.5 text-ink-soft hover:text-ink rounded-lg transition-colors cursor-pointer">
                 <XMarkIcon className="w-5 h-5" />
               </button>

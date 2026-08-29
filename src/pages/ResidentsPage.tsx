@@ -559,9 +559,9 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
                 <TrashIcon className="w-6 h-6" />
               </span>
               <div>
-                <h3 className="text-lg font-bold text-ink">
+                <h2 className="text-lg font-bold text-ink">
                   Xác nhận xóa cư dân
-                </h3>
+                </h2>
                 <p className="text-xs text-brand-danger font-medium">
                   Hành động nguy hiểm, không thể hoàn tác
                 </p>
