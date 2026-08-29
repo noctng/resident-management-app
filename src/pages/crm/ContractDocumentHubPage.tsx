@@ -19,6 +19,7 @@ import {
   ExclamationTriangleIcon,
   ClockIcon,
 } from '../../components/icons';
+import { StatCard } from '../../components/ui/Card';
 
 interface ContractDocumentHubPageProps {
   onNavigate?: (route: string) => void;
@@ -227,49 +228,49 @@ export const ContractDocumentHubPage: React.FC<ContractDocumentHubPageProps> = (
 
       {/* 4 Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <DocumentTextIcon className="w-4 h-4 text-accent" />
-            Tổng số bản scan lưu trữ
-          </span>
-          <div className="text-2xl font-bold font-mono text-ink tabular-nums">
-            {stats.totalDocs || 0} tài liệu
-          </div>
-          <p className="text-[11px] text-ink-soft">Tất cả định dạng PDF / ảnh</p>
-        </div>
-
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <BuildingOfficeIcon className="w-4 h-4 text-brand-success" />
-            Hợp đồng đã có bản scan
-          </span>
-          <div className="text-2xl font-bold font-mono text-brand-success tabular-nums">
-            {stats.uniqueContracts || 0} HĐMB
-          </div>
-          <p className="text-[11px] text-brand-success font-medium">Đã số hóa bản cứng</p>
-        </div>
-
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <FolderIcon className="w-4 h-4 text-accent" />
-            Tổng dung lượng lưu trữ
-          </span>
-          <div className="text-xl font-bold font-mono text-accent tabular-nums">
-            {((stats.totalSize || 0) / (1024 * 1024)).toFixed(2)} MB
-          </div>
-          <p className="text-[11px] text-ink-soft">Dung lượng ổ đĩa sử dụng</p>
-        </div>
-
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <ClockIcon className="w-4 h-4 text-brand-warning" />
-            Bản scan HĐMB gốc
-          </span>
-          <div className="text-2xl font-bold font-mono text-brand-warning tabular-nums">
-            {documents.filter((d) => d.doc_type === 'HDMB_SCAN').length} bản
-          </div>
-          <p className="text-[11px] text-brand-warning font-medium">HĐMB chính thức</p>
-        </div>
+        <StatCard
+          label="Tổng số bản scan lưu trữ"
+          value={stats.totalDocs || 0}
+          unit="tài liệu"
+          icon={DocumentTextIcon}
+          iconBg="bg-accent-soft"
+          iconColor="text-accent"
+          subValue="Tất cả định dạng PDF / ảnh"
+          subTone="neutral"
+        />
+        <StatCard
+          label="Hợp đồng đã có bản scan"
+          value={stats.uniqueContracts || 0}
+          unit="HĐMB"
+          icon={BuildingOfficeIcon}
+          iconBg="bg-brand-success-soft"
+          iconColor="text-brand-success"
+          valueTone="success"
+          subValue="Đã số hóa bản cứng"
+          subTone="success"
+        />
+        <StatCard
+          label="Tổng dung lượng lưu trữ"
+          value={((stats.totalSize || 0) / (1024 * 1024)).toFixed(2)}
+          unit="MB"
+          icon={FolderIcon}
+          iconBg="bg-accent-soft"
+          iconColor="text-accent"
+          valueTone="accent"
+          subValue="Dung lượng ổ đĩa sử dụng"
+          subTone="neutral"
+        />
+        <StatCard
+          label="Bản scan HĐMB gốc"
+          value={documents.filter((d) => d.doc_type === 'HDMB_SCAN').length}
+          unit="bản"
+          icon={ClockIcon}
+          iconBg="bg-brand-warning-soft"
+          iconColor="text-brand-warning"
+          valueTone="warning"
+          subValue="HĐMB chính thức"
+          subTone="warning"
+        />
       </div>
 
       {/* Filter Controls */}
