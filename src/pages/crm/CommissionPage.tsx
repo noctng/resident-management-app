@@ -16,6 +16,7 @@ import {
   ClockIcon,
   BuildingOfficeIcon,
 } from '../../components/icons';
+import { StatCard } from '../../components/ui/Card';
 
 interface CommissionPageProps {
   onNavigate?: (route: string) => void;
@@ -215,49 +216,45 @@ export const CommissionPage: React.FC<CommissionPageProps> = ({ onNavigate, onBa
 
       {/* 4 Financial Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <BanknotesIcon className="w-4 h-4 text-accent" />
-            Tổng hoa hồng phát sinh
-          </span>
-          <div className="text-xl font-bold font-mono text-ink tabular-nums">
-            {Number(stats.totalCommission || 0).toLocaleString('vi-VN')} đ
-          </div>
-          <p className="text-[11px] text-ink-soft">Theo toàn bộ HĐMB đã ký</p>
-        </div>
-
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <CheckCircleIcon className="w-4 h-4 text-brand-success" />
-            Đã giải ngân chi trả
-          </span>
-          <div className="text-xl font-bold font-mono text-brand-success tabular-nums">
-            {Number(stats.totalPaid || 0).toLocaleString('vi-VN')} đ
-          </div>
-          <p className="text-[11px] text-brand-success font-medium">Đã thanh toán thực tế</p>
-        </div>
-
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <ClockIcon className="w-4 h-4 text-brand-warning" />
-            Công nợ hoa hồng còn lại
-          </span>
-          <div className="text-xl font-bold font-mono text-accent tabular-nums">
-            {Number(stats.totalPending || 0).toLocaleString('vi-VN')} đ
-          </div>
-          <p className="text-[11px] text-ink-soft">Chờ các đợt giải ngân tiếp theo</p>
-        </div>
-
-        <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-1">
-          <span className="text-xs text-ink-soft font-semibold flex items-center gap-1.5">
-            <DocumentTextIcon className="w-4 h-4 text-ink-soft" />
-            Hồ sơ chờ phê duyệt
-          </span>
-          <div className="text-xl font-bold font-mono text-brand-warning tabular-nums">
-            {stats.pendingApprovalCount || 0} HĐ
-          </div>
-          <p className="text-[11px] text-brand-warning font-medium">Cần GĐKD duyệt chi</p>
-        </div>
+        <StatCard
+          label="Tổng hoa hồng phát sinh"
+          value={`${Number(stats.totalCommission || 0).toLocaleString('vi-VN')} đ`}
+          subValue="Theo toàn bộ HĐMB đã ký"
+          subTone="neutral"
+          icon={BanknotesIcon}
+          iconBg="bg-accent-soft"
+          iconColor="text-accent-ink"
+        />
+        <StatCard
+          label="Đã giải ngân chi trả"
+          value={`${Number(stats.totalPaid || 0).toLocaleString('vi-VN')} đ`}
+          subValue="Đã thanh toán thực tế"
+          subTone="success"
+          valueTone="success"
+          icon={CheckCircleIcon}
+          iconBg="bg-brand-success-soft"
+          iconColor="text-brand-success"
+        />
+        <StatCard
+          label="Công nợ hoa hồng còn lại"
+          value={`${Number(stats.totalPending || 0).toLocaleString('vi-VN')} đ`}
+          subValue="Chờ các đợt giải ngân tiếp theo"
+          subTone="neutral"
+          valueTone="accent"
+          icon={ClockIcon}
+          iconBg="bg-brand-warning-soft"
+          iconColor="text-brand-warning"
+        />
+        <StatCard
+          label="Hồ sơ chờ phê duyệt"
+          value={`${stats.pendingApprovalCount || 0} HĐ`}
+          subValue="Cần GĐKD duyệt chi"
+          subTone="danger"
+          valueTone="warning"
+          icon={DocumentTextIcon}
+          iconBg="bg-brand-warning-soft"
+          iconColor="text-brand-warning"
+        />
       </div>
 
       {/* ── TAB 1: COMMISSIONS TABLE ── */}
