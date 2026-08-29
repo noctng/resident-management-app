@@ -90,7 +90,7 @@ export const QRConfigTab: React.FC<QRConfigTabProps> = ({
             <QrCodeIcon className="w-5 h-5 text-brand-teal" />
             Tài Khoản Ngân Hàng Nhận Tiền
           </h2>
-          <p className="text-xs text-ink-soft mt-1">
+          <p className="text-sm text-ink-soft mt-1">
             Thông tin tài khoản dùng để tạo mã QR VietQR trên hóa đơn thanh toán.
           </p>
         </div>
@@ -112,7 +112,7 @@ export const QRConfigTab: React.FC<QRConfigTabProps> = ({
                 </option>
               ))}
             </select>
-            <p className="mt-1.5 text-xs text-ink-soft">
+            <p className="mt-1.5 text-sm text-ink-soft">
               Ngân hàng liên kết với SePay của bạn
             </p>
           </div>
@@ -170,7 +170,7 @@ export const QRConfigTab: React.FC<QRConfigTabProps> = ({
               className={`${inputCls} font-mono`}
               placeholder="VCB, MB, BIDV..."
             />
-            <p className="mt-1.5 text-xs text-ink-soft">
+            <p className="mt-1.5 text-sm text-ink-soft">
               Nếu không có trong danh sách trên
             </p>
           </div>
@@ -188,7 +188,7 @@ export const QRConfigTab: React.FC<QRConfigTabProps> = ({
             Quan trọng
           </span>
         </div>
-        <p className="text-xs text-ink-soft">
+        <p className="text-sm text-ink-soft">
           Để SePay tự động nhận diện và gạch nợ hóa đơn khi cư dân quét QR chuyển khoản, bạn cần
           cấu hình tài khoản ảo (Virtual Account) từ SePay.
         </p>
@@ -221,7 +221,7 @@ export const QRConfigTab: React.FC<QRConfigTabProps> = ({
                 </button>
               )}
             </div>
-            <p className="mt-1.5 text-xs text-ink-soft">
+            <p className="mt-1.5 text-sm text-ink-soft">
               Lấy từ{' '}
               <a
                 href="https://my.sepay.vn"
@@ -246,14 +246,14 @@ export const QRConfigTab: React.FC<QRConfigTabProps> = ({
               className={`${inputCls} font-mono`}
               placeholder={bankCode || 'BIDV'}
             />
-            <p className="mt-1.5 text-xs text-ink-soft">
+            <p className="mt-1.5 text-sm text-ink-soft">
               Để trống nếu dùng cùng mã ngân hàng ở trên
             </p>
           </div>
         </div>
 
         {/* How SePay VA works */}
-        <div className="bg-surface-alt/60 border border-brand-border rounded-xl p-4 text-xs text-ink-soft leading-relaxed">
+        <div className="bg-surface-alt/60 border border-brand-border rounded-xl p-4 text-sm text-ink-soft leading-relaxed">
           <p className="text-sm font-semibold text-ink mb-2">
             Cách lấy Tài Khoản Ảo SePay:
           </p>
@@ -310,7 +310,7 @@ export const QRConfigTab: React.FC<QRConfigTabProps> = ({
             <PencilIcon className="w-5 h-5 text-brand-teal" />
             Cú Pháp Nội Dung Chuyển Khoản
           </h2>
-          <p className="text-xs text-ink-soft mt-1">
+          <p className="text-sm text-ink-soft mt-1">
             Hệ thống tự động tạo nội dung chuyển khoản theo cú pháp chuẩn để Webhook SePay nhận diện
             căn hộ và gạch nợ tự động.
           </p>
@@ -346,7 +346,7 @@ export const QRConfigTab: React.FC<QRConfigTabProps> = ({
           ))}
         </div>
 
-        <p className="text-xs text-ink-soft">
+        <p className="text-sm text-ink-soft">
           Ví dụ cư dân <strong>CAN03-01</strong> thanh toán điện nước tháng 8/2026 → nội dung
           chuyển khoản:{' '}
           <code className="bg-surface-alt border border-brand-border px-1.5 py-0.5 rounded font-mono text-ink">
@@ -410,7 +410,7 @@ export const QRConfigTab: React.FC<QRConfigTabProps> = ({
                   <span className="font-mono text-ink text-xs">{previewContent}</span>
                 </div>
               </div>
-              <p className="text-xs text-ink-soft flex items-start gap-1.5">
+              <p className="text-sm text-ink-soft flex items-start gap-1.5">
                 <SparklesIcon className="w-3.5 h-3.5 shrink-0 mt-0.5 text-accent" />
                 Thay đổi nội dung mẫu để xem QR tương ứng từng loại hóa đơn
               </p>
@@ -431,7 +431,7 @@ export const QRConfigTab: React.FC<QRConfigTabProps> = ({
                   />
                 )}
               </div>
-              <p className="text-xs text-ink-soft text-center max-w-[224px]">
+              <p className="text-sm text-ink-soft text-center max-w-[224px]">
                 Đây là mã QR mẫu — mã thật sẽ được tạo tự động trên từng hóa đơn
               </p>
             </div>

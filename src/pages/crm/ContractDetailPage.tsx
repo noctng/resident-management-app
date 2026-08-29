@@ -247,7 +247,7 @@ export const ContractDetailPage: React.FC<ContractDetailPageProps> = ({ onNaviga
                 {contract.status === 'SIGNED' ? 'ĐÃ KÝ HĐMB' : contract.status}
               </span>
             </div>
-            <p className="text-xs text-ink-soft mt-0.5">
+            <p className="text-sm text-ink-soft mt-0.5">
               Khách hàng: <strong className="text-ink">{contract.customers?.name}</strong> • Căn: <strong className="text-ink font-mono">{contract.apartments?.code}</strong> ({contract.apartments?.phase_code || 'CANTATA'})
             </p>
           </div>
@@ -583,7 +583,7 @@ export const ContractDetailPage: React.FC<ContractDetailPageProps> = ({ onNaviga
               <h3 className="font-bold text-ink text-sm">
                 Lịch Sử Chuyển Nhượng Kế Thừa Nghĩa Vụ HĐMB
               </h3>
-              <p className="text-xs text-ink-soft">
+              <p className="text-sm text-ink-soft">
                 Tuân thủ Điều 7.3 Luật Kinh doanh BĐS 2023: Kế thừa 100% LTT và số tiền đã thanh toán của chủ cũ
               </p>
             </div>
@@ -609,7 +609,7 @@ export const ContractDetailPage: React.FC<ContractDetailPageProps> = ({ onNaviga
           {(!contract.contract_transfers || contract.contract_transfers.length === 0) ? (
             <div className="p-12 text-center text-ink-faint border border-dashed border-brand-border rounded-xl">
               <p className="font-bold text-sm text-ink">Chưa có giao dịch chuyển nhượng nào</p>
-              <p className="text-xs text-ink-soft mt-1">Hợp đồng này vẫn thuộc sở hữu của khách hàng ban đầu.</p>
+              <p className="text-sm text-ink-soft mt-1">Hợp đồng này vẫn thuộc sở hữu của khách hàng ban đầu.</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -654,7 +654,7 @@ export const ContractDetailPage: React.FC<ContractDetailPageProps> = ({ onNaviga
                 <FolderIcon className="w-4 h-4 text-accent" />
                 <span>Hồ Sơ & Bản Scan PDF của Hợp Đồng {contract.contract_code}</span>
               </h3>
-              <p className="text-xs text-ink-soft mt-0.5">
+              <p className="text-sm text-ink-soft mt-0.5">
                 Lưu trữ các bản cứng có dấu đỏ: HĐMB, Phiếu đặt cọc, Văn bản chuyển nhượng, Sổ đỏ và Giấy tờ tùy thân.
               </p>
             </div>
@@ -676,7 +676,7 @@ export const ContractDetailPage: React.FC<ContractDetailPageProps> = ({ onNaviga
             <div className="p-12 text-center text-ink-soft bg-surface rounded-xl border border-dashed border-brand-border space-y-3">
               <FolderIcon className="w-12 h-12 mx-auto text-ink-faint" />
               <p className="font-bold text-ink text-base">Hợp đồng này chưa có bản scan PDF nào</p>
-              <p className="text-xs text-ink-soft max-w-md mx-auto">
+              <p className="text-sm text-ink-soft max-w-md mx-auto">
                 Bấm "+ Tải Lên Bản Scan PDF" để đính kèm bản scan HĐMB đã ký đóng dấu, phiếu thu tiền hoặc hồ sơ pháp lý.
               </p>
             </div>
@@ -888,7 +888,7 @@ export const ContractDetailPage: React.FC<ContractDetailPageProps> = ({ onNaviga
             <h3 className="font-bold text-ink text-base">
               Thanh Toán Đợt {selectedPaymentForQr.installment}
             </h3>
-            <p className="text-xs text-ink-soft">
+            <p className="text-sm text-ink-soft">
               Căn <span className="font-mono font-semibold">{contract.apartments?.code}</span> • HĐ: <span className="font-mono">{contract.contract_code}</span>
             </p>
 

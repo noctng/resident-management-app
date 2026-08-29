@@ -147,7 +147,7 @@ export const ExecutiveAnalyticsHubPage: React.FC<ExecutiveAnalyticsHubPageProps>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Sales & Revenue */}
         <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-2">
-          <span className="text-xs text-ink-soft font-semibold flex items-center justify-between">
+          <span className="text-sm text-ink-soft font-semibold flex items-center justify-between">
             <span className="flex items-center gap-1.5">
               <BanknotesIcon className="w-4 h-4 text-accent" />
               Doanh số HĐMB Lũy kế
@@ -166,7 +166,7 @@ export const ExecutiveAnalyticsHubPage: React.FC<ExecutiveAnalyticsHubPageProps>
 
         {/* Card 2: Overdue Receivables */}
         <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-2">
-          <span className="text-xs text-ink-soft font-semibold flex items-center justify-between">
+          <span className="text-sm text-ink-soft font-semibold flex items-center justify-between">
             <span className="flex items-center gap-1.5">
               <ExclamationTriangleIcon className="w-4 h-4 text-brand-danger" />
               Công Nợ Quá Hạn HĐMB
@@ -185,7 +185,7 @@ export const ExecutiveAnalyticsHubPage: React.FC<ExecutiveAnalyticsHubPageProps>
 
         {/* Card 3: Operations SLA */}
         <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-2">
-          <span className="text-xs text-ink-soft font-semibold flex items-center justify-between">
+          <span className="text-sm text-ink-soft font-semibold flex items-center justify-between">
             <span className="flex items-center gap-1.5">
               <WrenchScrewdriverIcon className="w-4 h-4 text-accent" />
               SLA Bảo Hành Đúng Hạn
@@ -204,7 +204,7 @@ export const ExecutiveAnalyticsHubPage: React.FC<ExecutiveAnalyticsHubPageProps>
 
         {/* Card 4: Community & Occupancy */}
         <div className="bg-surface rounded-2xl p-5 border border-brand-border shadow-xs space-y-2">
-          <span className="text-xs text-ink-soft font-semibold flex items-center justify-between">
+          <span className="text-sm text-ink-soft font-semibold flex items-center justify-between">
             <span className="flex items-center gap-1.5">
               <BuildingOfficeIcon className="w-4 h-4 text-accent" />
               Tỷ Lệ Bàn Giao & Về Ở
@@ -492,29 +492,29 @@ export const ExecutiveAnalyticsHubPage: React.FC<ExecutiveAnalyticsHubPageProps>
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-surface rounded-2xl border border-brand-border p-6 shadow-sm space-y-2 text-center">
-              <span className="text-xs text-ink-soft font-semibold">Mật Độ Căn Hộ Về Ở</span>
+              <span className="text-sm text-ink-soft font-semibold">Mật Độ Căn Hộ Về Ở</span>
               <div className="text-3xl font-bold font-mono text-accent">
                 {community?.occupancyRate || 0}%
               </div>
-              <p className="text-xs text-ink-soft">
+              <p className="text-sm text-ink-soft">
                 {community?.occupiedApartments || 0} / {community?.totalApartments || 0} căn đã sáng đèn
               </p>
             </div>
 
             <div className="bg-surface rounded-2xl border border-brand-border p-6 shadow-sm space-y-2 text-center">
-              <span className="text-xs text-ink-soft font-semibold">Quy Mô Dân Cư Sinh Sống</span>
+              <span className="text-sm text-ink-soft font-semibold">Quy Mô Dân Cư Sinh Sống</span>
               <div className="text-3xl font-bold font-mono text-brand-success">
                 {community?.totalResidents || 0}
               </div>
-              <p className="text-xs text-ink-soft">Cư dân đăng ký nhân khẩu</p>
+              <p className="text-sm text-ink-soft">Cư dân đăng ký nhân khẩu</p>
             </div>
 
             <div className="bg-surface rounded-2xl border border-brand-border p-6 shadow-sm space-y-2 text-center">
-              <span className="text-xs text-ink-soft font-semibold">Phương Tiện Đăng Ký</span>
+              <span className="text-sm text-ink-soft font-semibold">Phương Tiện Đăng Ký</span>
               <div className="text-3xl font-bold font-mono text-ink">
                 {community?.vehicles?.total || 0}
               </div>
-              <p className="text-xs text-ink-soft">
+              <p className="text-sm text-ink-soft">
                 🚗 {community?.vehicles?.cars || 0} Ô tô • 🛵 {community?.vehicles?.motorbikes || 0} Xe máy
               </p>
             </div>

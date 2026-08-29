@@ -186,7 +186,7 @@ export default function DebtDashboardPage() {
                 style={{ width: `${total > 0 ? 100 - collectedPct : 0}%` }}
               ></div>
             </div>
-            <div className="flex items-center gap-6 mt-2 text-xs text-ink-soft">
+            <div className="flex items-center gap-6 mt-2 text-sm text-ink-soft">
               <span className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-brand-success"></span>
                 Đã thu: {formatCurrency(collected)}
@@ -240,7 +240,7 @@ export default function DebtDashboardPage() {
                       <p className="font-bold text-ink text-base">
                         {debtor.apartment_code}
                       </p>
-                      <p className="text-xs text-ink-soft mt-0.5">
+                      <p className="text-sm text-ink-soft mt-0.5">
                         <span className="text-brand-danger font-medium">
                           {debtor.overdue_count} quá hạn
                         </span>{' '}
@@ -252,7 +252,7 @@ export default function DebtDashboardPage() {
                     <p className="font-mono tabular-nums text-brand-danger font-bold text-base">
                       {formatCurrency(debtor.debt_amount)}
                     </p>
-                    <p className="text-xs text-ink-soft mt-0.5">Tổng nợ</p>
+                    <p className="text-sm text-ink-soft mt-0.5">Tổng nợ</p>
                   </div>
                 </div>
               ))
@@ -300,7 +300,7 @@ export default function DebtDashboardPage() {
                       style={{ width: `${(percentage * collectedPercentage) / 100}%` }}
                     ></div>
                   </div>
-                  <div className="flex justify-between text-xs text-ink-soft mt-1.5">
+                  <div className="flex justify-between text-sm text-ink-soft mt-1.5">
                     <span className="flex items-center gap-1">
                       <div className="w-2 h-2 rounded-full bg-secondary-500"></div>
                       Đã thu:{' '}

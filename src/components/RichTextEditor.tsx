@@ -169,7 +169,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         const data = await res.json();
         if (data.url) {
           const alignClass = alignInput === 'center' ? 'mx-auto text-center' : alignInput === 'right' ? 'ml-auto text-right' : 'mr-auto text-left';
-          const mediaHtml = `<figure class="my-4 ${alignClass}" style="max-width: 100%;"><img src="${data.url}" alt="${captionInput || 'Hình ảnh'}" class="rounded-xl shadow-sm inline-block" style="max-height: 520px; width: auto;" />${captionInput ? `<figcaption class="text-xs text-ink-soft mt-1.5 italic">${captionInput}</figcaption>` : ''}</figure><p><br></p>`;
+          const mediaHtml = `<figure class="my-4 ${alignClass}" style="max-width: 100%;"><img src="${data.url}" alt="${captionInput || 'Hình ảnh'}" class="rounded-xl shadow-sm inline-block" style="max-height: 520px; width: auto;" />${captionInput ? `<figcaption class="text-sm text-ink-soft mt-1.5 italic">${captionInput}</figcaption>` : ''}</figure><p><br></p>`;
           insertHtmlAtCursor(mediaHtml);
           setIsMediaModalOpen(false);
         }
@@ -190,7 +190,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     } else if (mediaTab === 'url') {
       if (!imageUrlInput.trim()) return;
       const alignClass = alignInput === 'center' ? 'mx-auto text-center' : alignInput === 'right' ? 'ml-auto text-right' : 'mr-auto text-left';
-      const mediaHtml = `<figure class="my-4 ${alignClass}" style="max-width: 100%;"><img src="${imageUrlInput.trim()}" alt="${captionInput || 'Hình ảnh'}" class="rounded-xl shadow-sm inline-block" style="max-height: 520px; width: auto;" />${captionInput ? `<figcaption class="text-xs text-ink-soft mt-1.5 italic">${captionInput}</figcaption>` : ''}</figure><p><br></p>`;
+      const mediaHtml = `<figure class="my-4 ${alignClass}" style="max-width: 100%;"><img src="${imageUrlInput.trim()}" alt="${captionInput || 'Hình ảnh'}" class="rounded-xl shadow-sm inline-block" style="max-height: 520px; width: auto;" />${captionInput ? `<figcaption class="text-sm text-ink-soft mt-1.5 italic">${captionInput}</figcaption>` : ''}</figure><p><br></p>`;
       insertHtmlAtCursor(mediaHtml);
       setIsMediaModalOpen(false);
     }
@@ -521,7 +521,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
                       <>
                         <PhotoIcon className="w-12 h-12 text-ink-faint mb-2" />
                         <p className="text-sm font-semibold text-ink ">Nhấn để chọn ảnh từ máy tính</p>
-                        <p className="text-xs text-ink-soft mt-1">Hỗ trợ PNG, JPG, GIF, WebP (Tối đa 15MB)</p>
+                        <p className="text-sm text-ink-soft mt-1">Hỗ trợ PNG, JPG, GIF, WebP (Tối đa 15MB)</p>
                       </>
                     )}
                   </div>

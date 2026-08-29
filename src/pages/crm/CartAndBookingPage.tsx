@@ -203,7 +203,7 @@ export const CartAndBookingPage: React.FC<CartAndBookingPageProps> = ({ onNaviga
           {/* Filter Toolbar */}
           <div className="bg-surface p-4 rounded-xl border border-brand-border flex flex-wrap items-center justify-between gap-3 shadow-sm">
             <div className="flex items-center gap-2">
-              <span className="text-xs text-ink-soft font-medium">Phân khu:</span>
+              <span className="text-sm text-ink-soft font-medium">Phân khu:</span>
               <div className="flex items-center bg-surface-alt p-1 rounded-xl">
                 {['ALL', 'TESLA', 'CANTATA', 'NOXH'].map((p) => (
                   <button
@@ -240,7 +240,7 @@ export const CartAndBookingPage: React.FC<CartAndBookingPageProps> = ({ onNaviga
             <div className="p-16 text-center text-ink-soft bg-surface rounded-xl border border-brand-border">
               <BuildingOfficeIcon className="w-12 h-12 mx-auto text-ink-faint mb-2" />
               <p className="font-bold text-ink">Chưa có phiếu giữ chỗ nào</p>
-              <p className="text-xs text-ink-soft mt-1">Các căn được giữ chỗ từ Ma Trận Bán Hàng sẽ hiển thị và đếm ngược tại đây.</p>
+              <p className="text-sm text-ink-soft mt-1">Các căn được giữ chỗ từ Ma Trận Bán Hàng sẽ hiển thị và đếm ngược tại đây.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -372,7 +372,7 @@ export const CartAndBookingPage: React.FC<CartAndBookingPageProps> = ({ onNaviga
             <div className="p-16 text-center text-ink-soft bg-surface rounded-xl border border-brand-border">
               <BuildingOfficeIcon className="w-12 h-12 mx-auto text-ink-faint mb-2" />
               <p className="font-bold text-ink">Giỏ hàng tư vấn đang trống</p>
-              <p className="text-xs text-ink-soft mt-1">Truy cập Ma Trận Bán Hàng và bấm "Thêm Giỏ Hàng" để đưa các căn quan tâm vào đây.</p>
+              <p className="text-sm text-ink-soft mt-1">Truy cập Ma Trận Bán Hàng và bấm "Thêm Giỏ Hàng" để đưa các căn quan tâm vào đây.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -386,7 +386,7 @@ export const CartAndBookingPage: React.FC<CartAndBookingPageProps> = ({ onNaviga
                       <h3 className="font-bold text-ink text-base">
                         Căn: {item.apartments?.code}
                       </h3>
-                      <p className="text-xs text-ink-soft">
+                      <p className="text-sm text-ink-soft">
                         Phân khu: <strong>{item.apartments?.phase_code || 'CANTATA'}</strong> • Dãy: {item.apartments?.block_code || 'N/A'}
                       </p>
                     </div>

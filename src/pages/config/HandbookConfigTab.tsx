@@ -174,7 +174,7 @@ const HandbookConfigTab: React.FC = () => {
             <DocumentTextIcon className="w-6 h-6 text-accent" />
             Cấu Hình & Quản Lý Sổ Tay Cư Dân (PDF)
           </h2>
-          <p className="text-xs text-ink-soft mt-1">
+          <p className="text-sm text-ink-soft mt-1">
             Đăng tải tài liệu Sổ Tay Cư Dân định dạng PDF và cấu hình danh bạ hotline hỗ trợ cư dân 24/7
           </p>
         </div>

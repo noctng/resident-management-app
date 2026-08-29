@@ -209,7 +209,7 @@ export const SePayConfigTab: React.FC<SePayConfigTabProps> = ({
               {copied ? '✓ Đã sao chép' : 'Sao chép URL'}
             </button>
           </div>
-          <p className="text-xs text-ink-soft mt-1.5">
+          <p className="text-sm text-ink-soft mt-1.5">
             Dán URL này vào phần cấu hình Webhook trên trang quản trị SePay (
             <a
               href="https://my.sepay.vn/webhooks"
@@ -436,7 +436,7 @@ export const SePayConfigTab: React.FC<SePayConfigTabProps> = ({
             placeholder="CAN, EW, UB, HD"
             className="w-full px-3 py-2 rounded-lg border border-brand-border bg-surface-alt text-xs text-ink font-mono placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
           />
-          <p className="text-xs text-ink-soft mt-1">
+          <p className="text-sm text-ink-soft mt-1">
             Các tiền tố ngăn cách bởi dấu phẩy mà hệ thống sẽ dùng để tách mã căn hộ trong chuỗi nội
             dung chuyển khoản.
           </p>
@@ -503,7 +503,7 @@ export const SePayConfigTab: React.FC<SePayConfigTabProps> = ({
               <ArrowPathIcon className="w-5 h-5 text-accent" />
               Thử Nghiệm Giao Dịch Webhook (Test Mode)
             </h3>
-            <p className="text-xs text-ink-soft mt-0.5">
+            <p className="text-sm text-ink-soft mt-0.5">
               Mô phỏng SePay gửi webhook đến server để kiểm tra luồng gạch nợ tự động mà không cần
               chuyển tiền thật.
             </p>

@@ -359,7 +359,7 @@ function NewsManagementPage() {
             <div className="lg:col-span-4 space-y-4">
               {/* Box 1: Đăng bài viết (Publish Box) */}
               <div className="bg-surface rounded-xl border border-brand-border shadow-sm overflow-hidden">
-                <div className="px-4 py-3 bg-surface-alt border-b border-brand-border font-bold text-xs text-ink-soft uppercase tracking-wider flex items-center gap-1.5">
+                <div className="px-4 py-3 bg-surface-alt border-b border-brand-border font-bold text-sm text-ink-soft uppercase tracking-wider flex items-center gap-1.5">
                   <Cog6ToothIcon className="w-3.5 h-3.5" />
                   <span>Thiết lập đăng bài</span>
                 </div>
@@ -422,7 +422,7 @@ function NewsManagementPage() {
 
               {/* Box 2: Chuyên mục (Categories) */}
               <div className="bg-surface rounded-xl border border-brand-border shadow-sm overflow-hidden">
-                <div className="px-4 py-3 bg-surface-alt border-b border-brand-border font-bold text-xs text-ink-soft uppercase tracking-wider flex items-center gap-1.5">
+                <div className="px-4 py-3 bg-surface-alt border-b border-brand-border font-bold text-sm text-ink-soft uppercase tracking-wider flex items-center gap-1.5">
                   <Squares2x2Icon className="w-3.5 h-3.5" />
                   <span>Chuyên mục phân loại</span>
                 </div>
@@ -448,7 +448,7 @@ function NewsManagementPage() {
 
               {/* Box 3: Ảnh đại diện (Featured Image) */}
               <div className="bg-surface rounded-xl border border-brand-border shadow-sm overflow-hidden">
-                <div className="px-4 py-3 bg-surface-alt border-b border-brand-border font-bold text-xs text-ink-soft uppercase tracking-wider flex items-center gap-1.5">
+                <div className="px-4 py-3 bg-surface-alt border-b border-brand-border font-bold text-sm text-ink-soft uppercase tracking-wider flex items-center gap-1.5">
                   <PhotoIcon className="w-3.5 h-3.5" />
                   <span>Ảnh đại diện (Featured Image)</span>
                 </div>
@@ -495,7 +495,7 @@ function NewsManagementPage() {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-ink ">Tin Tức & Thông Báo</h1>
-                <p className="text-xs text-ink-soft ">Soạn thảo và đăng tải bài viết, sự kiện cho cư dân</p>
+                <p className="text-sm text-ink-soft ">Soạn thảo và đăng tải bài viết, sự kiện cho cư dân</p>
               </div>
             </div>
             <button
@@ -584,7 +584,7 @@ function NewsManagementPage() {
                       </div>
 
                       {post.summary && (
-                        <p className="text-xs text-ink-soft  line-clamp-1 mb-1.5">{post.summary}</p>
+                        <p className="text-sm text-ink-soft  line-clamp-1 mb-1.5">{post.summary}</p>
                       )}
 
                       <div className="flex items-center gap-3 text-[11px] text-ink-soft flex-wrap">
@@ -698,7 +698,7 @@ function NewsManagementPage() {
                     {categoryBadge(previewModalPost.category || 'general')}
                     {previewModalPost.is_pinned && <span className="text-[11px] text-brand-warning font-bold inline-flex items-center gap-1"><PinIcon className="w-3.5 h-3.5" /> Ghim bài</span>}
                     <span className="text-[11px] bg-brand-danger-soft text-brand-danger px-2 py-0.5 rounded-full font-bold">MỚI</span>
-                    <span className="text-xs text-ink-soft">Vừa xong</span>
+                    <span className="text-sm text-ink-soft">Vừa xong</span>
                   </div>
 
                   <h2 className="text-xl sm:text-2xl font-bold text-ink  leading-snug">
@@ -772,7 +772,7 @@ function NewsManagementPage() {
                           {previewModalPost.title || 'Tiêu đề bài viết'}
                         </h3>
                         {previewModalPost.summary && (
-                          <p className="text-xs text-ink-soft  mt-1 line-clamp-2">{previewModalPost.summary}</p>
+                          <p className="text-sm text-ink-soft  mt-1 line-clamp-2">{previewModalPost.summary}</p>
                         )}
                         <p className="text-[11px] text-ink-soft mt-1.5">Vừa xong</p>
                       </div>

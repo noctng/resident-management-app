@@ -409,7 +409,7 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
                         {resident.phoneNumber ? (
                           <a
                             href={`tel:${resident.phoneNumber}`}
-                            className="font-mono text-xs text-ink-soft hover:text-accent hover:underline transition-colors"
+                            className="font-mono text-sm text-ink-soft hover:text-accent hover:underline transition-colors"
                           >
                             {resident.phoneNumber}
                           </a>
@@ -497,7 +497,7 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
                         <UsersIcon className="w-6 h-6" />
                       </div>
                       <div className="font-semibold text-ink">Không tìm thấy kết quả phù hợp</div>
-                      <div className="text-xs text-ink-soft">Thử thay đổi từ khóa tìm kiếm hoặc bỏ chọn các bộ lọc</div>
+                      <div className="text-sm text-ink-soft">Thử thay đổi từ khóa tìm kiếm hoặc bỏ chọn các bộ lọc</div>
                     </div>
                   </td>
                 </tr>
@@ -507,7 +507,7 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
         </div>
 
         {/* ── Table Footer & Stats Summary ── */}
-        <div className="bg-surface-alt border-t border-brand-border px-5 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-ink-soft font-medium">
+        <div className="bg-surface-alt border-t border-brand-border px-5 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-ink-soft font-medium">
           <div className="flex items-center gap-2">
             <span>Đang hiển thị <strong className="text-ink font-bold">{filteredResidents.length}</strong> / <strong className="text-ink font-bold">{residents.length}</strong> cư dân</span>
             {filteredResidents.length < residents.length && (
@@ -584,7 +584,7 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
                   <p className="text-sm font-semibold text-brand-warning flex items-center gap-1.5">
                     <ExclamationTriangleIcon className="w-4 h-4 inline" /> Không thể xóa cư dân này
                   </p>
-                  <p className="text-xs text-ink-soft leading-relaxed">
+                  <p className="text-sm text-ink-soft leading-relaxed">
                     Cư dân này hiện đang là <strong>Chủ sở hữu (Chủ hộ)</strong> của căn hộ. Hệ
                     thống không cho phép xóa Chủ hộ để tránh ảnh hưởng đến việc thanh toán hóa đơn.
                     Vui lòng chuyển quyền chủ hộ sang thành viên khác trước khi thực hiện xóa.
@@ -595,7 +595,7 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
                   <p className="text-xs font-semibold text-ink">
                     Ảnh hưởng dữ liệu khi xóa:
                   </p>
-                  <ul className="text-xs text-ink-soft space-y-1.5 list-disc list-inside">
+                  <ul className="text-sm text-ink-soft space-y-1.5 list-disc list-inside">
                     <li>
                       Tài khoản Portal cư dân sẽ bị <strong>xóa vĩnh viễn</strong>.
                     </li>

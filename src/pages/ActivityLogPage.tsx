@@ -501,7 +501,7 @@ const ActivityLogPage: React.FC<ActivityLogPageProps> = ({ onBack, initialUserId
               <ClockIcon className="w-6 h-6" />
             </div>
             <p className="text-sm font-semibold text-ink">Không có dữ liệu log</p>
-            <p className="text-xs text-ink-soft mt-1">
+            <p className="text-sm text-ink-soft mt-1">
               Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm để xem các thao tác khác
             </p>
           </div>
@@ -631,13 +631,13 @@ const ActivityLogPage: React.FC<ActivityLogPageProps> = ({ onBack, initialUserId
         {/* Loading / End observer target */}
         <div ref={observerTarget} className="py-4 text-center">
           {loading && (
-            <div className="inline-flex items-center gap-2 text-xs text-ink-soft">
+            <div className="inline-flex items-center gap-2 text-sm text-ink-soft">
               <div className="w-4 h-4 border-2 border-accent border-t-transparent rounded-full animate-spin"></div>
               <span>Đang tải thêm logs...</span>
             </div>
           )}
           {!hasMore && logs.length > 0 && (
-            <p className="text-xs text-ink-soft">Đã hiển thị toàn bộ {totalCount} bản ghi log</p>
+            <p className="text-sm text-ink-soft">Đã hiển thị toàn bộ {totalCount} bản ghi log</p>
           )}
         </div>
       </div>

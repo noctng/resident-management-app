@@ -76,7 +76,7 @@ const ResolveFeedbackModal: React.FC<{
                 </span>
                 Phản hồi P.A #{feedback.id.split('_')[1]}
               </h3>
-              <p className="text-xs text-ink-soft mt-1">
+              <p className="text-sm text-ink-soft mt-1">
                 Xem và xử lý phản ánh của cư dân
               </p>
             </div>
@@ -99,7 +99,7 @@ const ResolveFeedbackModal: React.FC<{
                   <p className="text-sm font-bold text-ink ">
                     {feedback.residentName || 'Cư dân ẩn danh'}
                   </p>
-                  <p className="text-xs text-ink-soft ">
+                  <p className="text-sm text-ink-soft ">
                     Căn hộ <span className="font-mono">{feedback.apartmentCode}</span> •{' '}
                     {new Date(feedback.submittedAt).toLocaleString('vi-VN')}
                   </p>
@@ -143,7 +143,7 @@ const ResolveFeedbackModal: React.FC<{
                     <p className="text-sm font-bold text-brand-success">
                       Ban Quản Lý
                     </p>
-                    <p className="text-xs text-ink-soft ">
+                    <p className="text-sm text-ink-soft ">
                       Xử lý bởi {feedback.resolvedByUsername} •{' '}
                       {new Date(feedback.resolvedAt!).toLocaleString('vi-VN')}
                     </p>
@@ -231,7 +231,7 @@ const ResolveFeedbackModal: React.FC<{
                         <p className="text-sm text-ink-soft ">
                           <span className="font-semibold">Nhấn để tải lên</span> hoặc kéo thả
                         </p>
-                        <p className="text-xs text-ink-faint ">
+                        <p className="text-sm text-ink-faint ">
                           PNG, JPG (Tối đa 5 ảnh)
                         </p>
                       </div>
@@ -446,7 +446,7 @@ const FeedbackManagementPage: React.FC<FeedbackManagementPageProps> = ({
 
         <div className="overflow-x-auto rounded-lg border border-brand-border">
           <table className="w-full text-sm text-left">
-            <thead className="text-xs text-ink-soft uppercase bg-surface-alt border-b border-brand-border">
+            <thead className="text-sm text-ink-soft uppercase bg-surface-alt border-b border-brand-border">
               <tr>
                 <th className="px-6 py-3 tracking-wider font-semibold">Mã P.A</th>
                 <th className="px-6 py-3 tracking-wider font-semibold">Căn hộ</th>
@@ -463,7 +463,7 @@ const FeedbackManagementPage: React.FC<FeedbackManagementPageProps> = ({
                     key={fb.id}
                     className="hover:bg-surface-alt/50 transition-colors"
                   >
-                    <td className="px-6 py-4 font-mono text-xs text-ink-soft">
+                    <td className="px-6 py-4 font-mono text-sm text-ink-soft">
                       #{fb.id.split('_')[1]}
                     </td>
                     <td className="px-6 py-4 font-semibold text-ink">
@@ -472,7 +472,7 @@ const FeedbackManagementPage: React.FC<FeedbackManagementPageProps> = ({
                     <td className="px-6 py-4 text-ink-soft">
                       {fb.residentName}
                     </td>
-                    <td className="px-6 py-4 text-xs text-ink-faint">
+                    <td className="px-6 py-4 text-sm text-ink-faint">
                       {new Date(fb.submittedAt).toLocaleString('vi-VN')}
                     </td>
                     <td className="px-6 py-4">

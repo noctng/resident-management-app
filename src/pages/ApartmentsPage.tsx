@@ -539,7 +539,7 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
         </div>
 
         {/* ── Table Footer ── */}
-        <div className="bg-surface-alt/50 border-t border-brand-border px-5 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-ink-soft font-medium">
+        <div className="bg-surface-alt/50 border-t border-brand-border px-5 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-ink-soft font-medium">
           <div>
             Đang hiển thị <strong className="text-ink font-bold">{filteredApartments.length}</strong> / <strong className="text-ink font-bold">{apartments.length}</strong> căn hộ đã bàn giao
           </div>
@@ -562,7 +562,7 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
                     ĐÃ BÀN GIAO
                   </span>
                 </h3>
-                <span className="text-xs text-ink-soft">
+                <span className="text-sm text-ink-soft">
                   Phân khu {selectedApartmentDetail.phase_code || selectedApartmentDetail.phaseCode || 'CANTATA'} • Dãy {selectedApartmentDetail.block_code || selectedApartmentDetail.blockCode || 'Dãy 01'}
                 </span>
               </div>

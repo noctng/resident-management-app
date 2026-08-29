@@ -325,7 +325,7 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
         <div className="p-16 text-center text-ink-soft bg-surface rounded-xl border border-dashed border-brand-border space-y-3">
           <ArrowsRightLeftIcon className="w-12 h-12 mx-auto text-ink-faint" />
           <p className="font-bold text-ink text-base">Chưa có giao dịch chuyển nhượng nào</p>
-          <p className="text-xs text-ink-soft max-w-md mx-auto">
+          <p className="text-sm text-ink-soft max-w-md mx-auto">
             Bấm "+ Lập Hồ Sơ Chuyển Nhượng Mới" để bắt đầu quy trình chuyển nhượng HĐMB theo Điều 7.3 Luật KDBĐS 2023.
           </p>
         </div>
@@ -670,7 +670,7 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
                   <ClockIcon className="w-5 h-5 text-accent" />
                   <span>Cây Lịch Sử Sở Hữu Căn Hộ: {chainData?.apartment?.code}</span>
                 </h3>
-                <p className="text-xs text-ink-soft mt-0.5">
+                <p className="text-sm text-ink-soft mt-0.5">
                   Phân kỳ: {chainData?.apartment?.phase_code} • Tổng số lần chuyển nhượng: {chainData?.apartment?.total_transfers || 0}
                 </p>
               </div>
@@ -701,13 +701,13 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
                             <h4 className="font-bold text-ink text-sm mt-1">{step.title}</h4>
                           </div>
                           {step.date && (
-                            <span className="font-mono text-xs text-ink-soft">
+                            <span className="font-mono text-sm text-ink-soft">
                               {new Date(step.date).toLocaleDateString('vi-VN')}
                             </span>
                           )}
                         </div>
 
-                        <div className="text-xs text-ink-soft space-y-1">
+                        <div className="text-sm text-ink-soft space-y-1">
                           <div>
                             Chủ sở hữu: <strong className="text-ink">{step.owner_name}</strong>
                             {step.owner_phone && ` • ${step.owner_phone}`}
@@ -826,7 +826,7 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
             </div>
 
             <div className="px-6 py-3 border-t border-brand-border bg-surface-alt flex justify-between items-center">
-              <span className="text-xs text-ink-soft">Văn bản xác nhận điện tử được trích xuất từ Hệ thống CRM Thành Phố Cà Phê</span>
+              <span className="text-sm text-ink-soft">Văn bản xác nhận điện tử được trích xuất từ Hệ thống CRM Thành Phố Cà Phê</span>
               <button
                 type="button"
                 onClick={() => window.print()}

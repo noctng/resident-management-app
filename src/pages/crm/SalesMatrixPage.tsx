@@ -248,7 +248,7 @@ export const SalesMatrixPage: React.FC<SalesMatrixPageProps> = ({ onNavigate, on
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs text-ink-soft font-medium">Trạng thái:</span>
+          <span className="text-sm text-ink-soft font-medium">Trạng thái:</span>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
@@ -276,7 +276,7 @@ export const SalesMatrixPage: React.FC<SalesMatrixPageProps> = ({ onNavigate, on
           <div className="bg-surface p-16 rounded-2xl border border-brand-border text-center text-ink-soft">
             <BuildingOfficeIcon className="w-12 h-12 mx-auto text-ink-faint mb-3" />
             <p className="text-base font-semibold text-ink">Chưa có sản phẩm nào trong phân khu này</p>
-            <p className="text-xs text-ink-soft mt-1">Vui lòng chọn phân khu khác hoặc thay đổi bộ lọc tìm kiếm.</p>
+            <p className="text-sm text-ink-soft mt-1">Vui lòng chọn phân khu khác hoặc thay đổi bộ lọc tìm kiếm.</p>
           </div>
         ) : (
           blockKeys.map((blockName) => {
@@ -293,7 +293,7 @@ export const SalesMatrixPage: React.FC<SalesMatrixPageProps> = ({ onNavigate, on
                     <h3 className="font-bold text-ink text-base">
                       {activePhase === 'NOXH' ? `Tòa / Tầng: ${blockName}` : `Dãy / Block: ${blockName}`}
                     </h3>
-                    <span className="text-xs text-ink-soft bg-surface-alt px-2 py-0.5 rounded-full font-medium">
+                    <span className="text-sm text-ink-soft bg-surface-alt px-2 py-0.5 rounded-full font-medium">
                       {unitsInBlock.length} căn/lô
                     </span>
                   </div>
@@ -353,7 +353,7 @@ export const SalesMatrixPage: React.FC<SalesMatrixPageProps> = ({ onNavigate, on
                       {getStatusBadge(selectedUnit.effectiveStatus).label}
                     </span>
                   </h3>
-                  <p className="text-xs text-ink-soft">
+                  <p className="text-sm text-ink-soft">
                     Phân khu: <strong className="text-ink">{selectedUnit.phase_code || activePhase}</strong> • Dãy: <strong className="text-ink">{selectedUnit.block_code || 'N/A'}</strong>
                   </p>
                 </div>
@@ -466,7 +466,7 @@ export const SalesMatrixPage: React.FC<SalesMatrixPageProps> = ({ onNavigate, on
 
             {/* Modal Footer Actions */}
             <div className="px-5 py-3.5 bg-surface-alt border-t border-brand-border flex items-center justify-between gap-3">
-              <div className="text-xs text-ink-soft">
+              <div className="text-sm text-ink-soft">
                 Mã định danh: <code className="font-mono text-[11px] text-ink-soft">{selectedUnit.id}</code>
               </div>
 

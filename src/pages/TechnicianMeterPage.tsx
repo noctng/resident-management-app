@@ -425,7 +425,7 @@ export const TechnicianMeterPage: React.FC<TechnicianMeterPageProps> = ({
             <h1 className="text-base font-bold text-ink truncate">
               Ghi Chỉ Số Điện Nước (Kỹ Thuật)
             </h1>
-            <p className="text-xs text-ink-soft truncate">
+            <p className="text-sm text-ink-soft truncate">
               {currentUser?.username || 'Kỹ thuật viên'} • Kỳ Tháng {selectedMonth}/{selectedYear}
             </p>
           </div>
@@ -486,7 +486,7 @@ export const TechnicianMeterPage: React.FC<TechnicianMeterPageProps> = ({
               style={{ width: `${progressStats.percentage}%` }}
             />
           </div>
-          <span className="text-xs text-ink-soft font-mono tabular-nums flex-shrink-0">
+          <span className="text-sm text-ink-soft font-mono tabular-nums flex-shrink-0">
             {progressStats.recorded}/{progressStats.total}
           </span>
         </div>
@@ -669,7 +669,7 @@ export const TechnicianMeterPage: React.FC<TechnicianMeterPageProps> = ({
                   {/* Scrollable list of apartments */}
                   <div className="max-h-60 overflow-y-auto space-y-1.5 custom-scrollbar pt-1">
                     {selectorApartments.length === 0 ? (
-                      <p className="text-xs text-ink-faint text-center py-4">
+                      <p className="text-sm text-ink-faint text-center py-4">
                         Không tìm thấy căn hộ phù hợp.
                       </p>
                     ) : (
@@ -1078,11 +1078,11 @@ export const TechnicianMeterPage: React.FC<TechnicianMeterPageProps> = ({
           <div className="space-y-3 animate-fade-in">
             <h3 className="text-sm font-bold text-ink flex items-center justify-between">
               <span>Lịch sử: <strong className="font-mono">{selectedApartment.code}</strong></span>
-              <span className="text-xs text-ink-soft">Tất cả các kỳ</span>
+              <span className="text-sm text-ink-soft">Tất cả các kỳ</span>
             </h3>
 
             {utilityRecords.filter((r) => r.apartmentId === selectedApartment.id).length === 0 ? (
-              <p className="text-xs text-ink-soft py-8 text-center bg-surface-alt rounded-xl">
+              <p className="text-sm text-ink-soft py-8 text-center bg-surface-alt rounded-xl">
                 Chưa có lịch sử ghi điện nước nào cho căn hộ này.
               </p>
             ) : (

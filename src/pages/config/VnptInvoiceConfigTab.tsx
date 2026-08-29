@@ -179,7 +179,7 @@ export const VnptInvoiceConfigTab: React.FC<VnptInvoiceConfigTabProps> = ({
             <ShieldCheckIcon className="w-5 h-5 text-accent" />
             Thông Tin Tài Khoản WebService VNPT
           </h2>
-          <span className="text-xs text-ink-soft bg-surface-alt px-2.5 py-1 rounded-lg">
+          <span className="text-sm text-ink-soft bg-surface-alt px-2.5 py-1 rounded-lg">
             Do VNPT cấp phát
           </span>
         </div>
@@ -200,7 +200,7 @@ export const VnptInvoiceConfigTab: React.FC<VnptInvoiceConfigTabProps> = ({
               placeholder="https://tenkhachhang-tt78.vnpt-invoice.com.vn/BusinessService.asmx"
               className="w-full px-3 py-2 rounded-lg border border-brand-border bg-surface-alt text-sm text-ink font-mono placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
             />
-            <p className="mt-1 text-xs text-ink-soft">
+            <p className="mt-1 text-sm text-ink-soft">
               Ví dụ: <code className="text-accent">https://tenmien-tt78.vnpt-invoice.com.vn/BusinessService.asmx</code> hoặc <code className="text-accent">PublishService.asmx</code>
             </p>
           </div>
@@ -217,7 +217,7 @@ export const VnptInvoiceConfigTab: React.FC<VnptInvoiceConfigTabProps> = ({
               placeholder="ws_thanhphocaphe"
               className="w-full px-3 py-2 rounded-lg border border-brand-border bg-surface-alt text-sm text-ink font-mono placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
             />
-            <p className="mt-1 text-xs text-ink-soft">
+            <p className="mt-1 text-sm text-ink-soft">
               Tài khoản được cấp phát để gọi service webservice
             </p>
           </div>
@@ -255,7 +255,7 @@ export const VnptInvoiceConfigTab: React.FC<VnptInvoiceConfigTabProps> = ({
                 )}
               </button>
             </div>
-            <p className="mt-1 text-xs text-ink-soft">
+            <p className="mt-1 text-sm text-ink-soft">
               Mật khẩu gọi service (được mã hóa bảo mật)
             </p>
           </div>
@@ -272,7 +272,7 @@ export const VnptInvoiceConfigTab: React.FC<VnptInvoiceConfigTabProps> = ({
               placeholder="admin_thanhphocaphe"
               className="w-full px-3 py-2 rounded-lg border border-brand-border bg-surface-alt text-sm text-ink font-mono placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
             />
-            <p className="mt-1 text-xs text-ink-soft">
+            <p className="mt-1 text-sm text-ink-soft">
               Tài khoản nhân viên được cấp quyền gọi lệnh phát hành / điều chỉnh / hủy hóa đơn
             </p>
           </div>
@@ -310,7 +310,7 @@ export const VnptInvoiceConfigTab: React.FC<VnptInvoiceConfigTabProps> = ({
                 )}
               </button>
             </div>
-            <p className="mt-1 text-xs text-ink-soft">
+            <p className="mt-1 text-sm text-ink-soft">
               Mật khẩu ACPass dùng cho hàm ImportAndPublishInv, adjustInv, cancelInv
             </p>
           </div>
@@ -331,7 +331,7 @@ export const VnptInvoiceConfigTab: React.FC<VnptInvoiceConfigTabProps> = ({
             )}
             {isTesting ? 'Đang kiểm tra...' : 'Kiểm Tra Kết Nối WebService'}
           </button>
-          <span className="text-xs text-ink-soft">
+          <span className="text-sm text-ink-soft">
             Gửi yêu cầu ping kiểm tra tới máy chủ VNPT để xác thực đường truyền & tài khoản
           </span>
         </div>
@@ -383,7 +383,7 @@ export const VnptInvoiceConfigTab: React.FC<VnptInvoiceConfigTabProps> = ({
               placeholder="1/001 hoặc 01GTKT0/001"
               className="w-full px-3 py-2 rounded-lg border border-brand-border bg-surface-alt text-sm text-ink font-mono placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
             />
-            <p className="mt-1 text-xs text-ink-soft">
+            <p className="mt-1 text-sm text-ink-soft">
               Ví dụ: <code className="text-accent font-semibold">1/001</code>
             </p>
           </div>
@@ -399,7 +399,7 @@ export const VnptInvoiceConfigTab: React.FC<VnptInvoiceConfigTabProps> = ({
               placeholder="C26TAA hoặc AA/26E"
               className="w-full px-3 py-2 rounded-lg border border-brand-border bg-surface-alt text-sm text-ink font-mono uppercase placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
             />
-            <p className="mt-1 text-xs text-ink-soft">
+            <p className="mt-1 text-sm text-ink-soft">
               Ví dụ: <code className="text-accent font-semibold">C26TAA</code>
             </p>
           </div>
@@ -416,7 +416,7 @@ export const VnptInvoiceConfigTab: React.FC<VnptInvoiceConfigTabProps> = ({
               <option value={0}>0 — Chuẩn Unicode (Mặc định)</option>
               <option value={1}>1 — Chuyển đổi từ TCVN3 sang Unicode</option>
             </select>
-            <p className="mt-1 text-xs text-ink-soft">
+            <p className="mt-1 text-sm text-ink-soft">
               Hệ thống hiện đại nên để mặc định 0
             </p>
           </div>
@@ -446,7 +446,7 @@ export const VnptInvoiceConfigTab: React.FC<VnptInvoiceConfigTabProps> = ({
               <label htmlFor="auto-utility" className="text-sm font-semibold text-ink cursor-pointer">
                 Tự động xuất HĐĐT Tiền Điện Nước
               </label>
-              <p className="text-xs text-ink-soft mt-0.5">
+              <p className="text-sm text-ink-soft mt-0.5">
                 Khi hóa đơn điện nước chuyển sang trạng thái <strong>Đã thanh toán (PAID)</strong> (qua SePay hoặc thủ công).
               </p>
             </div>
@@ -464,7 +464,7 @@ export const VnptInvoiceConfigTab: React.FC<VnptInvoiceConfigTabProps> = ({
               <label htmlFor="auto-unified" className="text-sm font-semibold text-ink cursor-pointer">
                 Tự động xuất HĐĐT Hóa Đơn Tổng Hợp
               </label>
-              <p className="text-xs text-ink-soft mt-0.5">
+              <p className="text-sm text-ink-soft mt-0.5">
                 Khi thanh toán trọn gói toàn bộ chi phí căn hộ trong kỳ.
               </p>
             </div>
@@ -482,7 +482,7 @@ export const VnptInvoiceConfigTab: React.FC<VnptInvoiceConfigTabProps> = ({
               <label htmlFor="auto-mgmt" className="text-sm font-semibold text-ink cursor-pointer">
                 Tự động xuất HĐĐT Phí Quản Lý Vận Hành
               </label>
-              <p className="text-xs text-ink-soft mt-0.5">
+              <p className="text-sm text-ink-soft mt-0.5">
                 Áp dụng cho các kỳ thu phí quản lý độc lập.
               </p>
             </div>
@@ -500,7 +500,7 @@ export const VnptInvoiceConfigTab: React.FC<VnptInvoiceConfigTabProps> = ({
               <label htmlFor="auto-confirm" className="text-sm font-semibold text-ink cursor-pointer">
                 Tự động Gạch Nợ trên Portal VNPT (confirmPaymentFkey)
               </label>
-              <p className="text-xs text-ink-soft mt-0.5">
+              <p className="text-sm text-ink-soft mt-0.5">
                 Đánh dấu trạng thái hóa đơn là <strong>Đã gạch nợ</strong> trên hệ thống VNPT ngay sau khi phát hành.
               </p>
             </div>
@@ -667,7 +667,7 @@ export const VnptInvoiceConfigTab: React.FC<VnptInvoiceConfigTabProps> = ({
         </div>
 
         {previewXmlData && (
-          <div className="flex flex-wrap items-center gap-4 text-xs text-ink-soft bg-surface-alt p-3 rounded-lg">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-ink-soft bg-surface-alt p-3 rounded-lg">
             <div>
               <strong>Khóa Fkey:</strong> <code className="text-accent">{previewXmlData.fkey}</code>
             </div>

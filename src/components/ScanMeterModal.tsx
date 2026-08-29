@@ -462,7 +462,7 @@ const ScanMeterModal: React.FC<ScanMeterModalProps> = ({
               <h2 className="text-base font-bold text-ink">
                 Quét AI & Ghi Chỉ Số Điện Nước
               </h2>
-              <p className="text-xs text-ink-soft">
+              <p className="text-sm text-ink-soft">
                 Tiến độ: <strong>{progressStats.recorded}/{progressStats.total}</strong> căn hộ đã ghi
               </p>
             </div>
@@ -649,7 +649,7 @@ const ScanMeterModal: React.FC<ScanMeterModalProps> = ({
                     {/* Scrollable list of apartments */}
                     <div className="max-h-56 overflow-y-auto space-y-1.5 custom-scrollbar pt-1">
                       {selectorApartments.length === 0 ? (
-                        <p className="text-xs text-ink-soft text-center py-4">
+                        <p className="text-sm text-ink-soft text-center py-4">
                           Không tìm thấy căn hộ phù hợp.
                         </p>
                       ) : (

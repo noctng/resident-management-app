@@ -356,7 +356,7 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
             <div className="p-16 text-center text-ink-soft bg-surface rounded-xl border border-dashed border-brand-border space-y-3">
               <BuildingOfficeIcon className="w-12 h-12 mx-auto text-ink-faint" />
               <p className="font-bold text-ink text-base">Chưa có phiên bản bảng giá nào</p>
-              <p className="text-xs text-ink-soft max-w-md mx-auto">
+              <p className="text-sm text-ink-soft max-w-md mx-auto">
                 Bấm "+ Tạo Phiên Bản Bảng Giá Mới" để thiết lập bảng giá theo đợt mở bán, hỗ trợ tính toán giá 2 thành phần và phê duyệt chính thức.
               </p>
             </div>
@@ -379,7 +379,7 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
                         <div className="flex items-center gap-2">
                           <h3 className="font-bold text-ink text-base">{pb.name}</h3>
                         </div>
-                        <span className="font-mono text-xs text-ink-soft font-semibold">{pb.code}</span>
+                        <span className="font-mono text-sm text-ink-soft font-semibold">{pb.code}</span>
                       </div>
 
                       <span
@@ -506,7 +506,7 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
             <div className="p-16 text-center text-ink-soft bg-surface rounded-xl border border-dashed border-brand-border space-y-3">
               <SparklesIcon className="w-12 h-12 mx-auto text-ink-faint" />
               <p className="font-bold text-ink text-base">Chưa có chương trình ưu đãi nào</p>
-              <p className="text-xs text-ink-soft max-w-md mx-auto">
+              <p className="text-sm text-ink-soft max-w-md mx-auto">
                 Tạo các chương trình chiết khấu trực tiếp, quà tặng nội thất hoặc ưu đãi thanh toán sớm theo quy định BLUEPRINT B.9.2.
               </p>
             </div>
@@ -846,7 +846,7 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
                   <span>Chi Tiết Bảng Giá: {selectedPbDetail?.name || 'Đang tải...'}</span>
                   <span className="font-mono text-xs text-accent">({selectedPbDetail?.code})</span>
                 </h3>
-                <p className="text-xs text-ink-soft mt-0.5">
+                <p className="text-sm text-ink-soft mt-0.5">
                   Phân kỳ: {selectedPbDetail?.phase_code} • Phiên bản v{selectedPbDetail?.version} • Hiệu lực từ: {selectedPbDetail?.effective_from ? new Date(selectedPbDetail.effective_from).toLocaleDateString('vi-VN') : ''}
                 </p>
               </div>

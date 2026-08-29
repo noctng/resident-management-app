@@ -219,7 +219,7 @@ export const HandoverManagementPage: React.FC<HandoverManagementPageProps> = ({ 
             <div className="bg-surface rounded-xl border border-brand-border p-16 text-center text-ink-soft">
               <BuildingOfficeIcon className="w-12 h-12 mx-auto text-ink-faint mb-2" />
               <p className="font-bold text-sm text-ink">Chọn một căn hộ bên trái để xem hồ sơ bàn giao</p>
-              <p className="text-xs text-ink-soft mt-1">Hệ thống sẽ tải toàn bộ danh mục kiểm tra Snag List và bảng kích hoạt Operations Bridge.</p>
+              <p className="text-sm text-ink-soft mt-1">Hệ thống sẽ tải toàn bộ danh mục kiểm tra Snag List và bảng kích hoạt Operations Bridge.</p>
             </div>
           ) : loadingDetail ? (
             <div className="bg-surface rounded-xl border border-brand-border p-16 text-center text-ink-soft">
@@ -235,7 +235,7 @@ export const HandoverManagementPage: React.FC<HandoverManagementPageProps> = ({ 
                     <h2 className="text-base font-bold text-ink">
                       Hồ Sơ Nghiệm Thu Căn: {handoverDetail?.apartments?.code}
                     </h2>
-                    <p className="text-xs text-ink-soft">
+                    <p className="text-sm text-ink-soft">
                       Chủ sở hữu: <strong>{handoverDetail?.customers?.name}</strong> • SĐT: <span className="font-mono">{handoverDetail?.customers?.phone_number}</span>
                     </p>
                   </div>

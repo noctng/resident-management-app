@@ -381,7 +381,7 @@ export const MonthlyViewMode: React.FC<MonthlyViewModeProps> = ({
           </div>
 
           {/* ── Table Footer & Stats Summary ── */}
-          <div className="bg-surface-alt border-t border-brand-border px-5 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-ink-soft font-medium">
+          <div className="bg-surface-alt border-t border-brand-border px-5 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-ink-soft font-medium">
             <div className="flex items-center gap-2">
               <span>Đang hiển thị <strong className="text-ink font-bold font-mono tabular-nums">{filteredMonthlyRecords.length}</strong> / <strong className="text-ink font-bold font-mono tabular-nums">{apartments.length}</strong> căn hộ</span>
               {filteredMonthlyRecords.length < apartments.length && (

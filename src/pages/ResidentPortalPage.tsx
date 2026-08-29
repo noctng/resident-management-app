@@ -762,7 +762,7 @@ function ResidentPortalPage({
                 <h4 className="text-xs sm:text-sm font-bold text-ink">
                   Bật thông báo đẩy PWA
                 </h4>
-                <p className="text-[11px] sm:text-xs text-ink-soft">
+                <p className="text-[11px] sm:text-sm text-ink-soft">
                   Nhận tin tức hóa đơn và thông báo xác nhận thanh toán tự động ngay trên màn hình điện thoại.
                 </p>
               </div>
@@ -771,7 +771,7 @@ function ResidentPortalPage({
               <button
                 type="button"
                 onClick={handleDismissPushPrompt}
-                className="px-3 py-1.5 text-xs text-ink-soft hover:text-ink font-medium rounded-xl hover:bg-surface-alt transition-colors cursor-pointer"
+                className="px-3 py-1.5 text-sm text-ink-soft hover:text-ink font-medium rounded-xl hover:bg-surface-alt transition-colors cursor-pointer"
               >
                 Để sau
               </button>
@@ -831,7 +831,7 @@ function ResidentPortalPage({
               </div>
 
               {usagesForSelectedApartment.length === 0 ? (
-                <p className="text-xs text-ink-soft py-8 text-center">
+                <p className="text-sm text-ink-soft py-8 text-center">
                   Bạn chưa có lượt đặt chỗ nào.
                 </p>
               ) : (
@@ -852,7 +852,7 @@ function ResidentPortalPage({
                             </span>
                           )}
                         </div>
-                        <div className="flex items-center gap-3 text-xs text-ink-soft">
+                        <div className="flex items-center gap-3 text-sm text-ink-soft">
                           <span>
                             {new Date(usage.usageDate + 'T00:00:00').toLocaleDateString('vi-VN')}
                           </span>
@@ -906,7 +906,7 @@ function ResidentPortalPage({
               Chi tiết tiêu thụ Điện Nước
             </h3>
             {localUtilityRecords.length === 0 ? (
-              <p className="text-xs text-ink-soft py-8 text-center bg-surface rounded-xl border border-brand-border">
+              <p className="text-sm text-ink-soft py-8 text-center bg-surface rounded-xl border border-brand-border">
                 Chưa có dữ liệu điện nước cho căn hộ này.
               </p>
             ) : (
@@ -1087,7 +1087,7 @@ function ResidentPortalPage({
                 <h3 className="text-base font-bold text-ink flex items-center gap-2">
                   <span>Hóa Đơn Tổng Hợp Căn Hộ</span>
                 </h3>
-                <p className="text-xs text-ink-soft mt-0.5">
+                <p className="text-sm text-ink-soft mt-0.5">
                   Tổng hợp toàn bộ phí quản lý, phí gửi xe, tiền điện và tiền nước trong kỳ
                 </p>
               </div>
@@ -1107,7 +1107,7 @@ function ResidentPortalPage({
                 <p className="text-xs">Đang tải danh sách hóa đơn tổng hợp...</p>
               </div>
             ) : unifiedHistory.length === 0 ? (
-              <p className="text-xs text-ink-soft py-10 text-center bg-surface rounded-xl border border-brand-border">
+              <p className="text-sm text-ink-soft py-10 text-center bg-surface rounded-xl border border-brand-border">
                 Chưa có dữ liệu hóa đơn tổng hợp cho căn hộ này.
               </p>
             ) : (
