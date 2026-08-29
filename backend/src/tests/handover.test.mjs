@@ -1,18 +1,18 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { createRequire } from 'module';
 
-// CJS test context trong Vitest ESM — dùng vi.mock để intercept paymentScheduleService
+// CJS test context trong Vitest ESM.
+// handoverService lazy-require('../services/paymentScheduleService').getContractPaymentSummary
+// → spy trực tiếp trên module thật (require trả cùng instance đã cache).
 const req = createRequire(import.meta.url);
 const SERVICE_PATH = req.resolve('../services/handoverService');
+const PAYMENT_PATH = req.resolve('../services/paymentScheduleService');
 
-const paymentScheduleMock = {
-  getContractPaymentSummary: vi.fn(),
-};
-vi.mock('../services/paymentScheduleService', () => paymentScheduleMock);
+const spyPaymentSummary = (value) =>
+  vi.spyOn(req(PAYMENT_PATH), 'getContractPaymentSummary').mockResolvedValue(value);
 
 beforeEach(() => {
   vi.restoreAllMocks();
-  paymentScheduleMock.getContractPaymentSummary.mockReset();
   delete req.cache[SERVICE_PATH];
 });
 
@@ -84,7 +84,7 @@ describe('handoverService', () => {
   // ===== 7. checkHandoverEligibility - eligible true =====
   it('checkHandoverEligibility returns eligible=true when conditions met', async () => {
     const repo = req('../repositories/handoverRepository');
-    paymentScheduleMock.getContractPaymentSummary.mockResolvedValue({ paymentPercentage: '97' });
+    spyPaymentSummary({ paymentPercentage: '97' });
     vi.spyOn(repo, 'findContractFull').mockResolvedValue({
       id: 'ct1', status: 'ACTIVE',
       handover_checklists: [
@@ -105,7 +105,7 @@ describe('handoverService', () => {
   // ===== 8. checkHandoverEligibility - not eligible (missing payment) =====
   it('checkHandoverEligibility returns eligible=false when payment < 95%', async () => {
     const repo = req('../repositories/handoverRepository');
-    paymentScheduleMock.getContractPaymentSummary.mockResolvedValue({ paymentPercentage: '80' });
+    spyPaymentSummary({ paymentPercentage: '80' });
     vi.spyOn(repo, 'findContractFull').mockResolvedValue({
       id: 'ct1', status: 'ACTIVE',
       handover_checklists: [{ is_required: true, is_completed: true }],
@@ -120,7 +120,7 @@ describe('handoverService', () => {
   // ===== 9. checkHandoverEligibility - not eligible (critical snag) =====
   it('checkHandoverEligibility fails when critical snag OPEN', async () => {
     const repo = req('../repositories/handoverRepository');
-    paymentScheduleMock.getContractPaymentSummary.mockResolvedValue({ paymentPercentage: '98' });
+    spyPaymentSummary({ paymentPercentage: '98' });
     vi.spyOn(repo, 'findContractFull').mockResolvedValue({
       id: 'ct1', status: 'ACTIVE',
       handover_checklists: [{ is_required: true, is_completed: true }],
@@ -135,7 +135,7 @@ describe('handoverService', () => {
   // ===== 10. completeHandover - not eligible (400) =====
   it('completeHandover throws 400 when not eligible', async () => {
     const repo = req('../repositories/handoverRepository');
-    paymentScheduleMock.getContractPaymentSummary.mockResolvedValue({ paymentPercentage: '50' });
+    spyPaymentSummary({ paymentPercentage: '50' });
     vi.spyOn(repo, 'findContractFull').mockResolvedValue({
       id: 'ct1', status: 'ACTIVE', handover_checklists: [],
       snag_items: [],
@@ -149,7 +149,7 @@ describe('handoverService', () => {
   it('completeHandover updates contract + creates resident + account + occupancy + lifecycle event', async () => {
     const bcrypt = req('bcrypt');
     const repo = req('../repositories/handoverRepository');
-    paymentScheduleMock.getContractPaymentSummary.mockResolvedValue({ paymentPercentage: '100' });
+    spyPaymentSummary({ paymentPercentage: '100' });
     vi.spyOn(repo, 'findContractFull').mockResolvedValue({
       id: 'ct1', status: 'ACTIVE', apartment_id: 'apt1',
       handover_checklists: [{ is_required: true, is_completed: true }],
@@ -185,7 +185,7 @@ describe('handoverService', () => {
   it('completeHandover updates existing resident phone if missing, creates account + occupancy + lifecycle event', async () => {
     const bcrypt = req('bcrypt');
     const repo = req('../repositories/handoverRepository');
-    paymentScheduleMock.getContractPaymentSummary.mockResolvedValue({ paymentPercentage: '100' });
+    spyPaymentSummary({ paymentPercentage: '100' });
     vi.spyOn(repo, 'findContractFull').mockResolvedValue({
       id: 'ct1', status: 'ACTIVE', apartment_id: 'apt1',
       handover_checklists: [{ is_required: true, is_completed: true }],
