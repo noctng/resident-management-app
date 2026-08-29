@@ -23,7 +23,7 @@ const EmailPreviewModal: React.FC<EmailPreviewModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-surface rounded-2xl shadow-xl border border-brand-border w-full max-w-2xl max-h-[92vh] overflow-y-auto custom-scrollbar flex flex-col">
+      <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-2xl max-h-[92vh] overflow-y-auto custom-scrollbar flex flex-col">
         <header className="p-4 border-b border-brand-border flex justify-between items-center bg-surface-alt">
           <div>
             <h3 className="text-base font-bold text-ink">Xem trước Email</h3>

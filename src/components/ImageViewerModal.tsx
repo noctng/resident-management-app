@@ -18,7 +18,7 @@ const ImageViewerModal: React.FC<ImageViewerModalProps> = ({ isOpen, onClose, im
       role="dialog"
     >
       <div
-        className="relative bg-surface rounded-2xl shadow-xl border border-brand-border max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200"
+        className="relative bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center p-3 border-b border-brand-border">

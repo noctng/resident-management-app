@@ -118,7 +118,7 @@ export const ImportApartmentModal: React.FC<ImportApartmentModalProps> = ({
       aria-modal="true"
       aria-labelledby="import-apartment-modal-title"
     >
-      <div className="bg-surface rounded-2xl shadow-xl border border-brand-border w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-up">
+      <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-up">
         
         {/* Header with Dark Green Brand Palette */}
         <div className="px-6 py-4 bg-sidebar-bg text-white flex items-center justify-between border-b border-sidebar-line shrink-0">

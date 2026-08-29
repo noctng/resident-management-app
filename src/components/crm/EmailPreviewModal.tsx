@@ -55,7 +55,7 @@ const EmailPreviewModal: React.FC<Props> = ({ paymentId, isOpen, onClose, onConf
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-surface rounded-2xl shadow-xl border border-brand-border max-w-3xl w-full max-h-[92vh] overflow-y-auto custom-scrollbar flex flex-col">
+      <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border max-w-3xl w-full max-h-[92vh] overflow-y-auto custom-scrollbar flex flex-col">
         {/* Header */}
         <div className="px-6 py-4 border-b border-brand-border">
           <h3 className="text-lg font-bold text-ink">

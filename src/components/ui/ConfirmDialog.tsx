@@ -46,7 +46,7 @@ export const ConfirmProvider: React.FC<{ children: React.ReactNode }> = ({ child
               onClick={() => handleResponse(false)}
             />
             <div
-              className="relative bg-surface rounded-2xl shadow-xl max-w-sm w-full p-6 space-y-4 border border-brand-border"
+              className="relative bg-surface rounded-2xl shadow-elevation-overlay max-w-sm w-full p-6 space-y-4 border border-brand-border"
               onClick={(e) => e.stopPropagation()}
             >
               {pending.options.variant === 'danger' && (

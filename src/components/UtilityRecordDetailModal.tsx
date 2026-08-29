@@ -88,7 +88,7 @@ const UtilityRecordDetailModal: React.FC<UtilityRecordDetailModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-opacity">
       <div
-        className="bg-surface rounded-2xl shadow-xl border border-brand-border w-full max-w-lg overflow-hidden flex flex-col max-h-[92vh]"
+        className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-lg overflow-hidden flex flex-col max-h-[92vh]"
         role="dialog"
         aria-modal="true"
       >

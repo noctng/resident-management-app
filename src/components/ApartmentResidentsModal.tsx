@@ -34,7 +34,7 @@ const ApartmentResidentsModal: React.FC<ApartmentResidentsModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="bg-surface rounded-2xl shadow-xl border border-brand-border w-full max-w-4xl max-h-[92vh] flex flex-col relative"
+        className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-4xl max-h-[92vh] flex flex-col relative"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center p-4 border-b border-brand-border bg-surface-alt rounded-t-lg">

@@ -83,7 +83,7 @@ const CancelContractModal: React.FC<CancelContractModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-surface rounded-2xl shadow-xl border border-brand-border w-full max-w-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
+      <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
         <div className="px-6 py-4 border-b border-brand-border flex justify-between items-center bg-brand-danger-soft">
           <div className="flex items-center gap-3">
             <ExclamationTriangleIcon className="w-6 h-6 text-brand-danger" />

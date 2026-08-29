@@ -270,7 +270,7 @@ const PaymentQRModal: React.FC<PaymentQRModalProps> = ({
   if (isPaidSuccess) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
-        <div className="bg-surface rounded-2xl shadow-xl border border-brand-border p-6 max-w-sm w-full text-center space-y-4 animate-scale-up">
+        <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border p-6 max-w-sm w-full text-center space-y-4 animate-scale-up">
           <div className="w-20 h-20 bg-brand-success-soft text-brand-success rounded-full flex items-center justify-center mx-auto shadow-lg animate-bounce">
             <CheckCircleIcon className="w-10 h-10" />
           </div>
@@ -472,7 +472,7 @@ const PaymentQRModal: React.FC<PaymentQRModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-surface rounded-t-2xl sm:rounded-2xl shadow-xl border border-brand-border w-full max-w-sm overflow-hidden flex flex-col max-h-[92vh]">
+      <div className="bg-surface rounded-t-2xl sm:rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-sm overflow-hidden flex flex-col max-h-[92vh]">
         {/* Header */}
         <div className="px-5 py-4 border-b border-brand-border bg-surface-alt/50 flex justify-between items-center shrink-0">
           <div>

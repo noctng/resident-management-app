@@ -405,7 +405,7 @@ const ScanMeterModal: React.FC<ScanMeterModalProps> = ({
       {/* Toast Notification */}
       {toastMessage && (
         <div
-          className={`fixed top-6 left-1/2 -translate-x-1/2 z-60 px-4 py-2.5 rounded-xl shadow-2xl font-bold text-xs flex items-center gap-2 animate-bounce-in ${
+          className={`fixed top-6 left-1/2 -translate-x-1/2 z-60 px-4 py-2.5 rounded-xl shadow-elevation-overlay font-bold text-xs flex items-center gap-2 animate-bounce-in ${
             toastMessage.type === 'success'
               ? 'bg-brand-success text-white'
               : toastMessage.type === 'info'
@@ -451,7 +451,7 @@ const ScanMeterModal: React.FC<ScanMeterModalProps> = ({
       />
 
       {/* Modal Dialog Card */}
-      <div className="bg-surface w-full max-w-2xl rounded-2xl shadow-xl border border-brand-border flex flex-col max-h-[92vh] overflow-hidden">
+      <div className="bg-surface w-full max-w-2xl rounded-2xl shadow-elevation-overlay border border-brand-border flex flex-col max-h-[92vh] overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-brand-border bg-surface-alt/50 flex-shrink-0">
           <div className="flex items-center gap-2.5">
@@ -590,7 +590,7 @@ const ScanMeterModal: React.FC<ScanMeterModalProps> = ({
 
                 {/* Expandable Searchable Dropdown Popup */}
                 {isPickerOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-surface rounded-2xl shadow-xl border border-brand-border z-40 p-3 space-y-2 animate-in fade-in zoom-in-95 duration-100">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border z-40 p-3 space-y-2 animate-in fade-in zoom-in-95 duration-100">
                     {/* Search Bar at Top */}
                     <div className="relative">
                       <MagnifyingGlassIcon className="w-4 h-4 text-ink-soft absolute left-3 top-3" />

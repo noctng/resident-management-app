@@ -43,6 +43,12 @@ const PATTERNS = [
       /(?:^|[\s"'`{(])(?:p|m|px|py|pt|pb|pl|pr|mx|my|mt|mb|ml|mr|gap)(?:-[trbl])?-4\.5\b/g,
     hint: 'Tailwind 3.4 không có bước 4.5 — dùng p-4/p-5/gap-4',
   },
+  {
+    name: 'raw deep elevation shadow-xl/shadow-2xl',
+    re:
+      /(?:^|[\s"'`{(])(?:shadow-(?:xl|2xl))\b/g,
+    hint: 'Dùng token elevation: shadow-elevation-overlay (modal/overlay), shadow-elevation-raised (card nổi). Raw xl/2xl quá sắc = look rẻ.',
+  },
 ];
 
 function walk(dir, out = []) {

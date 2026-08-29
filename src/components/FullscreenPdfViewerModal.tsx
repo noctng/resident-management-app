@@ -50,7 +50,7 @@ export const FullscreenPdfViewerModal: React.FC<FullscreenPdfViewerModalProps> =
     <div className="fixed inset-0 z-[9999] bg-sidebar-bg-2/95 flex flex-col backdrop-blur-lg animate-fade-in select-none">
       
       {/* Top Floating Control Bar */}
-      <header className="h-14 px-4 sm:px-6 bg-sidebar-bg-2 border-b border-sidebar-line text-white flex items-center justify-between gap-3 shrink-0 shadow-xl z-10">
+      <header className="h-14 px-4 sm:px-6 bg-sidebar-bg-2 border-b border-sidebar-line text-white flex items-center justify-between gap-3 shrink-0 shadow-elevation-overlay z-10">
         
         {/* Title & Document Badge */}
         <div className="flex items-center gap-3 min-w-0">

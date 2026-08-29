@@ -189,7 +189,7 @@ export const InvoiceViewModal: React.FC<InvoiceViewModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/50 backdrop-blur-sm animate-fade-in">
-      <div className="bg-surface rounded-2xl shadow-xl border border-brand-border w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden animate-in">
+      <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden animate-in">
         
         {/* Header - Mobile & Desktop friendly */}
         <div className="px-3.5 py-2.5 sm:px-5 sm:py-3.5 border-b border-brand-border bg-surface-alt/50 flex-shrink-0">

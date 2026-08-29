@@ -94,7 +94,7 @@ const PaymentRestructureModal: React.FC<Props> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-surface rounded-2xl shadow-xl border border-brand-border w-full max-w-3xl max-h-[92vh] overflow-y-auto custom-scrollbar flex flex-col">
+      <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border w-full max-w-3xl max-h-[92vh] overflow-y-auto custom-scrollbar flex flex-col">
         <div className="flex justify-between items-center p-6 border-b border-brand-border">
           <h3 className="text-xl font-bold text-ink">
             Điều chỉnh lịch thanh toán

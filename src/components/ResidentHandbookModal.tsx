@@ -40,7 +40,7 @@ const ResidentHandbookModal: React.FC<ResidentHandbookModalProps> = ({ isOpen, o
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm animate-fade-in select-none">
-      <div className="bg-sidebar-bg-2 rounded-none sm:rounded-3xl shadow-xl border border-sidebar-line w-full max-w-6xl h-full sm:h-[95vh] flex flex-col overflow-hidden animate-scale-up">
+      <div className="bg-sidebar-bg-2 rounded-none sm:rounded-3xl shadow-elevation-overlay border border-sidebar-line w-full max-w-6xl h-full sm:h-[95vh] flex flex-col overflow-hidden animate-scale-up">
         
         {/* Modal Header */}
         <div className="px-4 sm:px-6 py-3 bg-sidebar-bg text-white flex items-center justify-between border-b border-sidebar-line shrink-0">
