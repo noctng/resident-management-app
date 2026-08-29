@@ -1,7 +1,6 @@
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const repo = require('../repositories/handoverRepository');
-const { getContractPaymentSummary } = require('../services/paymentScheduleService');
 
 // Mọi logic nghiệp vụ của handover nằm ở đây.
 // Service gọi repo.* (prisma thuần) — KHÔNG viết prisma query trực tiếp.
@@ -75,7 +74,7 @@ async function checkHandoverEligibility(contractId) {
     throw err;
   }
 
-  const paymentSummary = await getContractPaymentSummary(contractId);
+  const paymentSummary = await require('../services/paymentScheduleService').getContractPaymentSummary(contractId);
   const paymentPercentage = parseFloat(paymentSummary.paymentPercentage);
   const openCriticalSnags = (contract.snag_items || [])
     .filter((item) => item.status === 'OPEN' && item.severity === 'CRITICAL');
