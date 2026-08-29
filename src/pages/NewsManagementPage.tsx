@@ -4,6 +4,7 @@ import {
   MegaphoneIcon, PinIcon, XMarkIcon, PhotoIcon, PencilIcon, EyeIcon, PlusIcon, TrashIcon,
   ArrowLeftIcon, Cog6ToothIcon, UserIcon, ClockIcon, TvIcon, PhoneIcon, Squares2x2Icon, DocumentArrowDownIcon,
 } from '../components/icons';
+import { StatCard } from '../components/ui/Card';
 import { RichTextEditor } from '../components/RichTextEditor';
 import { useConfirm } from '../components/ui';
 
@@ -509,14 +510,11 @@ function NewsManagementPage() {
           {/* Stats Bar */}
           <div className="grid grid-cols-3 gap-3">
             {[
-              { label: 'Tổng bài viết', value: posts.length, color: 'text-ink' },
-              { label: 'Đã xuất bản', value: posts.filter((p) => p.is_published).length, color: 'text-brand-success' },
-              { label: 'Bản nháp', value: posts.filter((p) => !p.is_published).length, color: 'text-brand-warning' },
+              { label: 'Tổng bài viết', value: posts.length, tone: 'ink' as const },
+              { label: 'Đã xuất bản', value: posts.filter((p) => p.is_published).length, tone: 'success' as const },
+              { label: 'Bản nháp', value: posts.filter((p) => !p.is_published).length, tone: 'warning' as const },
             ].map((s) => (
-              <div key={s.label} className="bg-surface border border-brand-border rounded-xl p-4 text-center shadow-xs">
-                <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>
-                <div className="text-xs text-ink-soft mt-1">{s.label}</div>
-              </div>
+              <StatCard key={s.label} label={s.label} value={s.value} valueTone={s.tone} />
             ))}
           </div>
 
