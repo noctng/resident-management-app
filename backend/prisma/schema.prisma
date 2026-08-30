@@ -182,6 +182,7 @@ model users {
   pricing_config_history pricing_config_history[]
   resident_feedback      resident_feedback[]
   announcements          announcements[]
+  userRoles              user_roles[]
 
   @@index([permissions], map: "idx_users_permissions", type: Gin)
 }
