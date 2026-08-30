@@ -10,6 +10,7 @@ const compression = require('compression');
 const authRoutes = require('./src/routes/authRoutes');
 const apartmentRoutes = require('./src/routes/apartmentRoutes');
 const residentRoutes = require('./src/routes/residentRoutes');
+const residentPortalRoutes = require('./src/routes/residentPortalRoutes');
 const occupancyRoutes = require('./src/routes/occupancyRoutes');
 const utilityRoutes = require('./src/routes/utilityRoutes');
 const amenityRoutes = require('./src/routes/amenityRoutes');
@@ -143,7 +144,7 @@ app.use('/utility', express.static(utilityDir, { maxAge: '1y' }));
 const { autoRbac } = require('./src/middleware/rbacAuto');
 app.use('/api', authenticateToken, autoRbac);
 app.use('/api', authRoutes);
-app.use('/api', residentRoutes);
+app.use('/api/resident-portal', residentPortalRoutes);
 app.use('/api', utilityRoutes);
 app.use('/api', amenityRoutes);
 

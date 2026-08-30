@@ -181,6 +181,45 @@ const isManagerOrAdmin = (req, res, next) => {
     return res.status(403).json({ message: 'Quyền truy cập bị từ chối.' });
 };
 
+// ===== Resident Portal (cổng cư dân) =====
+// Xác thực token cư dân (JWT_RESIDENT_SECRET) -> set req.resident
+const authenticateResident = (req, res, next) => {
+    let token = req.cookies ? req.cookies[TOKEN_COOKIE_NAME] : null;
+    if (!token && req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        token = req.headers.authorization.split(' ')[1];
+    }
+    if (!token) return res.sendStatus(401);
+    jwt.verify(token, JWT_RESIDENT_SECRET, (err, resident) => {
+        if (!err && resident && resident.type === 'resident') {
+            req.resident = resident;
+            return next();
+        }
+        return res.status(403).json({ message: 'Token cư dân không hợp lệ.' });
+    });
+};
+
+// Yêu cầu quyền của RESIDENT (role cố định) theo module + action
+const requireResidentPerm = (module, action) => {
+    return async (req, res, next) => {
+        if (!req.resident) return res.status(401).json({ message: 'Unauthorized' });
+        try {
+            const perms = await prisma.role_permissions.findMany({
+                where: { role_code: 'RESIDENT' },
+                select: { module: true, action: true },
+            });
+            const set = new Set(perms.map((p) => `${p.module}:${p.action}`));
+            if (set.has(`${module}:${action}`)) return next();
+            return res.status(403).json({
+                error: 'Forbidden',
+                message: `Cư dân không có quyền ${action} trên '${module}'`,
+            });
+        } catch (e) {
+            console.error('[Auth] requireResidentPerm error:', e);
+            return res.status(500).json({ message: 'Lỗi kiểm tra quyền cư dân.' });
+        }
+    };
+};
+
 const buildEffectivePerms = async (user) => {
   // Trả về 'ALL' hoặc Set<module:action>
   if (!user) return new Set();
@@ -200,6 +239,8 @@ const buildEffectivePerms = async (user) => {
 
 module.exports = {
     authenticateToken,
+    authenticateResident,
+    requireResidentPerm,
     isAdmin,
     requireAction,
     requireAnyRole,
