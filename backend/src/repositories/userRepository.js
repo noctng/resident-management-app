@@ -4,7 +4,7 @@ const prisma = require('../config/prisma');
 module.exports = {
   findAll: () =>
     prisma.users.findMany({
-      select: { id: true, username: true, role: true, permissions: true, created_at: true },
+      select: { id: true, username: true, role: true, permissions: true, created_at: true, userRoles: { select: { roles: true } } },
       orderBy: { username: 'asc' },
     }),
 

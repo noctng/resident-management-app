@@ -53,3 +53,18 @@ exports.resetPassword = async (req, res) => {
     res.status(500).json({ message: 'Lỗi máy chủ khi reset mật khẩu' });
   }
 };
+
+exports.updateUserRoles = async (req, res) => {
+  try {
+    const { roles } = req.body;
+    if (!Array.isArray(roles)) {
+      return res.status(400).json({ message: 'roles phải là mảng mã vai trò' });
+    }
+    const result = await service.updateUserRoles(req.params.id, roles, req);
+    if (!result.success) return res.status(result.status).json({ message: result.message });
+    res.json(result.user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Lỗi máy chủ khi gán vai trò' });
+  }
+};

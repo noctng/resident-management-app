@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Modal from './ui/Modal';
 import type { User, Permission } from '../types';
-import PermissionSelector from './PermissionSelector';
+import PermissionSelector, { RoleSelector } from './PermissionSelector';
+import { api } from '../services/api';
+import { useToast } from './ui';
 
 interface EditUserModalProps {
   isOpen: boolean;
@@ -13,13 +15,22 @@ interface EditUserModalProps {
 const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user, onUpdateUser }) => {
   const [role, setRole] = useState<User['role']>(1);
   const [permissions, setPermissions] = useState<Permission[]>([]);
+  const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [username, setUsername] = useState('');
+  const { toast } = useToast();
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (user) {
       setUsername(user.username);
       setRole(user.role);
       setPermissions(user.permissions || []);
+      // Lấy roles từ user (nếu có) hoặc fallback theo role Int cũ
+      if (user.roles && user.roles.length > 0) {
+        setSelectedRoles(user.roles.map((r) => r.code));
+      } else {
+        setSelectedRoles(user.role === 0 ? ['ADMIN'] : ['MANAGER']);
+      }
     }
   }, [user]);
 
@@ -27,6 +38,11 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user, on
     e.preventDefault();
     if (user) {
       onUpdateUser(user.id, { role, permissions });
+      // Gán vai trò RBAC qua endpoint chuyên biệt (1 user nhiều vai trò)
+      api
+        .put(`/users/${user.id}/roles`, { roles: selectedRoles })
+        .then(() => success('Đã cập nhật vai trò RBAC'))
+        .catch((err) => error(err?.message || 'Lỗi gán vai trò'));
       onClose();
     }
   };
@@ -38,7 +54,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user, on
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-ink">
-            Vai trò
+            Vai trò (legacy)
           </label>
           <select
             value={role}
@@ -50,6 +66,8 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user, on
             <option value={0}>Quản trị viên (Admin)</option>
           </select>
         </div>
+
+        <RoleSelector selectedRoles={selectedRoles} onChange={setSelectedRoles} />
 
         {role === 1 && (
           <PermissionSelector selectedPermissions={permissions} onChange={setPermissions} />

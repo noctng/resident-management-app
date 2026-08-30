@@ -6,7 +6,14 @@ const repo = require('../repositories/userRepository');
 const SALT_ROUNDS = 10;
 const DEFAULT_PASSWORD = 'Mk@12345';
 
-const getAllUsers = async () => repo.findAll();
+const getAllUsers = async () => {
+  const rows = await repo.findAll();
+  // Flatten userRoles -> roles: RoleInfo[]
+  return rows.map((u) => ({
+    ...u,
+    roles: (u.userRoles || []).map((ur) => ur.roles),
+  }));
+};
 
 const createUser = async (body, req) => {
   const { username, password, role, permissions } = body;
@@ -114,10 +121,56 @@ const resetPassword = async (id, req) => {
   return { success: true, message: `Mật khẩu đã được reset thành công. Mật khẩu mới: ${DEFAULT_PASSWORD}` };
 };
 
+// Gán vai trò RBAC (1 user nhiều vai trò) — thay thế toàn bộ user_roles
+const updateUserRoles = async (id, roles, req) => {
+  const user = await repo.findUserByIdRaw(id);
+  if (!user) return { success: false, status: 404, message: 'Không tìm thấy người dùng.' };
+
+  // Validate role codes tồn tại
+  const valid = await prisma.roles.findMany({ where: { code: { in: roles } }, select: { code: true } });
+  const validCodes = valid.map((r) => r.code);
+  const invalid = roles.filter((c) => !validCodes.includes(c));
+  if (invalid.length > 0) {
+    return { success: false, status: 400, message: `Vai trò không hợp lệ: ${invalid.join(', ')}` };
+  }
+
+  // Thay thế user_roles
+  await prisma.user_roles.deleteMany({ where: { user_id: id } });
+  if (roles.length > 0) {
+    await prisma.user_roles.createMany({
+      data: roles.map((code) => ({ user_id: id, role_code: code })),
+    });
+  }
+
+  // Nếu chứa ADMIN/MANAGER -> đồng bộ role Int cũ = 0/1 để compat
+  let legacyRole = user.role;
+  if (roles.includes('ADMIN')) legacyRole = 0;
+  else if (roles.includes('MANAGER')) legacyRole = 1;
+  if (legacyRole !== user.role) {
+    await repo.updateUserRole ? repo.updateUserRole(id, legacyRole) : null;
+  }
+
+  logAudit({
+    req,
+    userId: req.user?.id,
+    username: req.user?.username,
+    action: 'UPDATE_USER_ROLES',
+    targetType: 'User',
+    targetId: user.id,
+    targetName: user.username,
+    details: `Gán vai trò RBAC: ${roles.join(', ') || '(none)'}`,
+    statusCode: 200,
+  });
+
+  const updated = await repo.findUserByIdRaw(id);
+  return { success: true, user: updated };
+};
+
 module.exports = {
   getAllUsers,
   createUser,
   updateUser,
   deleteUser,
   resetPassword,
+  updateUserRoles,
 };

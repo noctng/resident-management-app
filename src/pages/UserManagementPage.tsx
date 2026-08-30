@@ -3,7 +3,7 @@ import type { User, Permission } from '../types';
 import { ArrowLeftIcon, PlusIcon, TrashIcon, KeyIcon, PencilIcon, ClockIcon } from '../components/icons';
 import AddUserModal from '../components/AddUserModal';
 import EditUserModal from '../components/EditUserModal';
-import { PERMISSION_LABELS } from '../components/PermissionSelector';
+import { PERMISSION_LABELS, ROLE_LABELS } from '../components/PermissionSelector';
 import { useToast, useConfirm } from '../components/ui';
 
 interface UserManagementPageProps {
@@ -187,12 +187,16 @@ const UserManagementPage: React.FC<UserManagementPageProps> = ({ onBack, current
                       {user.role === 0 ? (
                         <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-accent-soft text-accent-ink">
                           <span className="w-1.5 h-1.5 rounded-full bg-accent"></span>
-                          {roleMap[user.role]}
+                          {user.roles && user.roles.length > 0
+                            ? user.roles.map((r) => r.code).join(', ')
+                            : roleMap[user.role]}
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-secondary-200 text-secondary-800">
                           <span className="w-1.5 h-1.5 rounded-full bg-secondary-500"></span>
-                          {roleMap[user.role] || 'Unknown'}
+                          {user.roles && user.roles.length > 0
+                            ? user.roles.map((r) => r.code).join(', ')
+                            : roleMap[user.role] || 'Unknown'}
                         </span>
                       )}
                     </td>

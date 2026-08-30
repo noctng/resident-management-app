@@ -25,4 +25,11 @@ router.post(
     userController.resetPassword
 );
 
+// Gán vai trò RBAC (1 user nhiều vai trò) — chỉ Admin/Manager
+router.put(
+    '/:id/roles',
+    [authenticateToken, checkPermission('users')],
+    userController.updateUserRoles
+);
+
 module.exports = router;

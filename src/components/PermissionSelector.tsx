@@ -127,3 +127,79 @@ const PermissionSelector: React.FC<PermissionSelectorProps> = ({
 
 export default PermissionSelector;
 export { PERMISSION_LABELS, ALL_PERMISSIONS };
+
+// ===== RBAC: 17 vai trò blueprint (A.4) để chọn trong UI =====
+export const ROLE_OPTIONS: { code: string; name: string; subsystem: string }[] = [
+  { code: 'ADMIN', name: 'Quản trị hệ thống', subsystem: 'chung' },
+  { code: 'MANAGER', name: 'Quản lý (legacy full quyền)', subsystem: 'chung' },
+  { code: 'DIR', name: 'Ban điều hành', subsystem: 'chung' },
+  { code: 'SM', name: 'Giám đốc kinh doanh', subsystem: 'ban_hang' },
+  { code: 'SHEAD', name: 'Trưởng phòng kinh doanh', subsystem: 'ban_hang' },
+  { code: 'SALE', name: 'Nhân viên kinh doanh', subsystem: 'ban_hang' },
+  { code: 'AGENT', name: 'Đại lý/kênh', subsystem: 'ban_hang' },
+  { code: 'CS', name: 'Chăm sóc khách hàng', subsystem: 'ban_hang' },
+  { code: 'ACC-S', name: 'Kế toán bán hàng', subsystem: 'ban_hang' },
+  { code: 'LAW', name: 'Pháp chế hợp đồng', subsystem: 'ban_hang' },
+  { code: 'PMO', name: 'Điều hành bàn giao', subsystem: 'chung' },
+  { code: 'PMS-M', name: 'Trưởng BQL KĐT', subsystem: 'van_hanh' },
+  { code: 'PMS-FE', name: 'Nhân sự BQL (tiếp nhận)', subsystem: 'van_hanh' },
+  { code: 'PMS-BILL', name: 'Kế toán dịch vụ', subsystem: 'van_hanh' },
+  { code: 'PMS-TECH', name: 'Kỹ thuật/bảo trì', subsystem: 'van_hanh' },
+  { code: 'PMS-SEC', name: 'An ninh/kiểm soát', subsystem: 'van_hanh' },
+  { code: 'AUDIT', name: 'Kiểm toán nội bộ', subsystem: 'chung' },
+  // RESIDENT quản lý riêng qua cổng cư dân, không gán cho user nội bộ
+];
+
+export const ROLE_LABELS: Record<string, string> = Object.fromEntries(
+  ROLE_OPTIONS.map((r) => [r.code, `${r.code} — ${r.name}`])
+);
+
+interface RoleSelectorProps {
+  selectedRoles: string[];
+  onChange: (roles: string[]) => void;
+  disabled?: boolean;
+}
+
+export const RoleSelector: React.FC<RoleSelectorProps> = ({
+  selectedRoles,
+  onChange,
+  disabled = false,
+}) => {
+  const toggleRole = (code: string) => {
+    if (disabled) return;
+    if (selectedRoles.includes(code)) {
+      onChange(selectedRoles.filter((c) => c !== code));
+    } else {
+      onChange([...selectedRoles, code]);
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      <label className="block text-sm font-medium text-ink">Vai trò (RBAC)</label>
+      <div className="grid grid-cols-2 gap-2 p-3 bg-surface-alt rounded-lg max-h-64 overflow-y-auto">
+        {ROLE_OPTIONS.map((r) => (
+          <label
+            key={r.code}
+            className={`flex items-center gap-2 p-2 rounded cursor-pointer transition-colors ${
+              disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-surface'
+            }`}
+          >
+            <input
+              type="checkbox"
+              checked={selectedRoles.includes(r.code)}
+              onChange={() => toggleRole(r.code)}
+              disabled={disabled}
+              className="rounded border-brand-border text-accent focus:ring-accent/30 cursor-pointer"
+            />
+            <span className="text-sm text-ink">
+              <span className="font-medium">{r.code}</span>{' '}
+              <span className="text-ink-soft text-xs">{r.name}</span>
+            </span>
+          </label>
+        ))}
+      </div>
+      <div className="text-xs text-ink-soft">Đã chọn: {selectedRoles.length} vai trò</div>
+    </div>
+  );
+};
