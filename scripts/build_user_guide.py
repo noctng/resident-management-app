@@ -208,12 +208,14 @@ add_image(f'{SHOTS}/14-admin-taikhoan-cudan.png', 6.0, 'Hình 3.3 — Danh sách
 add_image(f'{SHOTS}/15-admin-permission-matrix.png', 5.4, 'Hình 3.4 — Ma trận phân quyền tài khoản cư dân (read-only, vai trò RESIDENT)')
 
 add_bullet('SALE: Vào "Cơ hội của tôi" để chăm sóc lead, lập giỏ hàng, giữ chỗ, lập phiếu đặt cọc. Không được xóa dữ liệu tài chính.')
+add_image(f'{SHOTS}/20-admin-dashboard.png', 6.0, 'Hình 3.5 — Bảng điều khiển Tổng quan (admin): KPI cư dân, tỷ lệ lấp đầy, doanh thu, phản ánh')
 add_bullet('SHEAD: Duyệt giữ chỗ/giỏ hàng, phân lead cho team, áp dụng chiết khấu trong hạn mức (≤2%).')
 add_bullet('SM: Duyệt hợp đồng, phê duyệt chiết khấu vượt hạn mức (≤5%), duyệt đợt mở bán.')
 add_bullet('ACC-S: Lập phiếu thu, đối soát, xuất hóa đơn thanh toán, quản lý công nợ phải thu.')
 add_bullet('LAW: Soạn/thẩm định hợp đồng, trình ký, lưu trữ chứng từ.')
 add_bullet('AGENT: Qua cổng đối tác, chỉ thấy khách do mình giới thiệu; giữ chỗ/cọc hộ trong phạm vi đó.')
 add_bullet('CS: Tiếp nhận tổng đài, hỗ trợ sau bán hàng, cập nhật hồ sơ khách.')
+add_image(f'{SHOTS}/21-admin-KinhDoanhCRM.png', 6.0, 'Hình 3.6 — Phân hệ Kinh doanh (CRM): doanh thu ký kết, tồn kho, phễu chuyển đổi')
 
 style_heading('3.3. Vận hành & Dịch vụ (PMS-M / PMS-FE / PMS-BILL / PMS-TECH / PMS-SEC / PMO)', 2)
 add_bullet('PMS-BILL: Chốt công tơ, tính phí, phát hành hóa đơn, quản lý công nợ cư dân, đối soát thu.')
@@ -222,6 +224,13 @@ add_bullet('PMS-FE: Tiếp nhận quầy, ghi chỉ số công tơ hỗ trợ, t
 add_bullet('PMS-M: Phê duyệt biểu phí, miễn/giảm, hồ sơ thi công, ký quỹ, các SLA.')
 add_bullet('PMS-SEC: Quản lý ra vào, xe, khách, giao hàng (chỉ giao diện tác nghiệp).')
 add_bullet('PMO: Kế hoạch bàn giao, nghiệm thu, cầu nối sang vận hành.')
+add_image(f'{SHOTS}/21-admin-CnH.png', 6.0, 'Hình 3.7 — Phân hệ Vận hành: quản lý Căn hộ (117 căn, tỷ lệ lấp đầy)')
+add_image(f'{SHOTS}/21-admin-CDn.png', 6.0, 'Hình 3.8 — Quản lý Cư dân (hồ sơ, quan hệ căn hộ)')
+add_image(f'{SHOTS}/21-admin-Phnnh.png', 5.6, 'Hình 3.9 — Tiếp nhận & xử lý Phản ánh')
+add_image(f'{SHOTS}/21-admin-Tinch.png', 5.6, 'Hình 3.10 — Quản lý Tiện ích & đặt chỗ')
+add_image(f'{SHOTS}/21-admin-BoHnhSauBnGiao.png', 5.6, 'Hình 3.11 — Bảo hành sau bàn giao')
+add_image(f'{SHOTS}/21-admin-QunLinNc.png', 5.6, 'Hình 3.12 — Quản lý Điện nước (ghi chỉ số)')
+add_image(f'{SHOTS}/21-admin-HanTngHp.png', 6.0, 'Hình 3.13 — Hóa đơn tổng hợp (quản lý thu, QR, xuất Excel)')
 
 style_heading('3.4. Kiểm toán (AUDIT)', 2)
 add_para('Tài khoản AUDIT chỉ có quyền Xem (R) toàn bộ dữ liệu, kể cả nhật ký hệ thống — phục vụ minh bạch nội bộ và cộng đồng cư dân. Không được tạo/sửa/xóa.', italic=True)
