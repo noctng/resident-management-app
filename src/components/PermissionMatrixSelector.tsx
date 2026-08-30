@@ -93,6 +93,7 @@ export const ROLE_PERMISSION_MATRIX: Record<string, string[]> = {
     'pricebook:C', 'pricebook:U',
     'crm_approve:A',
     'contracts:R', 'contracts:U',
+    'unified_billing:A',
   ]),
   SHEAD: baseR([
     'crm:C', 'crm:U',
@@ -105,7 +106,7 @@ export const ROLE_PERMISSION_MATRIX: Record<string, string[]> = {
     'contracts:R', 'contracts:U',
     'deposits:C', 'deposits:U',
   ]),
-  AGENT: baseR(['crm:C']),
+  AGENT: baseR(['crm:C', 'deposits:C']),
   CS: baseR(['crm:U', 'feedback:R', 'feedback:U', 'feedback:C']),
   'ACC-S': baseR([
     'unified_billing:C', 'unified_billing:U',
@@ -113,7 +114,7 @@ export const ROLE_PERMISSION_MATRIX: Record<string, string[]> = {
     'revenue:R', 'commission:R',
   ]),
   LAW: baseR(['contracts:R', 'contracts:U']),
-  PMO: baseR(['handover:R', 'handover:U', 'apartments:R', 'residents:R']),
+  PMO: baseR(['handover:R', 'handover:U', 'handover:C', 'apartments:R', 'residents:R']),
   'PMS-M': baseR([
     'apartments:C', 'apartments:U', 'apartments:D',
     'residents:C', 'residents:U', 'residents:D',
@@ -130,6 +131,7 @@ export const ROLE_PERMISSION_MATRIX: Record<string, string[]> = {
     'residents:R', 'residents:U',
     'feedback:R', 'feedback:U', 'feedback:C',
     'amenities:R', 'amenities:U',
+    'meter_reading:C',
   ]),
   'PMS-BILL': baseR([
     'utilities:C', 'utilities:U',

@@ -50,12 +50,13 @@ FROM (VALUES ('crm'),('crm_approve'),('unified_billing'),('billing'),('construct
       ('vehicles'),('deposits'),('handover'),('commission')) AS m(mod)
 ON CONFLICT DO NOTHING;
 
--- SM (Giám đốc KD): crm CRUD + pricebook CU + crm_approve A + contracts RU
+-- SM (Giám đốc KD): crm CRUD + pricebook CU + crm_approve A + contracts RU + unified_billing A (vượt hạn mức)
 INSERT INTO role_permissions (role_code, module, action) VALUES
   ('SM','crm','C'),('SM','crm','U'),('SM','crm','D'),
   ('SM','pricebook','C'),('SM','pricebook','U'),
   ('SM','crm_approve','A'),
-  ('SM','contracts','R'),('SM','contracts','U')
+  ('SM','contracts','R'),('SM','contracts','U'),
+  ('SM','unified_billing','A')
 ON CONFLICT DO NOTHING;
 
 -- SHEAD (Trưởng phòng KD): crm CU + crm_approve A + pricebook CU
@@ -73,9 +74,10 @@ INSERT INTO role_permissions (role_code, module, action) VALUES
   ('SALE','deposits','C'),('SALE','deposits','U')
 ON CONFLICT DO NOTHING;
 
--- AGENT: crm C (của mình)
+-- AGENT: crm C (của mình) + deposits C (giữ chỗ/cọc hộ khách)
 INSERT INTO role_permissions (role_code, module, action) VALUES
-  ('AGENT','crm','C')
+  ('AGENT','crm','C'),
+  ('AGENT','deposits','C')
 ON CONFLICT DO NOTHING;
 
 -- CS: crm RU + feedback RU
@@ -95,9 +97,9 @@ INSERT INTO role_permissions (role_code, module, action) VALUES
   ('LAW','contracts','R'),('LAW','contracts','U')
 ON CONFLICT DO NOTHING;
 
--- PMO: handover RU + apartments/residents R
+-- PMO: handover RU + apartments/residents R + handover C (lập kế hoạch bàn giao)
 INSERT INTO role_permissions (role_code, module, action) VALUES
-  ('PMO','handover','R'),('PMO','handover','U'),
+  ('PMO','handover','R'),('PMO','handover','U'),('PMO','handover','C'),
   ('PMO','apartments','R'),('PMO','residents','R')
 ON CONFLICT DO NOTHING;
 
@@ -115,11 +117,12 @@ INSERT INTO role_permissions (role_code, module, action) VALUES
   ('PMS-M','meter_reading','A')
 ON CONFLICT DO NOTHING;
 
--- PMS-FE: residents RU + feedback RU + amenities RU
+-- PMS-FE: residents RU + feedback RU + amenities RU + meter_reading C (ghi chỉ số)
 INSERT INTO role_permissions (role_code, module, action) VALUES
   ('PMS-FE','residents','R'),('PMS-FE','residents','U'),
   ('PMS-FE','feedback','R'),('PMS-FE','feedback','U'),('PMS-FE','feedback','C'),
-  ('PMS-FE','amenities','R'),('PMS-FE','amenities','U')
+  ('PMS-FE','amenities','R'),('PMS-FE','amenities','U'),
+  ('PMS-FE','meter_reading','C')
 ON CONFLICT DO NOTHING;
 
 -- PMS-BILL: utilities CU + billing CU + meter_reading CU + billing A
