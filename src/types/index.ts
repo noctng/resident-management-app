@@ -161,6 +161,21 @@ export type Permission =
   | 'meter_reading'
   | 'announcements';
 
+// ===== RBAC (Blueprint A.4 + E.1) =====
+// Action CRUDA: C=Tạo, R=Xem, U=Sửa, D=Xóa logic, A=Duyệt
+export type PermAction = 'C' | 'R' | 'U' | 'D' | 'A';
+
+export interface RoleInfo {
+  code: string; // ADMIN, PMS-M, SALE, ...
+  name: string;
+  subsystem: 'ban_hang' | 'van_hanh' | 'chung';
+}
+
+export interface EffectivePermission {
+  module: Permission;
+  action: PermAction;
+}
+
 export interface Customer {
   id: string;
   name: string;
@@ -284,8 +299,11 @@ export interface ContractFinancialSummary {
 export interface User {
   id: string;
   username: string;
-  role: 0 | 1; // 0 for Admin, 1 for Amenity Manager
+  role: 0 | 1; // 0 for Admin, 1 for Amenity Manager (legacy compat)
   permissions?: Permission[];
+  // RBAC mở rộng (blueprint)
+  roles?: RoleInfo[]; // danh sách vai trò (1 user nhiều vai trò)
+  perms?: EffectivePermission[]; // ma trận module:action
 }
 
 // --- NEW TYPES FOR PRICING CONFIG ---

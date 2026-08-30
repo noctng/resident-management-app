@@ -1056,3 +1056,35 @@ model project_phases {
   @@index([is_active])
 }
 
+// ===================== RBAC (Blueprint A.4 + E.1) =====================
+model roles {
+  code        String             @id @db.VarChar(32)
+  name        String             @db.VarChar(128)
+  subsystem   String             @default("chung") @db.VarChar(32)
+  description String?
+  is_system   Boolean            @default(true)
+  created_at  DateTime           @default(now()) @db.Timestamptz(6)
+  userRoles   user_roles[]
+  rolePerms   role_permissions[]
+}
+
+model user_roles {
+  user_id   String @db.VarChar(255)
+  role_code String @db.VarChar(32)
+  users     users  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  roles     roles  @relation(fields: [role_code], references: [code], onDelete: Cascade)
+
+  @@id([user_id, role_code])
+  @@index([role_code])
+}
+
+model role_permissions {
+  role_code String @db.VarChar(32)
+  module    String @db.VarChar(64)
+  action    String @db.VarChar(4)
+  roles     roles  @relation(fields: [role_code], references: [code], onDelete: Cascade)
+
+  @@id([role_code, module, action])
+  @@index([role_code])
+}
+
