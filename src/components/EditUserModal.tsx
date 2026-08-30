@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Modal from './ui/Modal';
 import type { User, Permission } from '../types';
 import PermissionSelector, { RoleSelector } from './PermissionSelector';
-import PermissionMatrixSelector from './PermissionMatrixSelector';
+import RolePermissionPanel from './RolePermissionPanel';
 import { api } from '../services/api';
 import { useToast } from './ui';
 
@@ -70,7 +70,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user, on
 
         <RoleSelector selectedRoles={selectedRoles} onChange={setSelectedRoles} />
 
-        <PermissionMatrixSelector selectedRoles={selectedRoles} value={[]} onChange={() => {}} disabled />
+        <RolePermissionPanel selectedRoles={selectedRoles} />
 
         {role === 1 && (
           <PermissionSelector selectedPermissions={permissions} onChange={setPermissions} />
