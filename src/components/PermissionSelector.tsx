@@ -24,6 +24,15 @@ const PERMISSION_LABELS: Record<Permission, string> = {
   configuration: 'Cấu hình Hệ thống',
   users: 'Nhân viên & Phân quyền',
   logs: 'Lịch sử Hệ thống (Audit Log)',
+  construction: 'Thi Công / Cải Tạo',
+  billing: 'Thu Phí / Đối Soát',
+  contracts: 'Hợp Đồng Mua Bán',
+  pricebook: 'Bảng Giá / Chiết Khấu',
+  leads: 'Lead / Khách Hàng Tiềm Năng',
+  deposits: 'Đặt Cọc / Giữ Chỗ',
+  handover: 'Bàn Giao Nhà',
+  commission: 'Hoa Hồng',
+  revenue: 'Doanh Thu / Báo Cáo',
 };
 
 const ALL_PERMISSIONS: Permission[] = [
@@ -43,6 +52,15 @@ const ALL_PERMISSIONS: Permission[] = [
   'configuration',
   'users',
   'logs',
+  'construction',
+  'billing',
+  'contracts',
+  'pricebook',
+  'leads',
+  'deposits',
+  'handover',
+  'commission',
+  'revenue',
 ];
 
 const PermissionSelector: React.FC<PermissionSelectorProps> = ({

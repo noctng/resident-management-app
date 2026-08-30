@@ -159,7 +159,16 @@ export type Permission =
   | 'unified_billing'
   | 'vehicles'
   | 'meter_reading'
-  | 'announcements';
+  | 'announcements'
+  | 'construction'
+  | 'billing'
+  | 'contracts'
+  | 'pricebook'
+  | 'leads'
+  | 'deposits'
+  | 'handover'
+  | 'commission'
+  | 'revenue';
 
 // ===== RBAC (Blueprint A.4 + E.1) =====
 // Action CRUDA: C=Tạo, R=Xem, U=Sửa, D=Xóa logic, A=Duyệt
