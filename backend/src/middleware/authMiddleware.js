@@ -46,6 +46,29 @@ const authenticateToken = (req, res, next) => {
 
                 if (dbUser) {
                     req.user = { ...user, ...dbUser }; // Use fresh data from DB
+                    // RBAC: nếu user có vai trò (role != 0/1) và permissions cũ rỗng,
+                    // populate permissions từ roles (union các module có quyền R) để
+                    // tương thích với checkPermission cũ.
+                    if (dbUser.role !== 0 && dbUser.role !== 1) {
+                        try {
+                            const rows = await prisma.user_roles.findMany({
+                                where: { user_id: dbUser.id },
+                                select: { role_code: true },
+                            });
+                            const roleCodes = rows.map((r) => r.role_code);
+                            if (roleCodes.length > 0) {
+                                const perms = await prisma.role_permissions.findMany({
+                                    where: { role_code: { in: roleCodes }, action: 'R' },
+                                    select: { module: true },
+                                });
+                                const modules = Array.from(new Set(perms.map((p) => p.module)));
+                                const legacy = Array.isArray(dbUser.permissions) ? dbUser.permissions : [];
+                                req.user.permissions = Array.from(new Set([...legacy, ...modules]));
+                            }
+                        } catch (e2) {
+                            console.error('[Auth] RBAC permission sync error:', e2);
+                        }
+                    }
                     return next();
                 }
             } catch (e) {
@@ -106,20 +129,43 @@ const requireAnyRole = (...codes) => {
 };
 
 const checkPermission = (permissions) => {
-    return (req, res, next) => {
+    return async (req, res, next) => {
         if (!req.user) {
             console.log(`[Auth] No user found in request for permission:`, permissions);
             return res.status(401).json({ message: 'Unauthorized' });
         }
 
-        // Admin has access to everything
-        if (req.user.role === 0) return next();
+        // Admin (role 0) và Manager cũ (role 1) có toàn quyền
+        if (req.user.role === 0 || req.user.role === 1) return next();
 
-        // Staff checks permission list
-        if (req.user.role === 1 && Array.isArray(req.user.permissions)) {
-            const required = Array.isArray(permissions) ? permissions : [permissions];
-            const hasPermission = required.some((p) => req.user.permissions.includes(p));
-            if (hasPermission) return next();
+        const required = Array.isArray(permissions) ? permissions : [permissions];
+
+        // Legacy: permissions array (từ DB users.permissions)
+        if (Array.isArray(req.user.permissions) && required.some((p) => req.user.permissions.includes(p))) {
+            return next();
+        }
+
+        // RBAC: nếu user có vai trò -> có quyền R trên các module của vai trò đó
+        try {
+            let roleCodes = req.user.roles;
+            if (!Array.isArray(roleCodes) || roleCodes.length === 0) {
+                const rows = await prisma.user_roles.findMany({
+                    where: { user_id: req.user.id },
+                    select: { role_code: true },
+                });
+                roleCodes = rows.map((r) => r.role_code);
+                req.user.roles = roleCodes;
+            }
+            if (Array.isArray(roleCodes) && roleCodes.length > 0) {
+                const perms = await prisma.role_permissions.findMany({
+                    where: { role_code: { in: roleCodes } },
+                    select: { module: true },
+                });
+                const modules = new Set(perms.map((p) => p.module));
+                if (required.some((p) => modules.has(p))) return next();
+            }
+        } catch (e) {
+            console.error('[Auth] checkPermission RBAC error:', e);
         }
 
         console.log(
@@ -135,6 +181,23 @@ const isManagerOrAdmin = (req, res, next) => {
     return res.status(403).json({ message: 'Quyền truy cập bị từ chối.' });
 };
 
+const buildEffectivePerms = async (user) => {
+  // Trả về 'ALL' hoặc Set<module:action>
+  if (!user) return new Set();
+  if (user.role === 0 || user.role === 1) return 'ALL';
+  const rows = await prisma.user_roles.findMany({
+    where: { user_id: user.id },
+    select: { role_code: true },
+  });
+  const roleCodes = rows.map((r) => r.role_code);
+  if (roleCodes.includes('ADMIN') || roleCodes.includes('MANAGER')) return 'ALL';
+  const perms = await prisma.role_permissions.findMany({
+    where: { role_code: { in: roleCodes } },
+    select: { module: true, action: true },
+  });
+  return new Set(perms.map((p) => `${p.module}:${p.action}`));
+};
+
 module.exports = {
     authenticateToken,
     isAdmin,
@@ -142,4 +205,5 @@ module.exports = {
     requireAnyRole,
     checkPermission,
     isManagerOrAdmin,
+    buildEffectivePerms,
 };

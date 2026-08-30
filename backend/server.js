@@ -139,6 +139,9 @@ if (!fs.existsSync(utilityDir)) {
 app.use('/utility', express.static(utilityDir, { maxAge: '1y' }));
 
 // --- API Routes ---
+// RBAC GĐ2 (mở rộng): centralized auto-enforcement — chạy SAU authenticateToken
+const { autoRbac } = require('./src/middleware/rbacAuto');
+app.use('/api', authenticateToken, autoRbac);
 app.use('/api', authRoutes);
 app.use('/api', residentRoutes);
 app.use('/api', utilityRoutes);
