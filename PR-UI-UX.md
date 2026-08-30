@@ -1,7 +1,7 @@
-# PR: UI/UX Evolution — Quiet Luxury Design System + UX Chuẩn hoá (Track 1–8)
+# PR: UI/UX Evolution — Quiet Luxury Design System + UX Chuẩn hoá (Track 1–9)
 
 > **Trạng thái:** ⚠️ Repo không có remote (`git remote -v` rỗng) → chưa thể `git push` / tạo PR thật trên GitHub.
-> Branch đã tạo local: **`ui-ux-track1-track3`** (chứa 31 commits UI/UX từ `e753b11` đến `63eb831`).
+> Branch đã tạo local: **`ui-ux-track1-track3`** (chứa 36 commits UI/UX từ `e753b11` đến `9526c51`).
 > Cung cấp remote URL để push + tạo PR thật.
 
 ## Tóm tắt
@@ -51,6 +51,12 @@ Nâng cấp tầng UI/UX của Resident Management App từ "đẹp rời rạc 
 - `scripts/check-ui-tokens.mjs` — guard rule #5 (ban raw deep shadow)
 - `scripts/ui-guard-allowlist.json` — cleared (0 legacy)
 
+## Track 9 — Accessibility Pass (WCAG 2.1 AA) (4 commits)
+Audit 5-axis + WCAG checklist (theo skill `frontend-ui-engineering`):
+- **(C) Modal a11y**: thêm `role="dialog" aria-modal="true"` vào 26 modal overlays; **shared `useFocusTrap` hook** (`src/hooks/useFocusTrap.ts`) + tích hợp vào `Modal.tsx` (DRY, cover mọi modal dùng `<Modal>`) và 25 self-render modals (trap Tab/Shift+Tab, focus element đầu, restore focus khi đóng)
+- **(A) Icon buttons**: thêm `aria-label` (Đóng/Làm mới/Tìm kiếm/Chụp ảnh...) vào 52 icon-only buttons trong 121 files
+- **(B) Heading hierarchy**: nâng 62 `h3`→`h2` trong 19 page files để fix heading skip (h1→h3)
+
 **Components mới / core:**
 - `src/components/ui/Card.tsx` — elevation system + StatCard v2
 - `src/components/ui/DataTable.tsx` (mới) — shared data table
@@ -78,6 +84,10 @@ Nâng cấp tầng UI/UX của Resident Management App từ "đẹp rời rạc 
 | `text-xs` overload | 1108 | ~996 (giảm noise) |
 | `font-serif` underused | 22 | 52 |
 | `animate-fade-in` đồng loạt | 118 | stagger (fade-in-1..6) |
+| Modal thiếu `role="dialog"` | 26 | 0 (có role + aria-modal) |
+| Icon buttons thiếu `aria-label` | 52 | 0 |
+| Heading skip (h1→h3) | 19 files | 0 (h3→h2) |
+| Modal thiếu focus trap | 23/31 | 0 (shared hook) |
 
 ## Verify (thực tế, mọi bước)
 - `npm run guard:ui` → **PASSED (0 vi phạm mới, 0 legacy)**
