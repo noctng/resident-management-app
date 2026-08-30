@@ -149,13 +149,15 @@ ON CONFLICT DO NOTHING;
 
 -- RESIDENT: quyền cổng (own data) — C/U trên module tự phục vụ
 -- Blueprint A.4: xem HĐ, thanh toán, phản ánh, đặt tiện ích, đăng ký xe/thi công
+-- (warranty:C bổ sung: cư dân báo cáo sự cố bảo hành — cùng phân loại phản ánh)
 INSERT INTO role_permissions (role_code, module, action) VALUES
   ('RESIDENT','feedback','C'),('RESIDENT','feedback','U'),
   ('RESIDENT','amenities','C'),
   ('RESIDENT','vehicles','C'),
   ('RESIDENT','residents','U'),
   ('RESIDENT','unified_billing','U'),   -- thanh toán hóa đơn
-  ('RESIDENT','construction','C')        -- đăng ký thi công
+  ('RESIDENT','construction','C'),       -- đăng ký thi công
+  ('RESIDENT','warranty','C')            -- báo cáo bảo hành/ bảo trì
 ON CONFLICT DO NOTHING;
 
 -- AUDIT: chỉ R (đã có từ helper) — không thêm C/U/D/A

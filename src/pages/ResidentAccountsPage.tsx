@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import type { ResidentAccountInfo } from '../types';
-import { ArrowLeftIcon, ArrowPathIcon, UserPlusIcon, MagnifyingGlassIcon, KeyIcon } from '../components/icons';
+import { ArrowLeftIcon, ArrowPathIcon, UserPlusIcon, MagnifyingGlassIcon, KeyIcon, ShieldCheckIcon } from '../components/icons';
 import { useToast, useConfirm } from '../components/ui';
+import RolePermissionPanel from '../components/RolePermissionPanel';
 
 interface ResidentAccountsPageProps {
   onBack: () => void;
@@ -13,6 +14,7 @@ const ResidentAccountsPage: React.FC<ResidentAccountsPageProps> = ({ onBack }) =
   const [isSyncing, setIsSyncing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [viewingPermsOf, setViewingPermsOf] = useState<ResidentAccountInfo | null>(null);
   const toast = useToast();
   const { confirm } = useConfirm();
 
@@ -180,14 +182,24 @@ const ResidentAccountsPage: React.FC<ResidentAccountsPageProps> = ({ onBack }) =
                     </td>
                     <td className="px-6 py-4 font-mono text-xs text-ink-soft">{acc.phoneNumber}</td>
                     <td className="px-6 py-4 text-center">
-                      <button
-                        onClick={() => handleResetPassword(acc.id, acc.name)}
-                        className="p-1.5 rounded-lg border border-brand-border bg-surface text-ink-soft hover:text-accent hover:border-accent/40 transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-accent/40"
-                        title="Reset mật khẩu về mặc định (Abc@12345)"
-                        aria-label={`Reset mật khẩu cho ${acc.name}`}
-                      >
-                        <KeyIcon className="w-4 h-4" />
-                      </button>
+                      <div className="inline-flex items-center gap-1.5">
+                        <button
+                          onClick={() => setViewingPermsOf(acc)}
+                          className="p-1.5 rounded-lg border border-brand-border bg-surface text-ink-soft hover:text-accent hover:border-accent/40 transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-accent/40"
+                          title="Xem phân quyền tài khoản cư dân"
+                          aria-label={`Xem phân quyền của ${acc.name}`}
+                        >
+                          <ShieldCheckIcon className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleResetPassword(acc.id, acc.name)}
+                          className="p-1.5 rounded-lg border border-brand-border bg-surface text-ink-soft hover:text-accent hover:border-accent/40 transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-accent/40"
+                          title="Reset mật khẩu về mặc định (Abc@12345)"
+                          aria-label={`Reset mật khẩu cho ${acc.name}`}
+                        >
+                          <KeyIcon className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -208,6 +220,41 @@ const ResidentAccountsPage: React.FC<ResidentAccountsPageProps> = ({ onBack }) =
           </div>
         )}
       </main>
+
+      {/* Modal: Phân quyền tài khoản cư dân (read-only, theo vai trò RESIDENT) */}
+      {viewingPermsOf && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40"
+          onClick={() => setViewingPermsOf(null)}
+        >
+          <div
+            className="bg-surface rounded-xl shadow-lg border border-brand-border w-full max-w-2xl max-h-[85vh] overflow-y-auto custom-scrollbar"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <header className="flex items-center justify-between px-5 py-4 border-b border-brand-border sticky top-0 bg-surface">
+              <div>
+                <h2 className="font-serif text-lg font-semibold text-ink">Phân quyền tài khoản cư dân</h2>
+                <p className="text-sm text-ink-soft mt-0.5">
+                  {viewingPermsOf.name} · <span className="font-mono text-xs">{viewingPermsOf.phoneNumber}</span>
+                </p>
+              </div>
+              <button
+                onClick={() => setViewingPermsOf(null)}
+                className="p-2 rounded-lg border border-brand-border bg-surface text-ink-soft hover:text-accent hover:border-accent/40 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-accent/40"
+                aria-label="Đóng"
+              >
+                <ArrowLeftIcon className="w-5 h-5 rotate-180" />
+              </button>
+            </header>
+            <div className="p-5">
+              <p className="text-xs text-ink-faint mb-4">
+                Tài khoản cư dân được cấp quyền tự động theo vai trò <span className="font-medium text-accent-ink">RESIDENT</span> (Blueprint A.4). Các ô checkbox thể hiện quyền được phép của vai trò này — chỉ đọc, không thể sửa trực tiếp.
+              </p>
+              <RolePermissionPanel selectedRoles={['RESIDENT']} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

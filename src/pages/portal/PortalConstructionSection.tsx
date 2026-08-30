@@ -52,7 +52,7 @@ export const PortalConstructionSection: React.FC<PortalConstructionSectionProps>
   const loadRegistrations = async () => {
     try {
       setLoading(true);
-      const res: any = await api.get('/operations/construction');
+      const res: any = await api.get(`/resident-portal/construction?apartmentId=${apartmentId}`);
       if (res && res.success) {
         const myRegs = (res.registrations || []).filter((r: any) => r.apartment_id === apartmentId);
         setRegistrations(myRegs);
@@ -67,7 +67,7 @@ export const PortalConstructionSection: React.FC<PortalConstructionSectionProps>
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res: any = await api.post('/operations/construction', {
+      const res: any = await api.post('/resident-portal/construction/register', {
         ...createForm,
         apartment_id: apartmentId,
       });

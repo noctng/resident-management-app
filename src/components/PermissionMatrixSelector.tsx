@@ -153,6 +153,7 @@ export const ROLE_PERMISSION_MATRIX: Record<string, string[]> = {
     'residents:U',
     'unified_billing:U',
     'construction:C',
+    'warranty:C',
   ]),
   AUDIT: [...R_ALL], // chỉ xem
 };

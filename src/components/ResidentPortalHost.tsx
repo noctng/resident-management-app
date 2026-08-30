@@ -111,12 +111,12 @@ function ResidentPortalHost() {
     setIsLoading(true);
     try {
       const [utilityData, feedbackData] = await Promise.all([
-        api.get<UtilityRecord[]>(`/utility-records/apartment/${apartment.id}`),
-        api.get<Feedback[]>(`/feedback/apartment/${apartment.id}`),
+        api.get<{ data?: UtilityRecord[] }>(`/resident-portal/billing?apartmentId=${apartment.id}`),
+        api.get<Feedback[]>(`/resident-portal/feedback?apartmentId=${apartment.id}`),
       ]);
 
-      setUtilityRecords(utilityData);
-      setFeedbackList(feedbackData);
+      setUtilityRecords(utilityData?.data || []);
+      setFeedbackList(feedbackData || []);
       setSelectedApartment(apartment);
     } catch (err: any) {
       setError(err.message);
@@ -149,9 +149,12 @@ function ResidentPortalHost() {
   };
 
   const handleRefetchAmenityUsages = async () => {
+    if (!selectedApartment?.id) return;
     setIsAmenityListLoading(true);
     try {
-      const newUsages = await api.get<AmenityUsage[]>('/amenity-usage');
+      const newUsages = await api.get<AmenityUsage[]>(
+        `/resident-portal/amenities?apartmentId=${selectedApartment.id}`
+      );
       setAmenityUsages(newUsages);
     } catch (error: any) {
       console.error(error);
@@ -168,7 +171,7 @@ function ResidentPortalHost() {
     residentId: string
   ): Promise<AmenityUsage> => {
     try {
-      const newUsage = await api.post<AmenityUsage>('/amenity-usage', {
+      const newUsage = await api.post<AmenityUsage>('/resident-portal/amenities/booking', {
         apartmentId,
         amenity,
         ...bookingData,
@@ -195,15 +198,17 @@ function ResidentPortalHost() {
       setAmenityUsages((prevUsages) =>
         prevUsages.map((u) => (u.id === usageId ? updatedUsage : u))
       );
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       toast.error('Cập nhật trạng thái đặt chỗ thất bại.');
     }
   };
 
   const handleAddFeedback = async (formData: FormData) => {
+    if (!selectedApartment?.id) throw new Error('Chưa chọn căn hộ.');
     try {
-      const newFeedback = await api.upload<Feedback>('/feedback', formData, 'POST');
+      formData.set('apartmentId', selectedApartment.id);
+      const newFeedback = await api.upload<Feedback>('/resident-portal/feedback', formData, 'POST');
       setFeedbackList((prev) =>
         [newFeedback, ...prev].sort(
           (a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()

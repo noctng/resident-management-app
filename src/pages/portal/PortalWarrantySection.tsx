@@ -52,7 +52,7 @@ export const PortalWarrantySection: React.FC<PortalWarrantySectionProps> = ({
   const loadClaims = async () => {
     try {
       setLoading(true);
-      const res: any = await api.get(`/operations/warranty?apartment_id=${apartmentId}`);
+      const res: any = await api.get(`/resident-portal/warranty?apartmentId=${apartmentId}`);
       if (res && res.success) {
         setClaims(res.claims || []);
       }
@@ -66,7 +66,7 @@ export const PortalWarrantySection: React.FC<PortalWarrantySectionProps> = ({
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res: any = await api.post('/operations/warranty', {
+      const res: any = await api.post('/resident-portal/warranty', {
         ...createForm,
         apartment_id: apartmentId,
       });

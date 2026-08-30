@@ -159,11 +159,15 @@ function ResidentPortalPage({
   }, [utilityRecords]);
 
   const fetchUtilityRecords = async () => {
+    if (!selectedApartment?.id) return;
     try {
-      const res = await fetch('/api/utility-records', { credentials: 'include' });
+      const res = await fetch(
+        `/api/resident-portal/billing?apartmentId=${selectedApartment.id}`,
+        { credentials: 'include' }
+      );
       if (res.ok) {
         const data = await res.json();
-        setLocalUtilityRecords(data || []);
+        setLocalUtilityRecords(data.data || []);
       }
     } catch (err) {
       console.error('Failed to fetch utility records:', err);
@@ -185,7 +189,7 @@ function ResidentPortalPage({
   const fetchUnifiedHistory = async (apartmentId: string) => {
     try {
       setUnifiedLoading(true);
-      const res = await fetch(`/api/unified-billing/history/${apartmentId}?limit=24`, { credentials: 'include' });
+      const res = await fetch(`/api/resident-portal/billing?apartmentId=${apartmentId}`, { credentials: 'include' });
       if (res.ok) {
         const data = await res.json();
         setUnifiedHistory(data.data || []);

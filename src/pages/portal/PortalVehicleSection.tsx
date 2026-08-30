@@ -35,7 +35,7 @@ export const PortalVehicleSection: React.FC<PortalVehicleSectionProps> = ({
   const loadVehicles = async () => {
     try {
       setLoading(true);
-      const res: any = await api.get(`/vehicles/apartment/${apartmentId}`);
+      const res: any = await api.get(`/resident-portal/vehicles?apartmentId=${apartmentId}`);
       if (res && res.success) {
         setVehicles(res.vehicles || []);
       }
@@ -49,7 +49,7 @@ export const PortalVehicleSection: React.FC<PortalVehicleSectionProps> = ({
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res: any = await api.post('/vehicles/register', {
+      const res: any = await api.post('/resident-portal/vehicles', {
         apartment_id: apartmentId,
         vehicle_type: registerForm.vehicle_type,
         license_plate: registerForm.license_plate,
