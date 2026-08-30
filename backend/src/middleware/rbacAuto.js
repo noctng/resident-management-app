@@ -45,7 +45,7 @@ const MOUNT_MODULE = {
   '/api/crm/promotions': 'crm',
   '/api/crm/commissions': 'commission',
   '/api/crm/transfers': 'crm',
-  '/api/operations/warranty': 'construction',
+  '/api/operations/warranty': 'warranty',
   '/api/operations/construction': 'construction',
   '/api/crm/analytics': 'dashboard',
   '/api/project-phases': 'configuration',

@@ -168,7 +168,8 @@ export type Permission =
   | 'deposits'
   | 'handover'
   | 'commission'
-  | 'revenue';
+  | 'revenue'
+  | 'warranty';
 
 // ===== RBAC (Blueprint A.4 + E.1) =====
 // Action CRUDA: C=Tạo, R=Xem, U=Sửa, D=Xóa logic, A=Duyệt

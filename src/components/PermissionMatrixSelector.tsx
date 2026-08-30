@@ -28,6 +28,7 @@ export const MODULE_LABELS: Record<Permission, string> = {
   revenue: 'Doanh Thu / Báo Cáo',
   construction: 'Thi Công / Cải Tạo',
   billing: 'Thu Phí / Đối Soát',
+  warranty: 'Bảo Hành / Bảo Trì (CMMS)',
 };
 
 // Thứ tự module hiển thị (nhóm theo phân hệ)
@@ -45,6 +46,7 @@ export const MODULE_ORDER: Permission[] = [
   'unified_billing',
   'billing',
   'construction',
+  'warranty',
   'crm',
   'crm_approve',
   'contracts',
@@ -121,6 +123,8 @@ export const ROLE_PERMISSION_MATRIX: Record<string, string[]> = {
     'construction:C', 'construction:U', 'construction:A',
     'unified_billing:C', 'unified_billing:U', 'unified_billing:A',
     'billing:A', 'feedback:A',
+    'warranty:C', 'warranty:U', 'warranty:A',
+    'meter_reading:A',
   ]),
   'PMS-FE': baseR([
     'residents:R', 'residents:U',
@@ -134,9 +138,10 @@ export const ROLE_PERMISSION_MATRIX: Record<string, string[]> = {
     'billing:C', 'billing:U', 'billing:A',
   ]),
   'PMS-TECH': baseR([
-    'construction:C', 'construction:U',
-    'feedback:R', 'feedback:U',
-    'utilities:R',
+    'construction:C', 'construction:U', 'construction:A',
+    'feedback:R', 'feedback:U', 'feedback:C',
+    'utilities:R', 'meter_reading:R',
+    'warranty:C', 'warranty:U',
   ]),
   'PMS-SEC': baseR(['vehicles:R', 'vehicles:U', 'residents:R']),
   RESIDENT: baseR([

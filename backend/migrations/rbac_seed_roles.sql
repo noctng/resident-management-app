@@ -32,7 +32,8 @@ WITH modules(mod) AS (
          ('feedback'),('resident_accounts'),('users'),('configuration'),('logs'),
          ('crm'),('crm_approve'),('unified_billing'),('vehicles'),('meter_reading'),
          ('announcements'),('contracts'),('pricebook'),('leads'),('deposits'),
-         ('handover'),('commission'),('revenue'),('construction'),('billing')
+         ('handover'),('commission'),('revenue'),('construction'),('billing'),
+         ('warranty')
 )
 INSERT INTO role_permissions (role_code, module, action)
 SELECT r.code, m.mod, 'R'
@@ -109,7 +110,9 @@ INSERT INTO role_permissions (role_code, module, action) VALUES
   ('PMS-M','vehicles','C'),('PMS-M','vehicles','U'),('PMS-M','vehicles','A'),
   ('PMS-M','construction','C'),('PMS-M','construction','U'),('PMS-M','construction','A'),
   ('PMS-M','unified_billing','C'),('PMS-M','unified_billing','U'),('PMS-M','unified_billing','A'),
-  ('PMS-M','billing','A'),('PMS-M','feedback','A')
+  ('PMS-M','billing','A'),('PMS-M','feedback','A'),
+  ('PMS-M','warranty','C'),('PMS-M','warranty','U'),('PMS-M','warranty','A'),
+  ('PMS-M','meter_reading','A')
 ON CONFLICT DO NOTHING;
 
 -- PMS-FE: residents RU + feedback RU + amenities RU
@@ -129,9 +132,10 @@ ON CONFLICT DO NOTHING;
 
 -- PMS-TECH: construction CU + feedback RU + utilities R
 INSERT INTO role_permissions (role_code, module, action) VALUES
-  ('PMS-TECH','construction','C'),('PMS-TECH','construction','U'),
-  ('PMS-TECH','feedback','R'),('PMS-TECH','feedback','U'),
-  ('PMS-TECH','utilities','R')
+  ('PMS-TECH','construction','C'),('PMS-TECH','construction','U'),('PMS-TECH','construction','A'),
+  ('PMS-TECH','feedback','R'),('PMS-TECH','feedback','U'),('PMS-TECH','feedback','C'),
+  ('PMS-TECH','utilities','R'),('PMS-TECH','meter_reading','R'),
+  ('PMS-TECH','warranty','C'),('PMS-TECH','warranty','U')
 ON CONFLICT DO NOTHING;
 
 -- PMS-SEC: vehicles RU + residents R

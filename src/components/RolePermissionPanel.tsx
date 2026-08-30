@@ -57,6 +57,7 @@ const SUBSYSTEM_OF_MODULE: Record<Permission, 'ban_hang' | 'van_hanh' | 'chung'>
   unified_billing: 'van_hanh',
   billing: 'van_hanh',
   construction: 'van_hanh',
+  warranty: 'van_hanh',
 };
 
 const SUBSYSTEM_META = {

@@ -33,6 +33,7 @@ const PERMISSION_LABELS: Record<Permission, string> = {
   handover: 'Bàn Giao Nhà',
   commission: 'Hoa Hồng',
   revenue: 'Doanh Thu / Báo Cáo',
+  warranty: 'Bảo Hành / Bảo Trì (CMMS)',
 };
 
 const ALL_PERMISSIONS: Permission[] = [
@@ -61,6 +62,7 @@ const ALL_PERMISSIONS: Permission[] = [
   'handover',
   'commission',
   'revenue',
+  'warranty',
 ];
 
 const PermissionSelector: React.FC<PermissionSelectorProps> = ({
