@@ -93,6 +93,8 @@ function resolveModule(baseUrl, path) {
 }
 
 const autoRbac = async (req, res, next) => {
+  // Public routes (no user/resident) pass through; their own handlers/guards decide.
+  if (!req.user && !req.resident) return next();
   // Bypass: manager cũ / admin / resident
   if (req.user && (req.user.role === 0 || req.user.role === 1)) return next();
   if (req.resident) return next();

@@ -54,6 +54,22 @@ def add_bullet(text, bold_prefix=None):
         p.add_run(text)
     return p
 
+def add_image(path, width=6.0, caption=None):
+    try:
+        doc.add_picture(path, width=Inches(width))
+        doc.paragraphs[-1].alignment = WD_ALIGN_PARAGRAPH.CENTER
+        if caption:
+            c = doc.add_paragraph()
+            c.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            cr = c.add_run(caption)
+            cr.italic = True
+            cr.font.size = Pt(8.5)
+            cr.font.color.rgb = RGBColor(0x5A, 0x69, 0x60)
+    except Exception as e:
+        add_para(f'[Ảnh minh họa: {path} — {e}]', italic=True, size=8.5, color=RGBColor(0x99,0x40,0x40))
+
+SHOTS = 'docs/shots'
+
 def add_table(headers, rows, col_widths=None, header_bg='17231F', font_size=8.5):
     t = doc.add_table(rows=1, cols=len(headers))
     t.style = 'Table Grid'
@@ -141,6 +157,9 @@ style_heading('1.3. Hai luồng đăng nhập', 2)
 add_bullet('Nhân viên nội bộ:', 'Đăng nhập bằng tài khoản hệ thống (username + mật khẩu), token JWT_ADMIN_SECRET. Truy cập toàn bộ phân hệ qua giao diện quản trị.')
 add_bullet('Cư dân:', 'Đăng nhập Cổng thông tin cư dân bằng SĐT + mật khẩu, token JWT_RESIDENT_SECRET. Chỉ truy cập được các chức năng của vai trò RESIDENT (xem §6).')
 
+add_image(f'{SHOTS}/10-admin-login.png', 5.2, 'Hình 1.1 — Màn hình Đăng nhập quản trị (nhân viên nội bộ)')
+add_image(f'{SHOTS}/01-resident-login.png', 5.2, 'Hình 1.2 — Màn hình Đăng nhập Cổng thông tin cư dân (SĐT + mật khẩu)')
+
 doc.add_page_break()
 
 # ============ CHƯƠNG 2: DANH SÁCH VAI TRÒ (A.4) ============
@@ -180,7 +199,14 @@ add_bullet('Cấu hình hệ thống & phân quyền: Quản lý vai trò, gán 
 add_bullet('Quản lý người dùng: Tạo/sửa tài khoản nhân viên, gán nhiều vai trò qua màn hình "Cấu hình phân quyền" (xem ma trận quyền từng vai trò bằng checkbox).')
 add_bullet('Số hóa chứng từ & tích hợp: Kết nối HĐĐT, ZNS, cổng thanh toán, xem nhật ký hệ thống.')
 
-style_heading('3.2. Kinh doanh (DIR / SM / SHEAD / SALE / AGENT / CS / ACC-S / LAW)', 2)
+add_image(f'{SHOTS}/11-admin-dashboard.png', 6.0, 'Hình 3.1 — Bảng điều khiển (Tổng quan) của nhân viên nội bộ sau đăng nhập')
+add_image(f'{SHOTS}/12-admin-Cuhnh.png', 6.0, 'Hình 3.2 — Màn hình Cấu hình hệ thống (biểu phí, email, HĐĐT, AI...)')
+
+style_heading('3.1.1. Quản lý tài khoản cư dân & xem phân quyền', 3)
+add_para('Tại menu "Tài khoản cư dân", Ban quản lý xem danh sách tài khoản, có thể "Reset mật khẩu" và xem ma trận phân quyền của từng tài khoản (chỉ đọc, theo vai trò RESIDENT).', space_after=6)
+add_image(f'{SHOTS}/14-admin-taikhoan-cudan.png', 6.0, 'Hình 3.3 — Danh sách Tài khoản cư dân (admin)')
+add_image(f'{SHOTS}/15-admin-permission-matrix.png', 5.4, 'Hình 3.4 — Ma trận phân quyền tài khoản cư dân (read-only, vai trò RESIDENT)')
+
 add_bullet('SALE: Vào "Cơ hội của tôi" để chăm sóc lead, lập giỏ hàng, giữ chỗ, lập phiếu đặt cọc. Không được xóa dữ liệu tài chính.')
 add_bullet('SHEAD: Duyệt giữ chỗ/giỏ hàng, phân lead cho team, áp dụng chiết khấu trong hạn mức (≤2%).')
 add_bullet('SM: Duyệt hợp đồng, phê duyệt chiết khấu vượt hạn mức (≤5%), duyệt đợt mở bán.')
@@ -211,6 +237,9 @@ add_bullet('Truy cập trang Cổng cư dân, chọn "Quản trị" để quay l
 add_bullet('Đăng nhập bằng Số điện thoại + Mật khẩu (mặc định Abc@12345, nên đổi sau lần đầu).')
 add_bullet('Nếu một SĐT thuộc nhiều căn hộ, hệ thống hiển thị danh sách căn hộ để chọn — chọn căn hộ muốn thao tác.')
 
+add_image(f'{SHOTS}/02-resident-portal-onboard.png', 5.2, 'Hình 4.1 — Wizard chào mừng & chọn căn hộ khi đăng nhập cư dân lần đầu')
+add_image(f'{SHOTS}/03-resident-tongquan.png', 6.0, 'Hình 4.2 — Giao diện Cổng thông tin cư dân (menu: Tin tức, Hóa đơn, Tiện ích, Phản ánh, Xe, Bảo hành, Thi công...)')
+
 style_heading('4.2. Các chức năng cư dân được phép', 2)
 add_table(
     ['Chức năng', 'Quyền', 'Thao tác', 'Ghi chú'],
@@ -226,6 +255,13 @@ add_table(
     ],
     col_widths=[1.4, 0.9, 2.6, 1.5],
 )
+
+add_image(f'{SHOTS}/04-res-HanTngHp.png', 6.0, 'Hình 4.3 — Hóa đơn tổng hợp căn hộ (207.000 ₫, đã thanh toán)')
+add_image(f'{SHOTS}/05-res-Phnnh.png', 5.6, 'Hình 4.4 — Gửi phản ánh (feedback)')
+add_image(f'{SHOTS}/05-res-ngKTinch.png', 5.6, 'Hình 4.5 — Đăng ký tiện ích chung')
+add_image(f'{SHOTS}/05-res-ThXePhngTin.png', 5.6, 'Hình 4.6 — Thẻ xe / phương tiện')
+add_image(f'{SHOTS}/05-res-BoHnhCnH.png', 5.6, 'Hình 4.7 — Bảo hành căn hộ')
+add_image(f'{SHOTS}/05-res-ngKCiTo.png', 5.6, 'Hình 4.8 — Đăng ký cải tạo thi công')
 
 style_heading('4.3. Nguyên tắc căn hộ nhiều thành viên (Mô hình A)', 2)
 add_para('Hệ thống áp dụng Mô hình A: mọi thành viên trong căn hộ có số điện thoại đều được cấp tài khoản riêng (mỗi người một SĐT = một tài khoản).', bold=True)

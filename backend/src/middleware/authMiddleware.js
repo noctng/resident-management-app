@@ -33,7 +33,10 @@ const authenticateToken = (req, res, next) => {
     if (!token && req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
         token = req.headers.authorization.split(' ')[1];
     }
-    if (!token) return res.sendStatus(401);
+    if (!token) {
+        req.user = null;
+        return next();
+    }
 
     jwt.verify(token, JWT_ADMIN_SECRET, async (err, user) => {
         if (!err && user.type === 'admin') {
