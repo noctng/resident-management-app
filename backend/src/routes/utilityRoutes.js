@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const utilityController = require('../controllers/utilityController');
-const { authenticateToken, checkPermission, isAdmin } = require('../middleware/authMiddleware');
+const { authenticateToken, checkPermission, isAdmin, requireAction, requireAnyRole } = require('../middleware/authMiddleware');
+const { enforceSoD, makeSoD } = require('../middleware/sodMiddleware');
 const validate = require('../middleware/validate');
 const { utilityRecordSchema, pricingConfigSchema } = require('../schemas/featureSchemas');
 const upload = require('../middleware/uploadMiddleware');
@@ -27,7 +28,9 @@ router.post(
     '/utility-records',
     [
         authenticateToken,
-        checkPermission(['utilities', 'meter_reading']),
+        // RBAC GĐ2: chỉ role có quyền ghi chỉ số (PMS-BILL, PMS-TECH, MANAGER, ADMIN)
+        requireAction('meter_reading', 'C'),
+        checkPermission(['utilities', 'meter_reading']), // compat cũ
         upload.single('meterImage'),
         coerceUtilityRecordNumbers,
         validate(utilityRecordSchema),
@@ -84,9 +87,20 @@ router.get(
 );
 
 // Recalculate utility costs for existing records
+// RBAC GĐ2: chỉ PMS-BILL (hoặc ADMIN/MANAGER) được chốt kỳ (A), + SoD demo
 router.post(
     '/utility-records/recalculate',
-    [authenticateToken, isAdmin],
+    [
+        authenticateToken,
+        requireAction('utilities', 'A'),
+        // SoD: người chốt kỳ phải khác người ghi chỉ số (giả lập owner kỳ trước = user khác)
+        (req, res, next) => {
+            req.sodContext = makeSoD('utilities', 'A', 'prev_meter_reader_id');
+            next();
+        },
+        enforceSoD,
+        isAdmin,
+    ],
     utilityController.recalculateUtilityCosts
 );
 
