@@ -231,6 +231,10 @@ add_image(f'{SHOTS}/21-admin-Tinch.png', 5.6, 'Hình 3.10 — Quản lý Tiện 
 add_image(f'{SHOTS}/21-admin-BoHnhSauBnGiao.png', 5.6, 'Hình 3.11 — Bảo hành sau bàn giao')
 add_image(f'{SHOTS}/21-admin-QunLinNc.png', 5.6, 'Hình 3.12 — Quản lý Điện nước (ghi chỉ số)')
 add_image(f'{SHOTS}/21-admin-HanTngHp.png', 6.0, 'Hình 3.13 — Hóa đơn tổng hợp (quản lý thu, QR, xuất Excel)')
+add_image(f'{SHOTS}/22-admin-GhiChSMobile.png', 6.0, 'Hình 3.14 — Ghi chỉ số di động (AI quét công tơ điện/nước)')
+add_image(f'{SHOTS}/22-admin-ThiCong.png', 6.0, 'Hình 3.15 — Đăng ký thi công & ký quỹ (hồ sơ, 100Tr, thẻ công nhân)')
+add_image(f'{SHOTS}/22-admin-BoCoKPIiuHnh.png', 6.0, 'Hình 3.16 — Báo cáo & KPI điều hành (4 trụ cột)')
+add_image(f'{SHOTS}/23-admin-CuDan-form.png', 5.6, 'Hình 3.17 — Form Thêm cư dân mới (thông tin & HĐĐT)')
 
 style_heading('3.4. Kiểm toán (AUDIT)', 2)
 add_para('Tài khoản AUDIT chỉ có quyền Xem (R) toàn bộ dữ liệu, kể cả nhật ký hệ thống — phục vụ minh bạch nội bộ và cộng đồng cư dân. Không được tạo/sửa/xóa.', italic=True)
