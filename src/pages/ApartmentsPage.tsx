@@ -57,6 +57,7 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
   const [exporting, setExporting] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isPhaseModalOpen, setIsPhaseModalOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
   const toast = useToast();
 
   // Get unique blocks
@@ -306,6 +307,30 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
             )}
           </div>
 
+          {/* View Mode Toggle (Table / Cards) */}
+          <div className="flex items-center gap-1 rounded-full bg-surface-alt p-1 border border-brand-border">
+            <button
+              onClick={() => setViewMode('table')}
+              aria-pressed={viewMode === 'table'}
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                viewMode === 'table' ? 'bg-accent text-white' : 'text-ink-soft hover:text-ink'
+              }`}
+              title="Xem bảng"
+            >
+              Bảng
+            </button>
+            <button
+              onClick={() => setViewMode('cards')}
+              aria-pressed={viewMode === 'cards'}
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                viewMode === 'cards' ? 'bg-accent text-white' : 'text-ink-soft hover:text-ink'
+              }`}
+              title="Xem thẻ căn hộ"
+            >
+              Thẻ
+            </button>
+          </div>
+
           {/* Phase Filter Tabs */}
           <div className="flex items-center gap-1">
             {['all', 'TESLA', 'CANTATA', 'NOXH'].map((p) => (
@@ -354,7 +379,7 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
       </div>
 
       {/* ── Table Container ── */}
-      <div className="bg-surface rounded-2xl shadow-sm border border-brand-border overflow-hidden">
+      <div className={`bg-surface rounded-2xl shadow-sm border border-brand-border overflow-hidden ${viewMode === 'cards' ? 'hidden' : ''}`}>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
@@ -709,6 +734,112 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* ── Card Inventory View (MONOLITH Units style) ── */}
+      {viewMode === 'cards' && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-4">
+          {filteredApartments.map((apt) => {
+            const residentCount = getResidentCount(apt.id);
+            const residentsInApt = getResidentsInApartment(apt.id);
+            const isOccupied = residentCount > 0;
+            const phase = apt.phase_code || apt.phaseCode || (apt.code.startsWith('TES') ? 'TESLA' : 'CANTATA');
+            const block = apt.block_code || apt.blockCode || apt.code.split('-')[0];
+            const landArea = Number(apt.land_area || apt.landArea || apt.area || 100);
+            const landPrice = Number(apt.land_price_before_vat || apt.landPrice || 0);
+            const constPrice = Number(apt.construction_price_before_vat || apt.constructionPrice || 0);
+            const subtotal = landPrice + constPrice;
+            const vat = Math.round((subtotal * Number(apt.vat_rate || 8)) / 100);
+            const pbt = Math.round(subtotal * 0.02);
+            const total = subtotal + vat + pbt;
+            const owner = residentsInApt.find((r) => r.relationshipStatus === 'OWNER') || residentsInApt[0];
+
+            return (
+              <article
+                key={apt.id}
+                className="group bg-surface rounded-2xl shadow-sm border border-brand-border hover:border-accent/50 hover:shadow-raised transition-all duration-200 motion-safe:animate-fade-in overflow-hidden flex flex-col"
+              >
+                {/* Card Top: code + status badge */}
+                <div className="flex items-start justify-between gap-2 p-4 pb-3 border-b border-brand-border">
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <strong className="text-ink font-mono font-semibold text-base">{apt.code}</strong>
+                      {block && (
+                        <span className="text-[10px] px-1.5 py-0.5 bg-surface-alt text-ink-soft rounded font-mono uppercase">
+                          {block}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-[11px] text-ink-faint">
+                      {phase} • Tầng {apt.floor || '—'} • {apt.houseType || 'Biệt thự/Nhà phố'}
+                    </span>
+                  </div>
+                  <span
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold shrink-0 ${
+                      isOccupied ? 'bg-brand-success-soft text-brand-success' : 'bg-surface-alt text-ink-soft'
+                    }`}
+                  >
+                    <span className={`w-1.5 h-1.5 rounded-full ${isOccupied ? 'bg-brand-success' : 'bg-ink-faint'}`}></span>
+                    {isOccupied ? 'Đã bàn giao' : 'Chưa bàn giao'}
+                  </span>
+                </div>
+
+                {/* Card Body */}
+                <div className="p-4 pt-3 space-y-2.5 flex-1">
+                  <div className="grid grid-cols-2 gap-2 text-[11px]">
+                    <div className="bg-surface-alt/50 rounded-lg p-2">
+                      <span className="text-ink-faint block">Diện tích đất</span>
+                      <strong className="text-ink font-mono">{landArea} m²</strong>
+                    </div>
+                    <div className="bg-surface-alt/50 rounded-lg p-2">
+                      <span className="text-ink-faint block">Hướng</span>
+                      <strong className="text-ink">{apt.direction || 'Đông Nam'}</strong>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between border-t border-brand-border pt-2.5">
+                    <span className="text-[11px] text-ink-faint">Giá bàn giao</span>
+                    <strong className="text-sm text-accent font-bold font-mono tabular-nums">
+                      {total > 0 ? `${(total / 1000000000).toFixed(2)} tỷ` : '14.30 tỷ'}
+                    </strong>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    {isOccupied ? (
+                      <>
+                        <span className="text-[11px] text-ink-soft">Chủ hộ:</span>
+                        <strong className="text-[11px] text-ink truncate">{owner?.name || 'Cư dân'}</strong>
+                        <span className="ml-auto text-[10px] text-brand-success font-semibold bg-brand-success-soft px-1.5 py-0.5 rounded">
+                          {residentCount} nhân khẩu
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-[11px] italic text-ink-faint">Chưa có người ở</span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Card Footer actions */}
+                <div className="flex items-center gap-2 p-3 pt-0">
+                  <button
+                    onClick={() => onViewApartment(apt)}
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-surface-alt text-ink-soft hover:text-ink hover:bg-brand-border rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+                  >
+                    <ViewfinderCircleIcon className="w-4 h-4" />
+                    Xem
+                  </button>
+                  <button
+                    onClick={() => onEditApartment(apt)}
+                    className="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-accent-soft text-accent-ink hover:bg-accent hover:text-white rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+                  >
+                    <PencilIcon className="w-4 h-4" />
+                    Sửa
+                  </button>
+                </div>
+              </article>
+            );
+          })}
         </div>
       )}
 
