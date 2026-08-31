@@ -22,6 +22,7 @@ import ImportResidentModal from '../components/ImportResidentModal';
 import { DocumentArrowUpIcon } from '../components/icons';
 import { useToast } from '../components/ui';
 import { StatCard } from '../components/ui/Card';
+import { EmptyState } from '../components/ui';
 
 interface ResidentsPageProps {
   residents: Resident[];
@@ -492,13 +493,12 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
               ) : (
                 <tr>
                   <td colSpan={7} className="py-10 px-6 text-center text-ink-soft">
-                    <div className="max-w-xs mx-auto text-center space-y-2">
-                      <div className="w-12 h-12 rounded-full bg-surface-alt flex items-center justify-center mx-auto text-ink-soft">
-                        <UsersIcon className="w-6 h-6" />
-                      </div>
-                      <div className="font-semibold text-ink">Không tìm thấy kết quả phù hợp</div>
-                      <div className="text-sm text-ink-soft">Thử thay đổi từ khóa tìm kiếm hoặc bỏ chọn các bộ lọc</div>
-                    </div>
+                    <EmptyState
+                      icon={UsersIcon}
+                      tone="accent"
+                      title="Không tìm thấy kết quả phù hợp"
+                      description="Thử thay đổi từ khóa tìm kiếm hoặc bỏ chọn các bộ lọc"
+                    />
                   </td>
                 </tr>
               )}

@@ -3,9 +3,11 @@ import type { Feedback, User } from '../types';
 import {
   ArrowLeftIcon,
   ChatBubbleBottomCenterTextIcon,
+  ExclamationTriangleIcon,
   XMarkIcon,
   MagnifyingGlassIcon,
 } from '../components/icons';
+import { EmptyState } from '../components/ui';
 // import Modal from '../components/Modal'; // Removed as custom modal is used
 import ImageViewerModal from '../components/ImageViewerModal';
 import {
@@ -501,7 +503,12 @@ const FeedbackManagementPage: React.FC<FeedbackManagementPageProps> = ({
               ) : (
                 <tr>
                   <td colSpan={6} className="text-center py-12 text-ink-soft">
-                    Không tìm thấy phản ánh nào phù hợp.
+                    <EmptyState
+                      icon={ExclamationTriangleIcon}
+                      tone="teal"
+                      title="Không tìm thấy phản ánh nào"
+                      description="Thử thay đổi từ khóa tìm kiếm hoặc bộ lọc trạng thái"
+                    />
                   </td>
                 </tr>
               )}

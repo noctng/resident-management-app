@@ -22,6 +22,7 @@ import BookingConfirmationModal from '../components/BookingConfirmationModal';
 import AmenityStats from '../components/AmenityStats';
 import { api } from '../services/api';
 import { useToast, useConfirm } from '../components/ui';
+import { EmptyState } from '../components/ui';
 
 interface AmenityPageProps {
   apartments: Apartment[];
@@ -742,11 +743,13 @@ const AmenityPage: React.FC<AmenityPageProps> = ({
 
             <div className="p-5 overflow-y-auto custom-scrollbar flex-grow bg-surface-alt">
               {pendingBookings.length === 0 ? (
-                <div className="text-center py-12">
-                  <p className="text-ink-soft  font-medium">
-                    Không có đặt chỗ nào đang chờ.
-                  </p>
-                </div>
+                <EmptyState
+                  icon={TicketIcon}
+                  tone="accent"
+                  size="sm"
+                  title="Không có đặt chỗ nào đang chờ"
+                  description="Các yêu cầu đặt tiện ích mới sẽ hiển thị tại đây"
+                />
               ) : (
                 <div className="space-y-4">
                   {pendingBookings.map((booking) => {
@@ -864,11 +867,13 @@ const AmenityPage: React.FC<AmenityPageProps> = ({
 
             <div className="p-5 overflow-y-auto custom-scrollbar flex-grow bg-surface-alt">
               {getDetailUsages().length === 0 ? (
-                <div className="text-center py-12">
-                  <p className="text-ink-soft ">
-                    Chưa có lượt sử dụng nào trong tháng này.
-                  </p>
-                </div>
+                <EmptyState
+                  icon={ClockIcon}
+                  tone="neutral"
+                  size="sm"
+                  title="Chưa có lượt sử dụng nào"
+                  description="Lịch sử sử dụng tiện ích trong tháng sẽ hiển thị tại đây"
+                />
               ) : (
                 <div className="space-y-3">
                   {getDetailUsages().map((u) => {
