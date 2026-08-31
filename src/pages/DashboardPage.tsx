@@ -121,11 +121,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           icon={UsersIcon}
           iconBg="bg-accent-soft"
           iconColor="text-accent-ink"
+          accentTone="teal"
           onClick={() => onNavigate?.('residents')}
           className="motion-safe:animate-fade-in [animation-fill-mode:both]"
         />
 
-        <button onClick={() => onNavigate?.('apartments')} className={`${cardBase} flex items-center justify-between gap-3 motion-safe:animate-fade-in [animation-fill-mode:both]`} style={{ animationDelay: '60ms' }}>
+        <button onClick={() => onNavigate?.('apartments')} className={`${cardBase} flex items-center justify-between gap-3 motion-safe:animate-fade-in [animation-fill-mode:both] relative overflow-hidden`} style={{ animationDelay: '60ms' }}>
+          <span aria-hidden className="absolute inset-y-0 left-0 w-1 bg-brand-teal" />
           <div>
             <span className="inline-flex p-2 bg-brand-teal-soft rounded-lg text-brand-teal mb-3">
               <BuildingOfficeIcon className="w-5 h-5" />
@@ -160,6 +162,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           icon={ExclamationTriangleIcon}
           iconBg="bg-brand-danger-soft"
           iconColor="text-brand-danger"
+          accentTone="danger"
           onClick={() => onNavigate?.('feedback')}
           className="motion-safe:animate-fade-in [animation-fill-mode:both]"
         />
@@ -173,6 +176,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           icon={ChatBubbleBottomCenterTextIcon}
           iconBg="bg-brand-warning-soft"
           iconColor="text-brand-warning"
+          accentTone="warning"
           onClick={() => onNavigate?.('amenities')}
           className="motion-safe:animate-fade-in [animation-fill-mode:both]"
         />
