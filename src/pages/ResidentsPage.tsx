@@ -57,11 +57,18 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
   const [filterStatus, setFilterStatus] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedResidentForModal, setSelectedResidentForModal] = useState<Resident | null>(null);
-  const [selectedResidentForDelete, setSelectedResidentForDelete] = useState<Resident | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const toast = useToast();
+
+  // Mobile default: cards, desktop: respect toggle
+  const effectiveViewMode = useMemo(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) return 'cards';
+    return viewMode;
+  }, [viewMode]);
 
   // Thống kê nhanh cho Dashboard Cards
   const stats = useMemo(() => {
@@ -163,10 +170,16 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
   const ghostIconBtn =
     'p-1.5 rounded-lg border border-brand-border bg-surface text-ink-soft hover:text-accent hover:border-accent/40 transition-colors cursor-pointer';
 
-  const handleExportExcel = async () => {
+  const handleExportExcel = async (retryCount = 0) => {
     setExporting(true);
     try {
-      const blob = await api.download('/reports/residents', {}, 'GET');
+      const controller = new AbortController();
+      const timeoutMs = 30000;
+      const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+      const blob = await api.download('/reports/residents', {}, 'GET', { signal: controller.signal });
+      clearTimeout(timeoutId);
+
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -175,9 +188,18 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
       link.click();
       link.parentNode?.removeChild(link);
       window.URL.revokeObjectURL(url);
+
+      toast.success('Xuất Excel thành công');
     } catch (error: any) {
       console.error('Export error:', error);
-      toast.error('Xuất báo cáo thất bại: ' + (error.message || 'Lỗi server'));
+      const isTimeout = error?.name === 'AbortError';
+      const message = isTimeout ? 'Yêu cầu xuất quá lâu, vui lòng thử lại' : 'Xuất báo cáo thất bại: ' + (error.message || 'Lỗi server');
+      if (retryCount < 1) {
+        toast.warning(`${message}. Đang thử lại...`);
+        setTimeout(() => handleExportExcel(retryCount + 1), 1000);
+      } else {
+        toast.error(message);
+      }
     } finally {
       setExporting(false);
     }
@@ -205,7 +227,7 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
             <span>Import Excel</span>
           </button>
           <button
-            onClick={handleExportExcel}
+            onClick={() => handleExportExcel(0)}
             disabled={exporting}
             className="px-4 py-2.5 rounded-lg border border-brand-border bg-surface text-ink font-medium flex items-center gap-2 min-h-[44px] hover:border-accent/40 hover:text-accent transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer focus-visible:ring-2 focus-visible:ring-accent/40"
             aria-label="Xuất Excel"
@@ -213,6 +235,28 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
             <DocumentArrowDownIcon className="w-5 h-5" />
             {exporting ? 'Đang xuất...' : 'Xuất Excel'}
           </button>
+          <div className="flex items-center gap-1 rounded-full bg-surface-alt p-1 border border-brand-border">
+            <button
+              onClick={() => setViewMode('table')}
+              aria-pressed={viewMode === 'table'}
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                viewMode === 'table' ? 'bg-accent text-white' : 'text-ink-soft hover:text-ink'
+              }`}
+              title="Xem bảng"
+            >
+              Bảng
+            </button>
+            <button
+              onClick={() => setViewMode('cards')}
+              aria-pressed={viewMode === 'cards'}
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                viewMode === 'cards' ? 'bg-accent text-white' : 'text-ink-soft hover:text-ink'
+              }`}
+              title="Xem thẻ cư dân"
+            >
+              Thẻ
+            </button>
+          </div>
         </div>
       </div>
 
@@ -349,178 +393,246 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
         </div>
       </div>
 
-      {/* ── Table Container ── */}
-      <div className="bg-surface rounded-xl shadow-sm border border-brand-border overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-surface-alt border-b border-brand-border text-[11px] font-semibold text-ink-soft uppercase tracking-wider">
-                <th className="py-3.5 px-5">Họ và tên</th>
-                <th className="py-3.5 px-4 whitespace-nowrap">CCCD / Định danh</th>
-                <th className="py-3.5 px-4 whitespace-nowrap">Số điện thoại</th>
-                <th className="py-3.5 px-4 whitespace-nowrap">Căn hộ trực thuộc</th>
-                <th className="py-3.5 px-4 whitespace-nowrap">Quan hệ</th>
-                <th className="py-3.5 px-4 whitespace-nowrap">Trạng thái</th>
-                <th className="py-3.5 px-4 text-center whitespace-nowrap">Thao tác</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-brand-border/60 text-sm">
-              {filteredResidents.length > 0 ? (
-                filteredResidents.map((resident) => {
-                  const residentApartments = getResidentApartments(resident.id);
-                  const badge = getRelationshipBadge(resident.relationshipStatus);
+      {/* ── View Container ── */}
+      {effectiveViewMode === 'cards' ? (
+        <div>
+          {filteredResidents.length === 0 ? (
+            <EmptyState
+              icon={UsersIcon}
+              tone="accent"
+              title="Không tìm thấy kết quả phù hợp"
+              description="Thử thay đổi từ khóa tìm kiếm hoặc bỏ chọn các bộ lọc"
+              size="md"
+            />
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-4">
+              {filteredResidents.map((resident) => {
+                const residentApartments = getResidentApartments(resident.id);
+                const badge = getRelationshipBadge(resident.relationshipStatus);
 
-                  return (
-                    <tr
-                      key={resident.id}
-                      className="hover:bg-surface-alt/60 transition-colors duration-150"
-                    >
-                      {/* Họ tên */}
-                      <td className="py-3.5 px-5">
-                        <div className="flex items-center gap-3">
-                          <span className="w-9 h-9 rounded-full bg-accent-soft text-accent-ink font-bold flex items-center justify-center shrink-0">
-                            {resident.name.charAt(0).toUpperCase()}
+                return (
+                  <article
+                    key={resident.id}
+                    className="bg-surface rounded-2xl shadow-sm border border-brand-border hover:border-accent/50 hover:shadow-raised transition-all duration-200 overflow-hidden flex flex-col"
+                  >
+                    <div className="p-4 pb-3 border-b border-brand-border flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-3">
+                        <span className="w-10 h-10 rounded-full bg-accent-soft text-accent-ink font-bold flex items-center justify-center shrink-0">
+                          {resident.name.charAt(0).toUpperCase()}
+                        </span>
+                        <div>
+                          <strong className="text-ink text-sm">{resident.name}</strong>
+                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${badge.class}`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`} />
+                            {badge.label}
                           </span>
-                          <div>
-                            <div className="font-semibold text-ink leading-tight">
-                              {resident.name}
-                            </div>
-                            {resident.canUseAmenities && (
-                              <span className="inline-flex items-center gap-1 text-[10.5px] font-medium text-brand-warning mt-0.5">
-                                <SparklesIcon className="w-3 h-3 inline" /> VIP Tiện ích
-                              </span>
-                            )}
-                          </div>
                         </div>
-                      </td>
+                      </div>
+                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                        resident.isActive ? 'bg-brand-success-soft text-brand-success' : 'bg-brand-warning-soft text-brand-warning'
+                      }`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${resident.isActive ? 'bg-brand-success' : 'bg-brand-warning'}`} />
+                        {resident.isActive ? 'Hoạt động' : 'Tạm vắng'}
+                      </span>
+                    </div>
 
-                      {/* CCCD */}
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        {resident.idNumber ? (
-                          <span className="font-mono text-xs font-medium px-2 py-1 rounded bg-surface-alt text-ink-soft border border-brand-border">
-                            {resident.idNumber}
-                          </span>
-                        ) : (
-                          <span className="text-ink-soft text-xs italic">Chưa cập nhật</span>
-                        )}
-                      </td>
-
-                      {/* SĐT */}
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        {resident.phoneNumber ? (
-                          <a
-                            href={`tel:${resident.phoneNumber}`}
-                            className="font-mono text-sm text-ink-soft hover:text-accent hover:underline transition-colors"
-                          >
-                            {resident.phoneNumber}
-                          </a>
-                        ) : (
-                          <span className="text-ink-soft text-xs italic">Chưa cập nhật</span>
-                        )}
-                      </td>
-
-                      {/* Căn hộ */}
-                      <td className="py-3.5 px-4 whitespace-nowrap">
+                    <div className="p-4 pt-3 space-y-2 text-xs flex-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-ink-soft">Căn hộ</span>
                         <button
                           onClick={() => setSelectedResidentForModal(resident)}
-                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent-soft text-accent-ink hover:bg-accent-hover/20 font-semibold text-xs transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-accent/40"
-                          title="Bấm để xem hoặc đổi căn hộ"
-                          aria-label={`Xem ${residentApartments.length} căn hộ của ${resident.name}`}
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent-soft text-accent-ink hover:bg-accent-hover/20 font-semibold text-xs transition-colors cursor-pointer"
                         >
                           <BuildingOfficeIcon className="w-3.5 h-3.5" />
                           <span>{residentApartments.length} căn hộ</span>
                         </button>
-                      </td>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-ink-soft">SĐT</span>
+                        {resident.phoneNumber ? (
+                          <a href={`tel:${resident.phoneNumber}`} className="font-mono text-ink hover:text-accent hover:underline">
+                            {resident.phoneNumber}
+                          </a>
+                        ) : (
+                          <span className="text-ink-faint italic">Chưa cập nhật</span>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-ink-soft">CCCD</span>
+                        {resident.idNumber ? (
+                          <span className="font-mono text-ink">{resident.idNumber}</span>
+                        ) : (
+                          <span className="text-ink-faint italic">Chưa cập nhật</span>
+                        )}
+                      </div>
+                    </div>
 
-                      {/* Quan hệ */}
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span
-                          className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold ${badge.class}`}
+                    <div className="flex items-center gap-2 p-3 pt-0">
+                      <button
+                        onClick={() => onViewResident(resident)}
+                        className={`${ghostIconBtn} flex-1 inline-flex items-center justify-center gap-1.5 text-xs`}
+                      >
+                        <ViewfinderCircleIcon className="w-4 h-4" /> Xem
+                      </button>
+                      <button
+                        onClick={() => onEditResident(resident)}
+                        className={`${ghostIconBtn} flex-1 inline-flex items-center justify-center gap-1.5 text-xs`}
+                      >
+                        <PencilIcon className="w-4 h-4" /> Sửa
+                      </button>
+                      {isAdmin && (
+                        <button
+                          onClick={() => setConfirmDeleteId(resident.id)}
+                          className={`${ghostIconBtn} hover:text-brand-danger hover:border-brand-danger/40`}
+                          title="Xóa cư dân"
+                          aria-label="Xóa cư dân"
                         >
-                          <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`} />
-                          {badge.label}
-                        </span>
-                      </td>
-
-                      {/* Trạng thái */}
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span
-                          className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold ${
-                            resident.isActive
-                              ? 'bg-brand-success-soft text-brand-success'
-                              : 'bg-brand-warning-soft text-brand-warning'
-                          }`}
-                        >
-                          <span className={`w-1.5 h-1.5 rounded-full ${resident.isActive ? 'bg-brand-success' : 'bg-brand-warning'}`} />
-                          {resident.isActive ? 'Hoạt động' : 'Tạm vắng'}
-                        </span>
-                      </td>
-
-                      {/* Thao tác */}
-                      <td className="py-3.5 px-4 whitespace-nowrap text-center">
-                        <div className="flex items-center justify-center gap-1.5">
-                          <button
-                            onClick={() => onViewResident(resident)}
-                            className={ghostIconBtn}
-                            title="Xem chi tiết cư dân"
-                            aria-label="Xem chi tiết cư dân"
-                          >
-                            <ViewfinderCircleIcon className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => onEditResident(resident)}
-                            className={ghostIconBtn}
-                            title="Chỉnh sửa thông tin"
-                            aria-label="Chỉnh sửa thông tin cư dân"
-                          >
-                            <PencilIcon className="w-4 h-4" />
-                          </button>
-                          {isAdmin && (
-                            <button
-                              onClick={() => setSelectedResidentForDelete(resident)}
-                              className={`${ghostIconBtn} hover:text-brand-danger hover:border-brand-danger/40`}
-                              title="Xóa cư dân"
-                              aria-label="Xóa cư dân"
-                            >
-                              <TrashIcon className="w-4 h-4" />
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
-              ) : (
-                <tr>
-                  <td colSpan={7} className="py-10 px-6 text-center text-ink-soft">
-                    <EmptyState
-                      icon={UsersIcon}
-                      tone="accent"
-                      title="Không tìm thấy kết quả phù hợp"
-                      description="Thử thay đổi từ khóa tìm kiếm hoặc bỏ chọn các bộ lọc"
-                    />
-                  </td>
+                          <TrashIcon className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="bg-surface rounded-xl shadow-sm border border-brand-border overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-surface-alt border-b border-brand-border text-[11px] font-semibold text-ink-soft uppercase tracking-wider">
+                  <th className="py-3.5 px-5">Họ và tên</th>
+                  <th className="py-3.5 px-4 whitespace-nowrap">CCCD / Định danh</th>
+                  <th className="py-3.5 px-4 whitespace-nowrap">Số điện thoại</th>
+                  <th className="py-3.5 px-4 whitespace-nowrap">Căn hộ trực thuộc</th>
+                  <th className="py-3.5 px-4 whitespace-nowrap">Quan hệ</th>
+                  <th className="py-3.5 px-4 whitespace-nowrap">Trạng thái</th>
+                  <th className="py-3.5 px-4 text-center whitespace-nowrap">Thao tác</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-brand-border/60 text-sm">
+                {filteredResidents.length > 0 ? (
+                  filteredResidents.map((resident) => {
+                    const residentApartments = getResidentApartments(resident.id);
+                    const badge = getRelationshipBadge(resident.relationshipStatus);
 
-        {/* ── Table Footer & Stats Summary ── */}
-        <div className="bg-surface-alt border-t border-brand-border px-5 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-ink-soft font-medium">
-          <div className="flex items-center gap-2">
-            <span>Đang hiển thị <strong className="text-ink font-bold">{filteredResidents.length}</strong> / <strong className="text-ink font-bold">{residents.length}</strong> cư dân</span>
-            {filteredResidents.length < residents.length && (
-              <span className="bg-accent-soft text-accent-ink px-2 py-0.5 rounded-full font-semibold text-[11px]">
-                Đang áp dụng bộ lọc
-              </span>
-            )}
+                    return (
+                      <tr key={resident.id} className="hover:bg-surface-alt/60 transition-colors duration-150">
+                        <td className="py-3.5 px-5">
+                          <div className="flex items-center gap-3">
+                            <span className="w-9 h-9 rounded-full bg-accent-soft text-accent-ink font-bold flex items-center justify-center shrink-0">
+                              {resident.name.charAt(0).toUpperCase()}
+                            </span>
+                            <div>
+                              <div className="font-semibold text-ink leading-tight">{resident.name}</div>
+                              {resident.canUseAmenities && (
+                                <span className="inline-flex items-center gap-1 text-[10.5px] font-medium text-brand-warning mt-0.5">
+                                  <SparklesIcon className="w-3 h-3 inline" /> VIP Tiện ích
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          {resident.idNumber ? (
+                            <span className="font-mono text-xs font-medium px-2 py-1 rounded bg-surface-alt text-ink-soft border border-brand-border">
+                              {resident.idNumber}
+                            </span>
+                          ) : (
+                            <span className="text-ink-soft text-xs italic">Chưa cập nhật</span>
+                          )}
+                        </td>
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          {resident.phoneNumber ? (
+                            <a href={`tel:${resident.phoneNumber}`} className="font-mono text-sm text-ink-soft hover:text-accent hover:underline transition-colors">
+                              {resident.phoneNumber}
+                            </a>
+                          ) : (
+                            <span className="text-ink-soft text-xs italic">Chưa cập nhật</span>
+                          )}
+                        </td>
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          <button
+                            onClick={() => setSelectedResidentForModal(resident)}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent-soft text-accent-ink hover:bg-accent-hover/20 font-semibold text-xs transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-accent/40"
+                            title="Bấm để xem hoặc đổi căn hộ"
+                            aria-label={`Xem ${residentApartments.length} căn hộ của ${resident.name}`}
+                          >
+                            <BuildingOfficeIcon className="w-3.5 h-3.5" />
+                            <span>{residentApartments.length} căn hộ</span>
+                          </button>
+                        </td>
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold ${badge.class}`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`} />
+                            {badge.label}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold ${
+                            resident.isActive ? 'bg-brand-success-soft text-brand-success' : 'bg-brand-warning-soft text-brand-warning'
+                          }`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${resident.isActive ? 'bg-brand-success' : 'bg-brand-warning'}`} />
+                            {resident.isActive ? 'Hoạt động' : 'Tạm vắng'}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 whitespace-nowrap text-center">
+                          <div className="flex items-center justify-center gap-1.5">
+                            <button onClick={() => onViewResident(resident)} className={ghostIconBtn} title="Xem chi tiết cư dân" aria-label="Xem chi tiết cư dân">
+                              <ViewfinderCircleIcon className="w-4 h-4" />
+                            </button>
+                            <button onClick={() => onEditResident(resident)} className={ghostIconBtn} title="Chỉnh sửa thông tin" aria-label="Chỉnh sửa thông tin cư dân">
+                              <PencilIcon className="w-4 h-4" />
+                            </button>
+                            {isAdmin && (
+                              <button
+                                onClick={() => setConfirmDeleteId(resident.id)}
+                                className={`${ghostIconBtn} hover:text-brand-danger hover:border-brand-danger/40`}
+                                title="Xóa cư dân"
+                                aria-label="Xóa cư dân"
+                              >
+                                <TrashIcon className="w-4 h-4" />
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td colSpan={7} className="py-10 px-6 text-center text-ink-soft">
+                      <EmptyState
+                        icon={UsersIcon}
+                        tone="accent"
+                        title="Không tìm thấy kết quả phù hợp"
+                        description="Thử thay đổi từ khóa tìm kiếm hoặc bỏ chọn các bộ lọc"
+                      />
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
-          <div className="text-[11px] text-ink-soft">
-            Dữ liệu cư dân Ban Quản Lý Thành Phố Cà Phê
+
+          {/* ── Table Footer & Stats Summary ── */}
+          <div className="bg-surface-alt border-t border-brand-border px-5 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-ink-soft font-medium">
+            <div className="flex items-center gap-2">
+              <span>Đang hiển thị <strong className="text-ink font-bold">{filteredResidents.length}</strong> / <strong className="text-ink font-bold">{residents.length}</strong> cư dân</span>
+              {filteredResidents.length < residents.length && (
+                <span className="bg-accent-soft text-accent-ink px-2 py-0.5 rounded-full font-semibold text-[11px]">
+                  Đang áp dụng bộ lọc
+                </span>
+              )}
+            </div>
+            <div className="text-[11px] text-ink-soft">
+              Dữ liệu cư dân Ban Quản Lý Thành Phố Cà Phê
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
 
       {/* Resident Apartments Modal */}
@@ -550,7 +662,7 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
       />
 
       {/* Custom Delete Resident Confirmation Modal */}
-      {selectedResidentForDelete && (
+      {confirmDeleteId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
           <div className="bg-surface rounded-2xl max-w-md w-full shadow-elevation-raised border border-brand-border overflow-hidden max-h-[90vh] overflow-y-auto custom-scrollbar">
             {/* Header */}
@@ -570,79 +682,91 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
 
             {/* Body */}
             <div className="p-6 space-y-4">
-              <p className="text-sm text-ink-soft">
-                Bạn có chắc chắn muốn xóa cư dân{' '}
-                <strong className="text-ink">
-                  {selectedResidentForDelete.name}
-                </strong>{' '}
-                (CCCD: {selectedResidentForDelete.idNumber}) không?
-              </p>
+              {(() => {
+                const resident = residents.find((r) => r.id === confirmDeleteId);
+                if (!resident) return null;
+                return (
+                  <>
+                    <p className="text-sm text-ink-soft">
+                      Bạn có chắc chắn muốn xóa cư dân{' '}
+                      <strong className="text-ink">
+                        {resident.name}
+                      </strong>{' '}
+                      (CCCD: {resident.idNumber}) không?
+                    </p>
 
-              {/* OWNER check warning */}
-              {selectedResidentForDelete.relationshipStatus === 'OWNER' ? (
-                <div className="p-4 bg-brand-warning-soft border border-brand-warning/30 rounded-xl space-y-2">
-                  <p className="text-sm font-semibold text-brand-warning flex items-center gap-1.5">
-                    <ExclamationTriangleIcon className="w-4 h-4 inline" /> Không thể xóa cư dân này
-                  </p>
-                  <p className="text-sm text-ink-soft leading-relaxed">
-                    Cư dân này hiện đang là <strong>Chủ sở hữu (Chủ hộ)</strong> của căn hộ. Hệ
-                    thống không cho phép xóa Chủ hộ để tránh ảnh hưởng đến việc thanh toán hóa đơn.
-                    Vui lòng chuyển quyền chủ hộ sang thành viên khác trước khi thực hiện xóa.
-                  </p>
-                </div>
-              ) : (
-                <div className="p-4 bg-surface-alt rounded-xl space-y-2 border border-brand-border">
-                  <p className="text-xs font-semibold text-ink">
-                    Ảnh hưởng dữ liệu khi xóa:
-                  </p>
-                  <ul className="text-sm text-ink-soft space-y-1.5 list-disc list-inside">
-                    <li>
-                      Tài khoản Portal cư dân sẽ bị <strong>xóa vĩnh viễn</strong>.
-                    </li>
-                    <li>Liên kết căn hộ hiện tại sẽ bị xóa bỏ.</li>
-                    <li>
-                      Lịch sử phản ánh (Feedback) sẽ được giữ lại dưới danh nghĩa{' '}
-                      <strong className="text-ink">"Cư dân đã xóa"</strong>.
-                    </li>
-                    <li>
-                      Lịch sử đặt chỗ tiện ích sẽ được <strong>ẩn danh tính</strong> người đặt.
-                    </li>
-                  </ul>
-                </div>
-              )}
+                    {/* OWNER check warning */}
+                    {resident.relationshipStatus === 'OWNER' ? (
+                      <div className="p-4 bg-brand-warning-soft border border-brand-warning/30 rounded-xl space-y-2">
+                        <p className="text-sm font-semibold text-brand-warning flex items-center gap-1.5">
+                          <ExclamationTriangleIcon className="w-4 h-4 inline" /> Không thể xóa cư dân này
+                        </p>
+                        <p className="text-sm text-ink-soft leading-relaxed">
+                          Cư dân này hiện đang là <strong>Chủ sở hữu (Chủ hộ)</strong> của căn hộ. Hệ
+                          thống không cho phép xóa Chủ hộ để tránh ảnh hưởng đến việc thanh toán hóa đơn.
+                          Vui lòng chuyển quyền chủ hộ sang thành viên khác trước khi thực hiện xóa.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="p-4 bg-surface-alt rounded-xl space-y-2 border border-brand-border">
+                        <p className="text-xs font-semibold text-ink">
+                          Ảnh hưởng dữ liệu khi xóa:
+                        </p>
+                        <ul className="text-sm text-ink-soft space-y-1.5 list-disc list-inside">
+                          <li>
+                            Tài khoản Portal cư dân sẽ bị <strong>xóa vĩnh viễn</strong>.
+                          </li>
+                          <li>Liên kết căn hộ hiện tại sẽ bị xóa bỏ.</li>
+                          <li>
+                            Lịch sử phản ánh (Feedback) sẽ được giữ lại dưới danh nghĩa{' '}
+                            <strong className="text-ink">"Cư dân đã xóa"</strong>.
+                          </li>
+                          <li>
+                            Lịch sử đặt chỗ tiện ích sẽ được <strong>ẩn danh tính</strong> người đặt.
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </div>
 
             {/* Footer */}
             <div className="bg-surface-alt p-4 border-t border-brand-border flex justify-end gap-3">
               <button
                 type="button"
-                onClick={() => setSelectedResidentForDelete(null)}
+                onClick={() => setConfirmDeleteId(null)}
                 disabled={deleting}
                 className="px-4 py-2 bg-surface text-ink-soft border border-brand-border rounded-lg hover:bg-surface-alt hover:text-ink transition-colors duration-200 font-medium text-sm disabled:opacity-50 cursor-pointer focus-visible:ring-2 focus-visible:ring-accent/40"
               >
                 Hủy bỏ
               </button>
-              {selectedResidentForDelete.relationshipStatus !== 'OWNER' && (
-                <button
-                  type="button"
-                  disabled={deleting}
-                  onClick={async () => {
-                    if (!onDeleteResident) return;
-                    setDeleting(true);
-                    try {
-                      await onDeleteResident(selectedResidentForDelete.id);
-                      setSelectedResidentForDelete(null);
-                    } catch (error: any) {
-                      toast.error(error.message || 'Lỗi khi xóa cư dân');
-                    } finally {
-                      setDeleting(false);
-                    }
-                  }}
-                  className="px-4 py-2 bg-brand-danger hover:bg-brand-danger/90 text-white rounded-lg transition-colors duration-200 font-medium text-sm flex items-center gap-1.5 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer focus-visible:ring-2 focus-visible:ring-accent/40"
-                >
-                  {deleting ? 'Đang xóa...' : 'Xác nhận xóa'}
-                </button>
-              )}
+              {(() => {
+                const resident = residents.find((r) => r.id === confirmDeleteId);
+                if (!resident || resident.relationshipStatus === 'OWNER') return null;
+                return (
+                  <button
+                    type="button"
+                    disabled={deleting}
+                    onClick={async () => {
+                      if (!onDeleteResident || !confirmDeleteId) return;
+                      setDeleting(true);
+                      try {
+                        await onDeleteResident(confirmDeleteId);
+                        setConfirmDeleteId(null);
+                      } catch (error: any) {
+                        toast.error(error.message || 'Lỗi khi xóa cư dân');
+                      } finally {
+                        setDeleting(false);
+                      }
+                    }}
+                    className="px-4 py-2 bg-brand-danger hover:bg-brand-danger/90 text-white rounded-lg transition-colors duration-200 font-medium text-sm flex items-center gap-1.5 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer focus-visible:ring-2 focus-visible:ring-accent/40"
+                  >
+                    {deleting ? 'Đang xóa...' : 'Xác nhận xóa'}
+                  </button>
+                );
+              })()}
             </div>
           </div>
         </div>
@@ -652,7 +776,7 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
         onClose={() => setIsImportModalOpen(false)}
         onSuccess={() => {
           setIsImportModalOpen(false);
-          window.location.reload();
+          toast.success('Import cư dân thành công');
         }}
       />
     </div>
