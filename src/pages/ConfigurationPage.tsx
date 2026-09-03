@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import type { PricingConfig, User, PricingHistory, FeeConfig } from '../types';
 import { api } from '../services/api';
-import { useConfirm } from '../components/ui';
+import { EmptyState, useConfirm } from '../components/ui';
 import {
   ArrowLeftIcon,
   CheckCircleIcon,
@@ -16,6 +16,7 @@ import {
   CalculatorIcon,
   CpuChipIcon,
   DocumentChartBarIcon,
+  ClockIcon,
 } from '../components/icons';
 import EmailConfigTab from './config/EmailConfigTab';
 import TemplateConfigTab from './config/TemplateConfigTab';
@@ -668,9 +669,13 @@ const ConfigurationPage: React.FC<ConfigurationPageProps> = ({ onBack, currentUs
             <div className="bg-surface rounded-xl shadow-sm border border-brand-border p-4">
               <h2 className="text-sm font-bold text-ink mb-3">Lịch sử Thay đổi</h2>
               {history.length === 0 ? (
-                <div className="text-center py-8 bg-surface-alt rounded-xl">
-                  <p className="text-xs text-ink-soft">Chưa có lịch sử thay đổi nào.</p>
-                </div>
+                <EmptyState
+                  icon={ClockIcon}
+                  tone="neutral"
+                  title="Chưa có lịch sử thay đổi"
+                  description="Các lần thay đổi cấu hình sẽ được ghi nhận tại đây"
+                  size="sm"
+                />
               ) : (
                 <div className="relative">
                   <div className="absolute left-[7px] top-2 bottom-2 w-0.5 bg-brand-border"></div>
