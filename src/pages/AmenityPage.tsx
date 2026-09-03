@@ -351,10 +351,21 @@ const AmenityPage: React.FC<AmenityPageProps> = ({
   const pendingBookings = amenityUsages.filter((u) => u.status === 'PENDING');
   const pendingCount = pendingBookings.length;
 
-  const handleExportExcel = async () => {
+  const handleExportExcel = async (retryCount = 0) => {
     setIsExporting(true);
     try {
-      const blob = await api.download(`/amenity-usage/export?month=${selectedDate}`, {}, 'GET');
+      const controller = new AbortController();
+      const timeoutMs = 30000;
+      const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+      const blob = await api.download(
+        `/amenity-usage/export?month=${selectedDate}`,
+        {},
+        'GET',
+        { signal: controller.signal }
+      );
+      clearTimeout(timeoutId);
+
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -363,9 +374,18 @@ const AmenityPage: React.FC<AmenityPageProps> = ({
       link.click();
       link.parentNode?.removeChild(link);
       window.URL.revokeObjectURL(url);
+
+      toast.success('Xuất Excel thành công');
     } catch (error: any) {
       console.error('Export error:', error);
-      toast.error('Xuất báo cáo thất bại: ' + (error.message || 'Lỗi server'));
+      const isTimeout = error?.name === 'AbortError';
+      const message = isTimeout ? 'Yêu cầu xuất quá lâu, vui lòng thử lại' : 'Xuất báo cáo thất bại: ' + (error.message || 'Lỗi server');
+      if (retryCount < 1) {
+        toast.warning(`${message}. Đang thử lại...`);
+        setTimeout(() => handleExportExcel(retryCount + 1), 1000);
+      } else {
+        toast.error(message);
+      }
     } finally {
       setIsExporting(false);
     }
@@ -489,7 +509,7 @@ const AmenityPage: React.FC<AmenityPageProps> = ({
           </button>
 
           <button
-            onClick={handleExportExcel}
+            onClick={() => handleExportExcel(0)}
             disabled={isExporting}
             className="flex items-center gap-2 px-4 py-2 text-sm font-semibold bg-surface border border-brand-border text-ink rounded-xl hover:bg-surface-alt hover:border-accent/40 hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-wait cursor-pointer" aria-label="Đóng">
             <DocumentArrowDownIcon className="w-5 h-5" />
@@ -711,7 +731,9 @@ const AmenityPage: React.FC<AmenityPageProps> = ({
       {isPendingModalOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in"
-          onClick={() => setIsPendingModalOpen(false)}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsPendingModalOpen(false);
+          }}
         >
           <div
             className="bg-surface border border-brand-border rounded-2xl shadow-elevation-raised w-full max-w-2xl max-h-[85vh] flex flex-col animate-slide-up"
