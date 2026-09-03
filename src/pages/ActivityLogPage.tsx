@@ -11,6 +11,7 @@ import {
   ShieldCheckIcon,
 } from '../components/icons';
 import { formatDate } from '../utils/formatters';
+import { EmptyState } from '../components/ui';
 
 interface ActivityLogPageProps {
   logs?: ActivityLog[];
@@ -496,15 +497,13 @@ const ActivityLogPage: React.FC<ActivityLogPageProps> = ({ onBack, initialUserId
       {/* Log List View */}
       <div className="flex-1 overflow-y-auto divide-y divide-brand-border">
         {logs.length === 0 && !loading ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center px-4">
-            <div className="w-12 h-12 rounded-full bg-surface-alt border border-brand-border flex items-center justify-center text-ink-soft mb-3">
-              <ClockIcon className="w-6 h-6" />
-            </div>
-            <p className="text-sm font-semibold text-ink">Không có dữ liệu log</p>
-            <p className="text-sm text-ink-soft mt-1">
-              Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm để xem các thao tác khác
-            </p>
-          </div>
+          <EmptyState
+            icon={ClockIcon}
+            tone="neutral"
+            title="Không có dữ liệu log"
+            description="Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm để xem các thao tác khác"
+            size="md"
+          />
         ) : (
           logs.map((log) => {
             const isExpanded = expandedLogId === log.id;
