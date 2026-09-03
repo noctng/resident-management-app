@@ -20,6 +20,7 @@ interface DashboardPageProps {
   amenityUsages?: AmenityUsage[];
   occupancies: Occupancy[];
   feedback: Feedback[];
+  revenueData?: { m: string; v: number }[];
   onNavigate?: (view: string) => void;
 }
 
@@ -32,6 +33,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   amenityUsages,
   occupancies,
   feedback,
+  revenueData,
   onNavigate,
 }) => {
   const totalApartments = apartments.length;
@@ -67,7 +69,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   }, [apartments, occupancies]);
   const maxBlock = Math.max(...blockEntries.map(([, v]) => v), 1);
 
-  // ⚠️ Dữ liệu mẫu — chưa có API doanh thu thực
+  // Revenue chart data: prefer real `revenueData`, fallback to demo when absent
+  const hasRevenue = Array.isArray(revenueData) && revenueData.length > 0;
   const revenueDemo = [
     { m: 'T4', v: 186 },
     { m: 'T5', v: 201 },
@@ -76,6 +79,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     { m: 'T8', v: 229 },
     { m: 'T9', v: 238 },
   ];
+  const revenueChartData = hasRevenue ? revenueData : revenueDemo;
+  const isRevenueDemo = !hasRevenue;
+
+  const [showFeedbackPanel, setShowFeedbackPanel] = React.useState(true);
 
   const quickActions = [
     { label: 'Cư dân', sub: 'Hồ sơ & hộ khẩu', Icon: UserPlusIcon, target: 'residents' },
@@ -182,70 +189,93 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         />
       </div>
 
-      {/* ── Row 2: Doanh thu (demo) + Phản ánh mới nhất ── */}
+      {/* ── Row 2: Doanh thu + Phản ánh mới nhất ── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 bg-surface border border-brand-border rounded-xl shadow-sm p-5">
           <div className="flex items-center justify-between border-b border-brand-border pb-3.5 mb-4">
             <h2 className="text-base font-bold text-ink">Doanh thu 6 tháng gần nhất</h2>
-            <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-brand-warning-soft text-brand-warning">
-              Dữ liệu mẫu
-            </span>
+            {isRevenueDemo ? (
+              <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-brand-warning-soft text-brand-warning border border-brand-warning/25">
+                Đang hiển thị dữ liệu mẫu — chưa có API doanh thu
+              </span>
+            ) : (
+              <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-brand-teal-soft text-brand-teal border border-brand-teal/25">
+                Dữ liệu thực tế
+              </span>
+            )}
           </div>
-          <div className="h-[240px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={revenueDemo} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}>
-                <XAxis
-                  dataKey="m"
-                  tick={{ fill: '#5A6960', fontSize: 11 }}
-                  axisLine={{ stroke: '#DFE2D9' }}
-                  tickLine={false}
-                />
-                <YAxis tick={{ fill: '#8B978E', fontSize: 11 }} axisLine={false} tickLine={false} unit=" tr" />
-                <Tooltip
-                  cursor={{ fill: '#EAEDE6', opacity: 0.5 }}
-                  contentStyle={{
-                    background: '#FFFFFF',
-                    border: '1px solid #DFE2D9',
-                    borderRadius: 12,
-                    fontSize: 12,
-                  }}
-                  formatter={(value) => [`${value} triệu ₫`, 'Doanh thu']}
-                />
-                <Bar dataKey="v" radius={[6, 6, 0, 0]}>
-                  {revenueDemo.map((entry, i) => (
-                    <Cell
-                      key={entry.m}
-                      fill={i === revenueDemo.length - 1 ? '#B8722E' : '#E1B48E'}
-                    />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+          {revenueChartData.length === 0 ? (
+            <div className="h-[240px] flex items-center justify-center text-sm text-ink-soft">
+              Chưa có dữ liệu doanh thu để hiển thị
+            </div>
+          ) : (
+            <div className="h-[240px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={revenueChartData} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}>
+                  <XAxis
+                    dataKey="m"
+                    tick={{ fill: '#5A6960', fontSize: 11 }}
+                    axisLine={{ stroke: '#DFE2D9' }}
+                    tickLine={false}
+                  />
+                  <YAxis tick={{ fill: '#8B978E', fontSize: 11 }} axisLine={false} tickLine={false} unit=" tr" />
+                  <Tooltip
+                    cursor={{ fill: '#EAEDE6', opacity: 0.5 }}
+                    contentStyle={{
+                      background: '#FFFFFF',
+                      border: '1px solid #DFE2D9',
+                      borderRadius: 12,
+                      fontSize: 12,
+                    }}
+                    formatter={(value) => [`${value} triệu ₫`, 'Doanh thu']}
+                  />
+                  <Bar dataKey="v" radius={[6, 6, 0, 0]}>
+                    {revenueChartData.map((entry: { m: string; v: number }, i: number) => (
+                      <Cell
+                        key={entry.m}
+                        fill={i === revenueChartData.length - 1 ? '#B8722E' : '#E1B48E'}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          )}
         </div>
 
         <div className="bg-surface border border-brand-border rounded-xl shadow-sm p-5 flex flex-col">
-          <h2 className="text-base font-bold text-ink border-b border-brand-border pb-3.5 mb-4">
-            Phản ánh mới nhất
-          </h2>
-          {latestFeedback.length === 0 ? (
-            <p className="text-sm text-ink-soft py-10 text-center">Không có phản ánh đang mở</p>
-          ) : (
-            <ul className="space-y-3 flex-1">
-              {latestFeedback.map((fb) => (
-                <li key={fb.id} className="flex items-start gap-2.5">
-                  <span className="mt-1.5 w-2 h-2 rounded-full bg-brand-warning shrink-0" aria-hidden="true" />
-                  <div className="min-w-0">
-                    <p className="text-sm text-ink line-clamp-2">{fb.content}</p>
-                    <p className="text-[11px] text-ink-faint mt-0.5">
-                      {fb.apartmentCode ? `${fb.apartmentCode} · ` : ''}
-                      {new Date(fb.submittedAt).toLocaleDateString('vi-VN')}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
+          <div className="flex items-center justify-between border-b border-brand-border pb-3.5 mb-4">
+            <h2 className="text-base font-bold text-ink">Phản ánh mới nhất</h2>
+            <button
+              type="button"
+              onClick={() => setShowFeedbackPanel((prev) => !prev)}
+              className="text-[11px] font-semibold text-ink-soft hover:text-accent transition-colors"
+              aria-expanded={showFeedbackPanel}
+              aria-controls="dashboard-feedback-panel"
+            >
+              {showFeedbackPanel ? 'Ẩn' : 'Hiện'}
+            </button>
+          </div>
+          {showFeedbackPanel ? (
+            latestFeedback.length === 0 ? (
+              <p className="text-sm text-ink-soft py-10 text-center">Không có phản ánh đang mở</p>
+            ) : (
+              <ul className="space-y-3 flex-1">
+                {latestFeedback.map((fb) => (
+                  <li key={fb.id} className="flex items-start gap-2.5">
+                    <span className="mt-1.5 w-2 h-2 rounded-full bg-brand-warning shrink-0" aria-hidden="true" />
+                    <div className="min-w-0">
+                      <p className="text-sm text-ink line-clamp-2">{fb.content}</p>
+                      <p className="text-[11px] text-ink-faint mt-0.5">
+                        {fb.apartmentCode ? `${fb.apartmentCode} · ` : ''}
+                        {new Date(fb.submittedAt).toLocaleDateString('vi-VN')}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )
+          ) : null}
           <button
             onClick={() => onNavigate?.('feedback')}
             className="mt-4 pt-3 border-t border-brand-border inline-flex items-center gap-1 text-xs font-semibold text-accent hover:text-accent-hover transition-colors cursor-pointer self-start"
