@@ -14,8 +14,10 @@ import {
   SparklesIcon,
   Squares2x2Icon,
   MagnifyingGlassIcon,
+  ExclamationTriangleIcon,
 } from '../components/icons';
 import { StatCard } from '../components/ui/Card';
+import { EmptyState } from '../components/ui';
 import { api } from '../services/api';
 import { useToast } from '../components/ui';
 import ApartmentResidentsModal from '../components/ApartmentResidentsModal';
@@ -59,6 +61,12 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
   const [isPhaseModalOpen, setIsPhaseModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
   const toast = useToast();
+
+  // Mobile default: cards, desktop: respect toggle
+  const effectiveViewMode = useMemo(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) return 'cards';
+    return viewMode;
+  }, [viewMode]);
 
   // Get unique blocks
   const blocks = Array.from(
@@ -137,10 +145,16 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
     });
   }, [apartments, filterPhase, filterBlock, filterStatus, searchQuery, occupancies]);
 
-  const handleExportExcel = async () => {
+  const handleExportExcel = async (retryCount = 0) => {
     setExporting(true);
     try {
-      const blob = await api.download('/reports/apartments', {}, 'GET');
+      const controller = new AbortController();
+      const timeoutMs = 30000;
+      const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+      const blob = await api.download('/reports/apartments', {}, 'GET', { signal: controller.signal });
+      clearTimeout(timeoutId);
+
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -149,9 +163,18 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
       link.click();
       link.parentNode?.removeChild(link);
       window.URL.revokeObjectURL(url);
+
+      toast.success('Xuất Excel thành công');
     } catch (error: any) {
       console.error('Export error:', error);
-      toast.error('Xuất báo cáo thất bại: ' + (error.message || 'Lỗi server'));
+      const isTimeout = error?.name === 'AbortError';
+      const message = isTimeout ? 'Yêu cầu xuất quá lâu, vui lòng thử lại' : 'Xuất báo cáo thất bại: ' + (error.message || 'Lỗi server');
+      if (retryCount < 1) {
+        toast.warning(`${message}. Đang thử lại...`);
+        setTimeout(() => handleExportExcel(retryCount + 1), 1000);
+      } else {
+        toast.error(message);
+      }
     } finally {
       setExporting(false);
     }
@@ -207,7 +230,7 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
           </button>
 
           <button
-            onClick={handleExportExcel}
+            onClick={() => handleExportExcel(0)}
             disabled={exporting}
             className="bg-surface-alt text-ink-soft hover:text-ink hover:bg-brand-border px-3.5 py-2 rounded-xl transition-colors font-bold text-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50" aria-label="Đóng">
             <DocumentArrowDownIcon className="w-4 h-4" />
@@ -379,7 +402,7 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
       </div>
 
       {/* ── Table Container ── */}
-      <div className={`bg-surface rounded-2xl shadow-sm border border-brand-border overflow-hidden ${viewMode === 'cards' ? 'hidden' : ''}`}>
+      <div className={`bg-surface rounded-2xl shadow-sm border border-brand-border overflow-hidden ${effectiveViewMode === 'cards' ? 'hidden' : ''}`}>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
@@ -738,9 +761,18 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
       )}
 
       {/* ── Card Inventory View (MONOLITH Units style) ── */}
-      {viewMode === 'cards' && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-4">
-          {filteredApartments.map((apt) => {
+      {effectiveViewMode === 'cards' && (
+        filteredApartments.length === 0 ? (
+          <EmptyState
+            icon={BuildingOfficeIcon}
+            tone="neutral"
+            title="Không tìm thấy căn hộ phù hợp"
+            description="Thử thay đổi bộ lọc phân khu, dãy hoặc từ khóa tìm kiếm."
+            size="md"
+          />
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-4">
+            {filteredApartments.map((apt) => {
             const residentCount = getResidentCount(apt.id);
             const residentsInApt = getResidentsInApartment(apt.id);
             const isOccupied = residentCount > 0;
@@ -841,6 +873,7 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
             );
           })}
         </div>
+        )
       )}
 
       {/* Resident Modal */}
@@ -872,13 +905,16 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
         onClose={() => setIsImportModalOpen(false)}
         onSuccess={() => {
           setIsImportModalOpen(false);
-          window.location.reload();
+          toast.success('Import căn hộ thành công');
         }}
       />
       <PhaseManagementModal
         isOpen={isPhaseModalOpen}
         onClose={() => setIsPhaseModalOpen(false)}
-        onPhaseUpdated={() => window.location.reload()}
+        onPhaseUpdated={() => {
+          setIsPhaseModalOpen(false);
+          toast.success('Cập nhật phân khu thành công');
+        }}
       />
     </div>
   );

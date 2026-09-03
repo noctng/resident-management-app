@@ -110,11 +110,12 @@ class ApiService {
   }
 
   // Generic download method
-  async download(endpoint: string, data?: any, method: 'POST' | 'GET' = 'POST'): Promise<Blob> {
+  async download(endpoint: string, data?: any, method: 'POST' | 'GET' = 'POST', requestInit?: RequestInit): Promise<Blob> {
     let url = `${API_BASE_URL}${endpoint}`;
     const options: RequestInit = {
       method,
       credentials: 'include',
+      ...requestInit,
     };
 
     if (data) {
