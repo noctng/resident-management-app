@@ -8,7 +8,6 @@ import {
   MagnifyingGlassIcon,
 } from '../components/icons';
 import { EmptyState } from '../components/ui';
-// import Modal from '../components/Modal'; // Removed as custom modal is used
 import ImageViewerModal from '../components/ImageViewerModal';
 import {
   getFeedbackStatusBadgeClass,
@@ -32,6 +31,13 @@ const ResolveFeedbackModal: React.FC<{
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [viewingImage, setViewingImage] = useState<string | null>(null);
+
+  const isDirty = responseContent.trim().length > 0 || responseImageFiles.length > 0;
+
+  const handleBackdropClick = () => {
+    if (isSubmitting || isDirty) return;
+    onClose();
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,7 +70,7 @@ const ResolveFeedbackModal: React.FC<{
     <>
       <div
         className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex justify-center items-center p-4 animate-fade-in"
-        onClick={onClose}
+        onClick={handleBackdropClick}
       >
         <div
           className="bg-surface rounded-2xl border border-brand-border shadow-elevation-raised w-full max-w-lg max-h-[92vh] overflow-y-auto custom-scrollbar animate-slide-up"
@@ -98,10 +104,10 @@ const ResolveFeedbackModal: React.FC<{
                   {feedback.residentName?.charAt(0) || 'U'}
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-ink ">
+                  <p className="text-sm font-bold text-ink">
                     {feedback.residentName || 'Cư dân ẩn danh'}
                   </p>
-                  <p className="text-sm text-ink-soft ">
+                  <p className="text-sm text-ink-soft">
                     Căn hộ <span className="font-mono">{feedback.apartmentCode}</span> •{' '}
                     {new Date(feedback.submittedAt).toLocaleString('vi-VN')}
                   </p>
@@ -128,7 +134,8 @@ const ResolveFeedbackModal: React.FC<{
                           src={`/picture_feedback/${filename}`}
                           alt={`Resident attachment ${index + 1}`}
                           className="w-full h-full object-cover"
-                        />                      </button>
+                        />
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -145,7 +152,7 @@ const ResolveFeedbackModal: React.FC<{
                     <p className="text-sm font-bold text-brand-success">
                       Ban Quản Lý
                     </p>
-                    <p className="text-sm text-ink-soft ">
+                    <p className="text-sm text-ink-soft">
                       Xử lý bởi {feedback.resolvedByUsername} •{' '}
                       {new Date(feedback.resolvedAt!).toLocaleString('vi-VN')}
                     </p>
@@ -230,10 +237,10 @@ const ResolveFeedbackModal: React.FC<{
                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                           ></path>
                         </svg>
-                        <p className="text-sm text-ink-soft ">
+                        <p className="text-sm text-ink-soft">
                           <span className="font-semibold">Nhấn để tải lên</span> hoặc kéo thả
                         </p>
-                        <p className="text-sm text-ink-faint ">
+                        <p className="text-sm text-ink-faint">
                           PNG, JPG (Tối đa 5 ảnh)
                         </p>
                       </div>
@@ -262,7 +269,7 @@ const ResolveFeedbackModal: React.FC<{
                             onClick={() =>
                               setResponseImageFiles((files) => files.filter((_, i) => i !== idx))
                             }
-                            className="hover:text-accent-hover "
+                            className="hover:text-accent-hover"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -308,48 +315,9 @@ const ResolveFeedbackModal: React.FC<{
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-5 py-2.5 bg-accent hover:bg-accent-hover text-white font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent/40 disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 transition-colors cursor-pointer" aria-label="Đóng">
-                    {isSubmitting ? (
-                      <>
-                        <svg
-                          className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          ></path>
-                        </svg>
-                        Đang xử lý...
-                      </>
-                    ) : (
-                      <>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          className="w-5 h-5"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        Xác nhận Đã xử lý
-                      </>
-                    )}
+                    className="px-5 py-2.5 bg-accent hover:bg-accent-hover text-white font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent/40 disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 transition-colors cursor-pointer"
+                  >
+                    {isSubmitting ? 'Đang xử lý...' : 'Xác nhận Đã xử lý'}
                   </button>
                 </div>
               </form>
@@ -368,8 +336,6 @@ const ResolveFeedbackModal: React.FC<{
 
 import FeedbackStats from '../components/FeedbackStats';
 
-// ... (existing helper function)
-
 const FeedbackManagementPage: React.FC<FeedbackManagementPageProps> = ({
   feedbackList,
   onResolveFeedback,
@@ -378,6 +344,14 @@ const FeedbackManagementPage: React.FC<FeedbackManagementPageProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'SUBMITTED' | 'RESOLVED'>('ALL');
   const [selectedFeedback, setSelectedFeedback] = useState<Feedback | null>(null);
+  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const effectiveViewMode = useMemo(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) return 'cards';
+    return viewMode;
+  }, [viewMode]);
 
   const filteredFeedback = useMemo(() => {
     return feedbackList
@@ -443,78 +417,94 @@ const FeedbackManagementPage: React.FC<FeedbackManagementPageProps> = ({
               Xóa bộ lọc
             </button>
           )}
+          <div className="flex items-center gap-1 rounded-full bg-surface-alt p-1 border border-brand-border">
+            <button
+              onClick={() => setViewMode('table')}
+              aria-pressed={viewMode === 'table'}
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                viewMode === 'table' ? 'bg-accent text-white' : 'text-ink-soft hover:text-ink'
+              }`}
+              title="Xem bảng"
+            >
+              Bảng
+            </button>
+            <button
+              onClick={() => setViewMode('cards')}
+              aria-pressed={viewMode === 'cards'}
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                viewMode === 'cards' ? 'bg-accent text-white' : 'text-ink-soft hover:text-ink'
+              }`}
+              title="Xem thẻ"
+            >
+              Thẻ
+            </button>
+          </div>
         </div>
 
-        <div className="overflow-x-auto rounded-lg border border-brand-border">
-          <table className="w-full text-sm text-left">
-            <thead className="text-sm text-ink-soft uppercase bg-surface-alt border-b border-brand-border">
-              <tr>
-                <th className="px-6 py-3 tracking-wider font-semibold">Mã P.A</th>
-                <th className="px-6 py-3 tracking-wider font-semibold">Căn hộ</th>
-                <th className="px-6 py-3 tracking-wider font-semibold">Cư dân</th>
-                <th className="px-6 py-3 tracking-wider font-semibold">Ngày gửi</th>
-                <th className="px-6 py-3 tracking-wider font-semibold">Trạng thái</th>
-                <th className="px-6 py-3 tracking-wider text-center font-semibold">Hành động</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-brand-border bg-surface">
-              {filteredFeedback.length > 0 ? (
-                filteredFeedback.map((fb) => (
-                  <tr
-                    key={fb.id}
-                    className="hover:bg-surface-alt/50 transition-colors"
-                  >
-                    <td className="px-6 py-4 font-mono text-sm text-ink-soft">
-                      #{fb.id.split('_')[1]}
-                    </td>
-                    <td className="px-6 py-4 font-semibold text-ink">
-                      {fb.apartmentCode}
-                    </td>
-                    <td className="px-6 py-4 text-ink-soft">
-                      {fb.residentName}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-ink-faint">
-                      {new Date(fb.submittedAt).toLocaleString('vi-VN')}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-semibold rounded-full ${getFeedbackStatusBadgeClass(
-                          fb.status,
-                        )}`}
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-current" />
-                        {translateFeedbackStatus(fb.status)}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      <button
-                        onClick={() => setSelectedFeedback(fb)}
-                        className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors border cursor-pointer ${
-                          fb.status === 'RESOLVED'
-                            ? 'bg-surface text-ink-soft border-brand-border hover:bg-surface-alt'
-                            : 'bg-accent text-white border-transparent hover:bg-accent-hover'
-                        }`}
-                      >
-                        {fb.status === 'RESOLVED' ? 'Xem lại' : 'Xem & Phản hồi'}
-                      </button>
+        {loading && (
+          <div className="py-10 text-center text-ink-soft text-sm">Đang tải phản ánh...</div>
+        )}
+        {error && (
+          <div className="py-3 px-4 mb-4 text-sm text-brand-danger bg-brand-danger-soft border border-brand-danger/25 rounded-lg">{error}</div>
+        )}
+
+        {!loading && !error && (
+          <div className="overflow-x-auto rounded-lg border border-brand-border">
+            <table className="w-full text-sm text-left">
+              <thead className="text-sm text-ink-soft uppercase bg-surface-alt border-b border-brand-border">
+                <tr>
+                  <th className="px-6 py-3 tracking-wider font-semibold">Mã P.A</th>
+                  <th className="px-6 py-3 tracking-wider font-semibold">Căn hộ</th>
+                  <th className="px-6 py-3 tracking-wider font-semibold">Cư dân</th>
+                  <th className="px-6 py-3 tracking-wider font-semibold">Ngày gửi</th>
+                  <th className="px-6 py-3 tracking-wider font-semibold">Trạng thái</th>
+                  <th className="px-6 py-3 tracking-wider text-center font-semibold">Hành động</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-brand-border bg-surface">
+                {filteredFeedback.length > 0 ? (
+                  filteredFeedback.map((fb) => (
+                    <tr key={fb.id} className="hover:bg-surface-alt/50 transition-colors">
+                      <td className="px-6 py-4 font-mono text-sm text-ink-soft">#{fb.id.split('_')[1]}</td>
+                      <td className="px-6 py-4 font-semibold text-ink">{fb.apartmentCode}</td>
+                      <td className="px-6 py-4 text-ink-soft">{fb.residentName}</td>
+                      <td className="px-6 py-4 text-sm text-ink-faint">{new Date(fb.submittedAt).toLocaleString('vi-VN')}</td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-semibold rounded-full ${getFeedbackStatusBadgeClass(fb.status)}`}>
+                          <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                          {translateFeedbackStatus(fb.status)}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <button
+                          onClick={() => setSelectedFeedback(fb)}
+                          className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors border cursor-pointer ${
+                            fb.status === 'RESOLVED'
+                              ? 'bg-surface text-ink-soft border-brand-border hover:bg-surface-alt'
+                              : 'bg-accent text-white border-transparent hover:bg-accent-hover'
+                          }`}
+                        >
+                          {fb.status === 'RESOLVED' ? 'Xem lại' : 'Xem & Phản hồi'}
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="text-center py-12 text-ink-soft">
+                      <EmptyState
+                        icon={ExclamationTriangleIcon}
+                        tone="teal"
+                        title="Không tìm thấy phản ánh nào"
+                        description="Thử thay đổi từ khóa tìm kiếm hoặc bộ lọc trạng thái"
+                      />
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={6} className="text-center py-12 text-ink-soft">
-                    <EmptyState
-                      icon={ExclamationTriangleIcon}
-                      tone="teal"
-                      title="Không tìm thấy phản ánh nào"
-                      description="Thử thay đổi từ khóa tìm kiếm hoặc bộ lọc trạng thái"
-                    />
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {selectedFeedback && (
