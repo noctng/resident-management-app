@@ -330,7 +330,7 @@ export default function ManagementFeePage() {
               {loading ? (
                 <tr>
                   <td colSpan={10} className="px-4 py-8 text-center">
-                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
+                    <div className="inline-flex items-center justify-center rounded-full h-8 w-8 border-2 border-accent/70"></div>
                     <p className="mt-2 text-ink-soft">Đang tải...</p>
                   </td>
                 </tr>

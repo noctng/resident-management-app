@@ -219,7 +219,7 @@ export const SalesMatrixPage: React.FC<SalesMatrixPageProps> = ({ onNavigate, on
             label={item.label}
             value={item.count}
             valueTone={item.tone}
-            className="border-l-4"
+            className="border-l-2"
             subValue={<span className={`inline-block w-2.5 h-2.5 rounded-full ${item.dot}`} />}
           />
         ))}

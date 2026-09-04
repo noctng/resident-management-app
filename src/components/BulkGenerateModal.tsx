@@ -132,7 +132,7 @@ export default function BulkGenerateModal({ month, year, onClose, onSuccess }: P
           {/* Loading State */}
           {loading && (
             <div className="text-center py-8">
-              <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-accent"></div>
+              <div className="inline-flex items-center justify-center rounded-full h-16 w-16 border-2 border-accent/70"></div>
               <p className="mt-4 text-lg font-semibold text-ink">Đang tạo hóa đơn...</p>
               <p className="text-sm text-ink-soft">
                 Vui lòng đợi, quá trình này có thể mất vài phút

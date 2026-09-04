@@ -136,7 +136,7 @@ const CustomerListPage: React.FC<CustomerListPageProps> = ({ onNavigate, onBack,
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center">
                     <div className="flex justify-center items-center">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-accent"></div>
+                      <div className="rounded-full h-6 w-6 border-2 border-accent/70"></div>
                       <span className="ml-2 text-ink-soft">Đang tải...</span>
                     </div>
                   </td>

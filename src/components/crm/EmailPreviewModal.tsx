@@ -71,7 +71,7 @@ const EmailPreviewModal: React.FC<Props> = ({ paymentId, isOpen, onClose, onConf
         <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
           {loading ? (
             <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto"></div>
+              <div className="rounded-full h-12 w-12 border-2 border-accent/70 mx-auto"></div>
               <p className="text-ink-soft mt-4">Đang tải preview...</p>
             </div>
           ) : preview ? (
@@ -121,7 +121,7 @@ const EmailPreviewModal: React.FC<Props> = ({ paymentId, isOpen, onClose, onConf
             className="px-6 py-2 bg-accent hover:bg-accent-hover text-white rounded-lg transition-colors duration-200 cursor-pointer disabled:opacity-50 flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40" aria-label="Đóng">
             {sending ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <div className="inline-flex items-center justify-center rounded-full h-4 w-4 border-2 border-white/80"></div>
                 Đang gửi...
               </>
             ) : (

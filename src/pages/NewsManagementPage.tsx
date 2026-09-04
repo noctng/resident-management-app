@@ -284,7 +284,7 @@ function NewsManagementPage() {
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
       {/* Toast Notification */}
       {toast && (
-        <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-2xl shadow-elevation-raised text-white text-sm font-semibold transition-all animate-bounce ${toast.type === 'error' ? 'bg-brand-danger' : 'bg-brand-success'}`}>
+        <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-2xl shadow-elevation-raised text-white text-sm font-semibold transition-all ${toast.type === 'error' ? 'bg-brand-danger' : 'bg-brand-success'}`}>
           {toast.msg}
         </div>
       )}
@@ -545,7 +545,7 @@ function NewsManagementPage() {
           {/* Posts List */}
           {loading ? (
             <div className="text-center py-16 text-ink-soft">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-accent mb-3"></div>
+              <div className="rounded-full h-8 w-8 border-2 border-accent/70 mx-auto mb-3"></div>
               <p className="text-sm font-medium">Đang tải danh sách bài viết...</p>
             </div>
           ) : filteredPosts.length === 0 ? (
@@ -721,7 +721,7 @@ function NewsManagementPage() {
                   )}
 
                   <div
-                    className="text-sm sm:text-base text-ink leading-relaxed space-y-3 prose  max-w-none [&_img]:rounded-xl [&_figure]:my-4 [&_iframe]:rounded-2xl [&_iframe]:shadow-md [&_h2]:text-xl [&_h2]:font-bold [&_h3]:text-lg [&_h3]:font-bold [&_blockquote]:border-l-4 [&_blockquote]:border-accent [&_blockquote]:pl-4 [&_blockquote]:italic"
+                    className="text-sm sm:text-base text-ink leading-relaxed space-y-3 prose  max-w-none [&_img]:rounded-xl [&_figure]:my-4 [&_iframe]:rounded-2xl [&_iframe]:shadow-md [&_h2]:text-xl [&_h2]:font-bold [&_h3]:text-lg [&_h3]:font-bold [&_blockquote]:bg-accent-soft/40 [&_blockquote]:pl-4 [&_blockquote]:italic"
                     dangerouslySetInnerHTML={{ __html: previewModalPost.content || '<p>Chưa có nội dung...</p>' }}
                   />
                 </div>

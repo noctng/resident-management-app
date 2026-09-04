@@ -313,7 +313,7 @@ function ResidentPortalHost() {
 
           {!authChecked || isLoading ? (
             <div className="flex flex-col items-center gap-3 text-ink-soft">
-              <div className="animate-spin rounded-full h-9 w-9 border-b-2 border-accent"></div>
+              <div className="rounded-full h-9 w-9 border-2 border-accent/70"></div>
               <p className="text-sm">Đang tải dữ liệu...</p>
             </div>
           ) : authenticatedData && !selectedApartment ? (
@@ -432,7 +432,7 @@ function ResidentPortalHost() {
                   disabled={isLoading}
                   className="w-full flex items-center justify-center gap-2 py-2.5 rounded-[10px] bg-accent hover:bg-accent-hover text-white text-sm font-semibold transition-colors disabled:opacity-60 disabled:cursor-wait cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-offset-2" aria-label="Đóng">
                   {isLoading && (
-                    <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+                    <span className="inline-flex items-center justify-center rounded-full h-4 w-4 border-2 border-white/80"></span>
                   )}
                   {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
                 </button>

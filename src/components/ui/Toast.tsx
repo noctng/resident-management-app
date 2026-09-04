@@ -80,10 +80,10 @@ const icons: Record<ToastVariant, React.ReactNode> = {
 };
 
 const toastBg: Record<ToastVariant, string> = {
-  success: 'border-l-4 border-brand-success',
-  error: 'border-l-4 border-brand-danger',
-  warning: 'border-l-4 border-brand-warning',
-  info: 'border-l-4 border-brand-teal',
+  success: 'border-l-2 border-brand-success',
+  error: 'border-l-2 border-brand-danger',
+  warning: 'border-l-2 border-brand-warning',
+  info: 'border-l-2 border-brand-teal',
 };
 
 // ── Toast Item ────────────────────────────────────────────────────────────────

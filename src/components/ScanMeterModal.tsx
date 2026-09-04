@@ -409,7 +409,7 @@ const ScanMeterModal: React.FC<ScanMeterModalProps> = ({
       {/* Toast Notification */}
       {toastMessage && (
         <div
-          className={`fixed top-6 left-1/2 -translate-x-1/2 z-60 px-4 py-2.5 rounded-xl shadow-elevation-overlay font-bold text-xs flex items-center gap-2 animate-bounce-in ${
+          className={`fixed top-6 left-1/2 -translate-x-1/2 z-60 px-4 py-2.5 rounded-xl shadow-elevation-overlay font-bold text-xs flex items-center gap-2 ${
             toastMessage.type === 'success'
               ? 'bg-brand-success text-white'
               : toastMessage.type === 'info'

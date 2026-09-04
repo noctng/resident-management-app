@@ -195,7 +195,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             >
               {isLoading ? (
                 <>
-                  <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+                  <span className="inline-flex items-center justify-center rounded-full h-4 w-4 border-2 border-white/80"></span>
                   <span>Đang đăng nhập...</span>
                 </>
               ) : (

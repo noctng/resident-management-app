@@ -273,7 +273,7 @@ const PaymentQRModal: React.FC<PaymentQRModalProps> = ({
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in" ref={dialogRef} role="dialog" aria-modal="true">
         <div className="bg-surface rounded-2xl shadow-elevation-overlay border border-brand-border p-6 max-w-sm w-full text-center space-y-4 animate-scale-up">
-          <div className="w-20 h-20 bg-brand-success-soft text-brand-success rounded-full flex items-center justify-center mx-auto shadow-lg animate-bounce">
+          <div className="w-20 h-20 bg-brand-success-soft text-brand-success rounded-full flex items-center justify-center mx-auto shadow-lg">
             <CheckCircleIcon className="w-10 h-10" />
           </div>
           <div className="space-y-1.5">

@@ -234,7 +234,7 @@ function PortalNewsSection({ onMarkRead }: Props) {
               {/* Rich Content (HTML or Plain Text) */}
               {viewing.content.includes('<') && viewing.content.includes('>') ? (
                 <div
-                  className="text-sm sm:text-base text-ink leading-relaxed space-y-3 prose max-w-none [&_img]:rounded-xl [&_img]:my-4 [&_img]:shadow-xs [&_figure]:my-4 [&_iframe]:rounded-xl [&_iframe]:shadow-md [&_h2]:text-xl [&_h2]:font-bold [&_h3]:text-lg [&_h3]:font-bold [&_blockquote]:border-l-4 [&_blockquote]:border-primary-500 [&_blockquote]:pl-4 [&_blockquote]:italic [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5"
+                  className="text-sm sm:text-base text-ink leading-relaxed space-y-3 prose max-w-none [&_img]:rounded-xl [&_img]:my-4 [&_img]:shadow-xs [&_figure]:my-4 [&_iframe]:rounded-xl [&_iframe]:shadow-md [&_h2]:text-xl [&_h2]:font-bold [&_h3]:text-lg [&_h3]:font-bold [&_blockquote]:bg-accent-soft/40 [&_blockquote]:pl-4 [&_blockquote]:italic [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5"
                   dangerouslySetInnerHTML={{ __html: viewing.content }}
                 />
               ) : (

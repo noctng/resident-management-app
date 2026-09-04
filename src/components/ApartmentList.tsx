@@ -57,7 +57,7 @@ const ApartmentList: React.FC<ApartmentListProps> = ({
               <li key={apt.id}>
                 <button
                   onClick={() => onSelectApartment(apt.id)}
-                  className={`w-full text-left p-3 flex items-center gap-4 transition-colors border-l-4 cursor-pointer ${
+                  className={`w-full text-left p-3 flex items-center gap-4 transition-colors border-l-2 cursor-pointer ${
                     selectedApartmentId === apt.id
                       ? 'bg-accent-soft border-accent'
                       : 'border-transparent hover:bg-surface-alt'

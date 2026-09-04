@@ -106,8 +106,7 @@ const ContractListPage: React.FC<ContractListPageProps> = ({ onNavigate, onBack,
     return (
       <div className="flex justify-center items-center h-64">
       <CrmSubNav current="contracts" title="Danh Sách Hợp Đồng Mua Bán" subtitle="Theo dõi toàn bộ HĐMB 18 điều khoản, tiến độ 10 đợt & chuyển nhượng" onNavigate={onNavigate} onBack={onBack} />
-
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
+      <div className="rounded-full h-8 w-8 border-2 border-accent/70"></div>
       </div>
     );
 

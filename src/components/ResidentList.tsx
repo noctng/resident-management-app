@@ -67,7 +67,7 @@ const ResidentList: React.FC<ResidentListProps> = ({
               <li key={res.id}>
                 <button
                   onClick={() => onSelectResident(res.id)}
-                  className={`w-full text-left p-3 flex items-center gap-4 transition-colors border-l-4 cursor-pointer ${
+                  className={`w-full text-left p-3 flex items-center gap-4 transition-colors border-l-2 cursor-pointer ${
                     selectedResidentId === res.id
                       ? 'bg-accent-soft border-accent'
                       : 'border-transparent hover:bg-surface-alt'

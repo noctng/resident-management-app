@@ -133,8 +133,8 @@ export const UnifiedHistoryView: React.FC<UnifiedHistoryViewProps> = ({
         </div>
 
         {historyLoading ? (
-          <div className="flex items-center justify-center p-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
+          <div className="flex justify-center items-center">
+            <div className="rounded-full h-8 w-8 border-2 border-accent/70"></div>
             <p className="ml-3 text-ink-soft font-medium text-sm">Đang tải lịch sử...</p>
           </div>
         ) : historyData.length === 0 ? (
