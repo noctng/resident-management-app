@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CrmSubNav } from '../../components/crm/CrmSubNav';
 import { api } from '../../services/api';
 import { useToast, useConfirm } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import {
   TagIcon,
   SparklesIcon,
@@ -263,7 +264,7 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
       {/* Header & Tab Switcher */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className="font-serif text-2xl font-bold text-ink flex items-center gap-2">
             <TagIcon className="w-7 h-7 text-accent" />
             <span>Bảng Giá Phiên Bản & Chiến Dịch Ưu Đãi</span>
           </h1>
@@ -353,13 +354,13 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
               <p className="text-sm font-medium">Đang tải danh sách bảng giá phiên bản...</p>
             </div>
           ) : pricebooks.length === 0 ? (
-            <div className="p-16 text-center text-ink-soft bg-surface rounded-xl border border-dashed border-brand-border space-y-3">
-              <BuildingOfficeIcon className="w-12 h-12 mx-auto text-ink-faint" />
-              <p className="font-bold text-ink text-base">Chưa có phiên bản bảng giá nào</p>
-              <p className="text-sm text-ink-soft max-w-md mx-auto">
-                Bấm "+ Tạo Phiên Bản Bảng Giá Mới" để thiết lập bảng giá theo đợt mở bán, hỗ trợ tính toán giá 2 thành phần và phê duyệt chính thức.
-              </p>
-            </div>
+            <EmptyState
+              icon={BuildingOfficeIcon}
+              tone="neutral"
+              title="Chưa có phiên bản bảng giá nào"
+              description="Bấm + Tạo Phiên Bản Bảng Giá Mới để thiết lập bảng giá theo đợt mở bán, hỗ trợ tính toán giá 2 thành phần và phê duyệt chính thức."
+              size="md"
+            />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {pricebooks.map((pb) => {
@@ -503,13 +504,13 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
               <p className="text-sm font-medium">Đang tải danh sách chương trình ưu đãi...</p>
             </div>
           ) : promotions.length === 0 ? (
-            <div className="p-16 text-center text-ink-soft bg-surface rounded-xl border border-dashed border-brand-border space-y-3">
-              <SparklesIcon className="w-12 h-12 mx-auto text-ink-faint" />
-              <p className="font-bold text-ink text-base">Chưa có chương trình ưu đãi nào</p>
-              <p className="text-sm text-ink-soft max-w-md mx-auto">
-                Tạo các chương trình chiết khấu trực tiếp, quà tặng nội thất hoặc ưu đãi thanh toán sớm theo quy định BLUEPRINT B.9.2.
-              </p>
-            </div>
+            <EmptyState
+              icon={SparklesIcon}
+              tone="neutral"
+              title="Chưa có chương trình ưu đãi nào"
+              description="Tạo các chương trình chiết khấu trực tiếp, quà tặng nội thất hoặc ưu đãi thanh toán sớm theo quy định BLUEPRINT B.9.2."
+              size="md"
+            />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {promotions.map((p) => {
@@ -876,7 +877,13 @@ export const PricingPolicyPage: React.FC<PricingPolicyPageProps> = ({ onNavigate
                   <p>Đang tải chi tiết đơn giá từng căn...</p>
                 </div>
               ) : (!selectedPbDetail?.pricebook_items || selectedPbDetail.pricebook_items.length === 0) ? (
-                <div className="p-12 text-center text-ink-soft">Bảng giá này chưa có dữ liệu căn hộ nào.</div>
+                <EmptyState
+                  icon={CalculatorIcon}
+                  tone="neutral"
+                  title="Bảng giá này chưa có dữ liệu căn hộ nào"
+                  description="Hệ thống sẽ hiển thị đơn giá từng căn sau khi có dữ liệu."
+                  size="md"
+                />
               ) : (
                 <div className="overflow-x-auto rounded-xl border border-brand-border">
                   <table className="w-full text-left divide-y divide-brand-border">

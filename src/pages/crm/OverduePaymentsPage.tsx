@@ -12,6 +12,7 @@ import {
 import MarkPaymentPaidModal from '../../components/MarkPaymentPaidModal';
 import EmailPreviewModal from '../../components/EmailPreviewModal';
 import { useToast } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import { StatCard } from '../../components/ui/Card';
 import { formatDate } from '../../utils/formatters';
 
@@ -183,7 +184,7 @@ const OverduePaymentsPage: React.FC<OverduePaymentsPageProps> = ({ onNavigate, o
           className="p-2 hover:bg-surface-alt rounded-full transition-colors cursor-pointer" aria-label="Đóng">
           <ArrowLeftIcon className="w-6 h-6 text-ink-soft" />
         </button>
-        <h1 className=" font-seriftext-2xl font-bold text-ink">Yêu cầu Thanh toán Nợ</h1>
+        <h1 className="font-serif text-2xl font-bold text-ink">Yêu cầu Thanh toán Nợ</h1>
       </div>
 
       {/* Summary Cards */}
@@ -273,7 +274,13 @@ const OverduePaymentsPage: React.FC<OverduePaymentsPageProps> = ({ onNavigate, o
               {filteredPayments.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="px-6 py-10 text-center text-ink-soft">
-                    Không có khoản thanh toán nào
+                    <EmptyState
+                      icon={ExclamationTriangleIcon}
+                      tone="neutral"
+                      title="Không có khoản thanh toán nào"
+                      description="Khoản thanh toán quá hạn sẽ hiển thị tại đây"
+                      size="md"
+                    />
                   </td>
                 </tr>
               ) : (
