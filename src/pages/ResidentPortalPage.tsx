@@ -1033,7 +1033,7 @@ function ResidentPortalPage({
                         <span className="text-sm font-semibold text-ink">
                           Tổng:{' '}
                           <span className="text-ink font-mono tabular-nums">
-                            {formatCurrency(record.electricity.cost + record.water.cost)}
+                            {formatCurrency((record.electricity?.cost ?? 0) + (record.water?.cost ?? 0))}
                           </span>
                         </span>
 
