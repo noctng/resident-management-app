@@ -28,7 +28,7 @@ import {
   WrenchScrewdriverIcon,
   TruckIcon,
 } from '../components/icons';
-import { useToast, useConfirm } from '../components/ui';
+import { useToast, useConfirm, EmptyState } from '../components/ui';
 import BookAmenityModal from '../components/BookAmenityModal';
 import ImageViewerModal from '../components/ImageViewerModal';
 import ChangePasswordModal from '../components/ChangePasswordModal';
@@ -835,9 +835,13 @@ function ResidentPortalPage({
               </div>
 
               {usagesForSelectedApartment.length === 0 ? (
-                <p className="text-sm text-ink-soft py-8 text-center">
-                  Bạn chưa có lượt đặt chỗ nào.
-                </p>
+                <EmptyState
+                  icon={TicketIcon}
+                  tone="neutral"
+                  title="Bạn chưa có lượt đặt chỗ nào"
+                  description="Đặt tiện ích để xem lịch sử đặt chỗ tại đây"
+                  size="md"
+                />
               ) : (
                 <ul className="space-y-3">
                   {usagesForSelectedApartment.map((usage) => (
@@ -910,9 +914,13 @@ function ResidentPortalPage({
               Chi tiết tiêu thụ Điện Nước
             </h2>
             {localUtilityRecords.length === 0 ? (
-              <p className="text-sm text-ink-soft py-8 text-center bg-surface rounded-xl border border-brand-border">
-                Chưa có dữ liệu điện nước cho căn hộ này.
-              </p>
+              <EmptyState
+                icon={BoltIcon}
+                tone="neutral"
+                title="Chưa có dữ liệu điện nước cho căn hộ này"
+                description="Dữ liệu điện nước sẽ hiển thị sau khi có chỉ số mới"
+                size="md"
+              />
             ) : (
               <div className="space-y-4">
                 {localUtilityRecords.map((record) => (
@@ -1111,9 +1119,13 @@ function ResidentPortalPage({
                 <p className="text-xs">Đang tải danh sách hóa đơn tổng hợp...</p>
               </div>
             ) : unifiedHistory.length === 0 ? (
-              <p className="text-sm text-ink-soft py-10 text-center bg-surface rounded-xl border border-brand-border">
-                Chưa có dữ liệu hóa đơn tổng hợp cho căn hộ này.
-              </p>
+              <EmptyState
+                icon={DocumentChartBarIcon}
+                tone="neutral"
+                title="Chưa có dữ liệu hóa đơn tổng hợp cho căn hộ này"
+                description="Hóa đơn tổng hợp sẽ xuất hiện khi có phí phát sinh trong kỳ"
+                size="md"
+              />
             ) : (
               <div className="space-y-4">
                 {unifiedHistory.map((item) => {
