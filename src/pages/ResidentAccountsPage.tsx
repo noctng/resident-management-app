@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import type { ResidentAccountInfo } from '../types';
 import { ArrowLeftIcon, ArrowPathIcon, UserPlusIcon, MagnifyingGlassIcon, KeyIcon, ShieldCheckIcon } from '../components/icons';
 import { useToast, useConfirm } from '../components/ui';
+import { EmptyState } from '../components/ui';
 import RolePermissionPanel from '../components/RolePermissionPanel';
 
 interface ResidentAccountsPageProps {
@@ -206,16 +207,21 @@ const ResidentAccountsPage: React.FC<ResidentAccountsPageProps> = ({ onBack }) =
               </tbody>
             </table>
             {filteredAccounts.length === 0 && (
-              <p className="text-center text-ink-soft p-10 text-sm">
-                {searchTerm
-                  ? 'Không tìm thấy tài khoản nào khớp.'
-                  : 'Không có tài khoản cư dân nào được tìm thấy.'}
-                <br />
-                <small className="text-xs text-ink-soft">
-                  Lưu ý: Tài khoản chỉ được tạo cho cư dân có số điện thoại và đang ở trạng thái
-                  hoạt động.
-                </small>
-              </p>
+              <EmptyState
+                icon={UserPlusIcon}
+                tone="neutral"
+                title={
+                  searchTerm
+                    ? 'Không tìm thấy tài khoản nào khớp'
+                    : 'Không có tài khoản cư dân nào được tìm thấy'
+                }
+                description={
+                  searchTerm
+                    ? 'Thử thay đổi từ khóa tìm kiếm hoặc kiểm tra lại số điện thoại'
+                    : 'Tài khoản chỉ được tạo cho cư dân có số điện thoại và đang ở trạng thái hoạt động.'
+                }
+                size="md"
+              />
             )}
           </div>
         )}
