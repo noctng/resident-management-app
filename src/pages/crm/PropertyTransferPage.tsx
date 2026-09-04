@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { CrmSubNav } from '../../components/crm/CrmSubNav';
 import { api } from '../../services/api';
 import { useToast, useConfirm } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import {
   ArrowsRightLeftIcon,
   DocumentTextIcon,
@@ -226,7 +227,7 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className="font-serif text-2xl font-bold text-ink flex items-center gap-2">
             <ArrowsRightLeftIcon className="w-7 h-7 text-accent" />
             <span>Quản Lý Chuyển Nhượng Hợp Đồng Mua Bán</span>
           </h1>

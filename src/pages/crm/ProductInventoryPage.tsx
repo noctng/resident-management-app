@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import type { ProductUnit, RealEstatePhase } from '../../types';
 import { useToast, useConfirm } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import {
   BuildingOfficeIcon,
   PlusIcon,
@@ -220,7 +221,7 @@ export const ProductInventoryPage: React.FC<ProductInventoryPageProps> = ({ onNa
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className="font-serif text-2xl font-bold text-ink flex items-center gap-2">
             <BuildingOfficeIcon className="w-7 h-7 text-primary-600" />
             Cấu Hình & Quản Lý Kho Hàng Sản Phẩm BĐS
           </h1>

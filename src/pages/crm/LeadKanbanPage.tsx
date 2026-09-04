@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import type { CrmLead, LeadStatus, RealEstatePhase } from '../../types';
 import { useToast } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import {
   UsersIcon,
   PlusIcon,
@@ -118,7 +119,7 @@ export const LeadKanbanPage: React.FC<LeadKanbanPageProps> = ({ onNavigate, onBa
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className="font-serif text-2xl font-bold text-ink flex items-center gap-2">
             <UsersIcon className="w-7 h-7 text-primary-600" />
             Phễu Khách Hàng Tiềm Năng (CRM Lead Pipeline)
           </h1>
@@ -176,6 +177,14 @@ export const LeadKanbanPage: React.FC<LeadKanbanPageProps> = ({ onNavigate, onBa
           <ArrowPathIcon className="w-8 h-8 animate-spin mx-auto text-accent mb-3" />
           <p className="text-sm font-medium">Đang tải danh sách khách hàng tiềm năng...</p>
         </div>
+      ) : leads.length === 0 ? (
+        <EmptyState
+          icon={UsersIcon}
+          tone="neutral"
+          title="Chưa có khách hàng tiềm năng nào"
+          description="Thêm lead mới để bắt đầu quản lý phễu bán hàng"
+          size="md"
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {STAGES.map((col) => {
