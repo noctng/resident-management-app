@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import type { Apartment, UtilityRecord, User } from '../types';
 import { api } from '../services/api';
 import { useConfirm } from '../components/ui';
+import { EmptyState } from '../components/ui';
 import {
   AppLogo,
   BoltIcon,
@@ -18,6 +19,7 @@ import {
   ViewfinderCircleIcon,
   ClockIcon,
   ExclamationTriangleIcon,
+  UserIcon,
 } from '../components/icons';
 import ImageViewerModal from '../components/ImageViewerModal';
 
@@ -668,9 +670,13 @@ export const TechnicianMeterPage: React.FC<TechnicianMeterPageProps> = ({
                   {/* Scrollable list of apartments */}
                   <div className="max-h-60 overflow-y-auto space-y-1.5 custom-scrollbar pt-1">
                     {selectorApartments.length === 0 ? (
-                      <p className="text-sm text-ink-faint text-center py-4">
-                        Không tìm thấy căn hộ phù hợp.
-                      </p>
+                      <EmptyState
+                        icon={BuildingOfficeIcon}
+                        tone="neutral"
+                        title="Không tìm thấy căn hộ phù hợp"
+                        description="Thử thay đổi từ khóa tìm kiếm hoặc bộ lọc trạng thái"
+                        size="sm"
+                      />
                     ) : (
                       selectorApartments.map((apt) => {
                         const rec = progressStats.recordedMap.get(apt.id);
@@ -1081,9 +1087,13 @@ export const TechnicianMeterPage: React.FC<TechnicianMeterPageProps> = ({
             </h2>
 
             {utilityRecords.filter((r) => r.apartmentId === selectedApartment.id).length === 0 ? (
-              <p className="text-sm text-ink-soft py-8 text-center bg-surface-alt rounded-xl">
-                Chưa có lịch sử ghi điện nước nào cho căn hộ này.
-              </p>
+              <EmptyState
+                icon={ClockIcon}
+                tone="neutral"
+                title="Chưa có lịch sử ghi điện nước nào cho căn hộ này"
+                description="Lịch sử chỉ số sẽ hiển thị sau khi có bản ghi điện nước"
+                size="md"
+              />
             ) : (
               <div className="space-y-2.5">
                 {utilityRecords
