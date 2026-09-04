@@ -931,7 +931,7 @@ function ResidentPortalPage({
               <div className="space-y-4">
                 {localUtilityRecords.map((record) => (
                   <div
-                    key={record.id}
+                    key={`${record.apartmentId}-${record.month}-${record.year}`}
                     className="bg-surface border border-brand-border rounded-xl shadow-sm p-4"
                   >
                     <div className="flex items-center justify-between mb-3 pb-2 border-b border-brand-border">
