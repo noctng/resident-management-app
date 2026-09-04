@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { PdfViewerModal } from '../../components/crm/PdfViewerModal';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import {
   ArrowLeftIcon,
   BuildingOfficeIcon,
@@ -607,10 +608,13 @@ export const ContractDetailPage: React.FC<ContractDetailPageProps> = ({ onNaviga
           </div>
 
           {(!contract.contract_transfers || contract.contract_transfers.length === 0) ? (
-            <div className="p-12 text-center text-ink-faint border border-dashed border-brand-border rounded-xl">
-              <p className="font-bold text-sm text-ink">Chưa có giao dịch chuyển nhượng nào</p>
-              <p className="text-sm text-ink-soft mt-1">Hợp đồng này vẫn thuộc sở hữu của khách hàng ban đầu.</p>
-            </div>
+            <EmptyState
+              icon={ArrowRightIcon}
+              tone="neutral"
+              title="Chưa có giao dịch chuyển nhượng nào"
+              description="Hợp đồng này vẫn thuộc sở hữu của khách hàng ban đầu."
+              size="md"
+            />
           ) : (
             <div className="space-y-3">
               {contract.contract_transfers.map((trf: any) => (

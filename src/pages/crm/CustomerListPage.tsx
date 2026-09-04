@@ -5,6 +5,7 @@ import { api } from '../../services/api';
 import { PlusIcon, UserIcon, ArrowLeftIcon, MagnifyingGlassIcon } from '../../components/icons';
 import { formatDate } from '../../utils/formatters';
 import { useToast } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 
 interface CustomerListPageProps {
   onNavigate?: (route: string) => void;
@@ -143,10 +144,13 @@ const CustomerListPage: React.FC<CustomerListPageProps> = ({ onNavigate, onBack,
               ) : filteredCustomers.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-ink-soft">
-                    <div className="flex flex-col items-center justify-center">
-                      <UserIcon className="w-12 h-12 text-ink-faint mb-2" />
-                      <p>Chưa có khách hàng nào</p>
-                    </div>
+                    <EmptyState
+                      icon={UserIcon}
+                      tone="neutral"
+                      title="Chưa có khách hàng nào"
+                      description="Thêm khách hàng đầu tiên để bắt đầu quản lý CRM"
+                      size="md"
+                    />
                   </td>
                 </tr>
               ) : (

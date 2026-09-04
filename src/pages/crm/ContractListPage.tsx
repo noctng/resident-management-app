@@ -10,6 +10,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { formatDate } from '../../utils/formatters';
 import { useToast } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 
 interface ContractListPageProps {
   onNavigate?: (route: string) => void;
@@ -167,12 +168,13 @@ const ContractListPage: React.FC<ContractListPageProps> = ({ onNavigate, onBack,
               {filteredContracts.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-6 py-12 text-center text-ink-soft">
-                    <div className="flex flex-col items-center justify-center p-4">
-                      <div className="w-16 h-16 bg-surface-alt rounded-full flex items-center justify-center mb-3">
-                        <BuildingOfficeIcon className="w-8 h-8 text-ink-faint" />
-                      </div>
-                      <p className="text-ink-soft text-lg">Không tìm thấy hợp đồng nào</p>
-                    </div>
+                    <EmptyState
+                      icon={BuildingOfficeIcon}
+                      tone="neutral"
+                      title="Không tìm thấy hợp đồng nào"
+                      description="Thử thay đổi từ khóa tìm kiếm hoặc kiểm tra lại sau"
+                      size="md"
+                    />
                   </td>
                 </tr>
               ) : (

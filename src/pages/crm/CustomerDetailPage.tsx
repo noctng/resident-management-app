@@ -14,6 +14,7 @@ import {
 import AddContractModal from '../../components/AddContractModal';
 import EditCustomerModal from '../../components/EditCustomerModal';
 import ConvertToResidentModal from '../../components/ConvertToResidentModal';
+import { EmptyState } from '../../components/ui';
 
 interface CustomerDetailPageProps {
   onNavigate?: (route: string) => void;
@@ -92,7 +93,7 @@ const CustomerDetailPage: React.FC<CustomerDetailPageProps> = ({ onNavigate, onB
           className="p-1.5 border border-brand-border text-ink-soft hover:text-accent hover:border-accent/40 hover:bg-accent-soft/40 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent/40" aria-label="Đóng">
           <ArrowLeftIcon className="w-6 h-6" />
         </button>
-        <h1 className=" font-seriftext-2xl font-bold text-ink">Chi tiết Khách hàng</h1>
+        <h1 className="font-serif text-2xl font-bold text-ink">Chi tiết Khách hàng</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in">
@@ -187,16 +188,13 @@ const CustomerDetailPage: React.FC<CustomerDetailPageProps> = ({ onNavigate, onB
 
             <div className="space-y-4">
               {customer.contracts.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-12 border-2 border-dashed border-brand-border rounded-xl text-ink-soft bg-surface-alt/50">
-                  <BuildingOfficeIcon className="w-12 h-12 text-ink-faint mb-3" />
-                  <p className="font-medium">Khách hàng chưa có hợp đồng nào</p>
-                  <button
-                    onClick={() => setIsAddContractModalOpen(true)}
-                    className="mt-4 text-accent font-semibold hover:underline text-sm"
-                  >
-                    Tạo hợp đồng ngay
-                  </button>
-                </div>
+                <EmptyState
+                  icon={BuildingOfficeIcon}
+                  tone="neutral"
+                  title="Khách hàng chưa có hợp đồng nào"
+                  description="Tạo hợp đồng đầu tiên để bắt đầu theo dõi giao dịch"
+                  size="md"
+                />
               ) : (
                 customer.contracts.map((contract) => (
                   <div
