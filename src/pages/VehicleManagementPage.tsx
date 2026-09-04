@@ -14,6 +14,7 @@ import {
 import { api } from '../services/api';
 import SearchableSelect from '../components/SearchableSelect';
 import { useToast, useConfirm } from '../components/ui';
+import { EmptyState } from '../components/ui';
 import { StatCard } from '../components/ui/Card';
 
 interface VehicleManagementPageProps {
@@ -446,15 +447,13 @@ const VehicleManagementPage: React.FC<VehicleManagementPageProps> = ({ apartment
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-accent border-t-transparent"></div>
           </div>
         ) : filteredVehicles.length === 0 ? (
-          <div className="py-16 px-6 text-center text-ink-soft">
-            <div className="max-w-xs mx-auto text-center space-y-2">
-              <div className="w-12 h-12 rounded-full bg-surface-alt flex items-center justify-center mx-auto text-ink-faint">
-                <TruckIcon className="w-6 h-6" />
-              </div>
-              <div className="font-semibold text-ink">Không tìm thấy phương tiện nào</div>
-              <div className="text-xs text-ink-faint">Thử tìm kiếm với từ khóa khác hoặc thay đổi bộ lọc loại xe / căn hộ</div>
-            </div>
-          </div>
+          <EmptyState
+            icon={TruckIcon}
+            tone="neutral"
+            title="Không tìm thấy phương tiện nào"
+            description="Thử tìm kiếm với từ khóa khác hoặc thay đổi bộ lọc loại xe / căn hộ"
+            size="md"
+          />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
