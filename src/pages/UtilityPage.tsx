@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import type { Apartment, UtilityRecord } from '../types';
 import {
   ArrowLeftIcon,
@@ -381,7 +381,6 @@ const UtilityPage: React.FC<UtilityPageProps> = ({
         paymentStatus: newStatus,
         paidDate: newStatus === 'PAID' ? new Date().toISOString().split('T')[0] : null,
       });
-      window.location.reload();
     } catch (error: any) {
       console.error(error);
     }
@@ -400,7 +399,7 @@ const UtilityPage: React.FC<UtilityPageProps> = ({
             <ArrowLeftIcon className="w-5 h-5" />
           </button>
           <div>
-            <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2.5">
+            <h1 className="font-serif text-2xl font-bold text-ink flex items-center gap-2.5">
               <span className="p-2 bg-accent rounded-xl shadow-sm text-white">
                 <BoltIcon className="w-5 h-5" />
               </span>
