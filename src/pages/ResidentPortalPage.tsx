@@ -227,6 +227,12 @@ function ResidentPortalPage({
     }
   }, [selectedApartment?.id, activeTab]);
 
+  useEffect(() => {
+    if (selectedApartment?.id) {
+      fetchUtilityRecords();
+    }
+  }, [selectedApartment?.id]);
+
   const [qrConfig, setQrConfig] = useState<{
     QR_BANK_CODE?: string;
     QR_BANK_ACCOUNT?: string;
