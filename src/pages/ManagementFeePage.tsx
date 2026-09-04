@@ -12,6 +12,7 @@ import {
   ExclamationTriangleIcon,
 } from '../components/icons';
 import { StatCard } from '../components/ui/Card';
+import { EmptyState } from '../components/ui';
 
 export default function ManagementFeePage() {
   const [fees, setFees] = useState<ManagementFee[]>([]);
@@ -336,7 +337,13 @@ export default function ManagementFeePage() {
               ) : fees.length === 0 ? (
                 <tr>
                   <td colSpan={10} className="px-4 py-8 text-center text-ink-soft">
-                    Chưa có hóa đơn cho tháng {selectedMonth}/{selectedYear}
+                    <EmptyState
+                      icon={ExclamationTriangleIcon}
+                      tone="neutral"
+                      title={`Chưa có hóa đơn cho tháng ${selectedMonth}/${selectedYear}`}
+                      description="Thử chọn tháng khác hoặc kiểm tra lại sau khi hệ thống phát sinh hóa đơn"
+                      size="md"
+                    />
                   </td>
                 </tr>
               ) : (
