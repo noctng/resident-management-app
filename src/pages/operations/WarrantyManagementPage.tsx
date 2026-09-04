@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import { useToast, useConfirm } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import { StatCard } from '../../components/ui/Card';
 import {
   WrenchScrewdriverIcon,
@@ -209,7 +210,7 @@ export const WarrantyManagementPage: React.FC<WarrantyManagementPageProps> = () 
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className="font-serif text-2xl font-bold text-ink flex items-center gap-2">
             <WrenchScrewdriverIcon className="w-7 h-7 text-accent" />
             <span>Quản Lý Bảo Hành Căn Hộ Sau Bàn Giao (B.8.4 / C.8)</span>
           </h1>
@@ -351,13 +352,13 @@ export const WarrantyManagementPage: React.FC<WarrantyManagementPageProps> = () 
           <p>Đang tải danh sách yêu cầu bảo hành...</p>
         </div>
       ) : claims.length === 0 ? (
-        <div className="p-16 text-center text-ink-soft bg-surface rounded-xl border border-dashed border-brand-border space-y-3">
-          <WrenchScrewdriverIcon className="w-12 h-12 mx-auto text-ink-faint" />
-          <p className="font-bold text-ink text-base">Chưa có yêu cầu bảo hành nào</p>
-          <p className="text-xs text-ink-soft max-w-md mx-auto">
-            Hệ thống tự động tiếp nhận khi cư dân gửi yêu cầu qua ứng dụng hoặc BQL lập phiếu tiếp nhận sự cố.
-          </p>
-        </div>
+        <EmptyState
+          icon={WrenchScrewdriverIcon}
+          tone="neutral"
+          title="Chưa có yêu cầu bảo hành nào"
+          description="Hệ thống tự động tiếp nhận khi cư dân gửi yêu cầu qua ứng dụng hoặc BQL lập phiếu tiếp nhận sự cố."
+          size="md"
+        />
       ) : (
         <div className="bg-surface rounded-2xl border border-brand-border shadow-sm overflow-hidden">
           <div className="overflow-x-auto">

@@ -133,7 +133,7 @@ const UserManagementPage: React.FC<UserManagementPageProps> = ({ onBack, current
           >
             <ArrowLeftIcon className="w-5 h-5" />
           </button>
-          <h1 className=" font-seriftext-3xl font-bold text-ink">Quản Lý Tài Khoản</h1>
+          <h1 className="font-serif text-3xl font-bold text-ink">Quản Lý Tài Khoản</h1>
         </div>
         <button
           onClick={() => setAddUserModalOpen(true)}

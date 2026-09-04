@@ -385,7 +385,7 @@ const FeedbackManagementPage: React.FC<FeedbackManagementPageProps> = ({
           >
             <ArrowLeftIcon className="w-5 h-5 text-ink-soft" />
           </button>
-          <h1 className=" font-seriftext-3xl font-bold text-ink">Quản Lý Phản Ánh</h1>
+          <h1 className="font-serif text-3xl font-bold text-ink">Quản Lý Phản Ánh</h1>
         </div>
       </header>
 

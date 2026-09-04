@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import {
   TruckIcon,
   PlusIcon,
@@ -96,13 +97,13 @@ export const PortalVehicleSection: React.FC<PortalVehicleSectionProps> = ({
           <p className="text-xs">Đang tải danh sách phương tiện...</p>
         </div>
       ) : vehicles.length === 0 ? (
-        <div className="p-12 text-center text-ink-soft bg-surface rounded-xl border border-dashed border-brand-border space-y-3">
-          <TruckIcon className="w-12 h-12 mx-auto text-ink-faint" />
-          <p className="font-bold text-ink text-sm">Chưa có phương tiện nào được đăng ký</p>
-          <p className="text-xs text-ink-soft max-w-md mx-auto">
-            Bấm "+ Đăng Ký Thẻ Xe Mới" để cấp thẻ từ RFID cho phương tiện của gia đình bạn.
-          </p>
-        </div>
+        <EmptyState
+          icon={TruckIcon}
+          tone="neutral"
+          title="Chưa có phương tiện nào được đăng ký"
+          description="Bấm + Đăng Ký Thẻ Xe Mới để cấp thẻ từ RFID cho phương tiện của gia đình bạn."
+          size="md"
+        />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {vehicles.map((v) => (

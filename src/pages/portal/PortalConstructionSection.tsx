@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import {
   BuildingOfficeIcon,
   PlusIcon,
@@ -128,13 +129,13 @@ export const PortalConstructionSection: React.FC<PortalConstructionSectionProps>
           <p className="text-xs">Đang tải hồ sơ thi công...</p>
         </div>
       ) : registrations.length === 0 ? (
-        <div className="p-12 text-center text-ink-soft bg-surface rounded-xl border border-dashed border-brand-border space-y-3">
-          <BuildingOfficeIcon className="w-12 h-12 mx-auto text-ink-faint" />
-          <p className="font-bold text-ink text-sm">Chưa có hồ sơ đăng ký cải tạo nội thất</p>
-          <p className="text-xs text-ink-soft max-w-md mx-auto">
-            Trước khi tiến hành sửa chữa hoặc đóng đồ gỗ nội thất, bạn cần nộp hồ sơ đăng ký và nộp tiền ký quỹ để bảo vệ cấp phép cho thợ vào thi công.
-          </p>
-        </div>
+        <EmptyState
+          icon={BuildingOfficeIcon}
+          tone="neutral"
+          title="Chưa có hồ sơ đăng ký cải tạo nội thất"
+          description="Trước khi tiến hành sửa chữa hoặc đóng đồ gỗ nội thất, bạn cần nộp hồ sơ đăng ký và nộp tiền ký quỹ để bảo vệ cấp phép cho thợ vào thi công."
+          size="md"
+        />
       ) : (
         <div className="space-y-4">
           {registrations.map((reg) => (

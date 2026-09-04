@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Apartment, UtilityRecord } from '../../types';
 import { BoltIcon, PlusIcon, EnvelopeIcon } from '../../components/icons';
+import { EmptyState } from '../../components/ui';
 
 interface ApartmentViewModeProps {
   selectedApartment: Apartment | null;
@@ -83,11 +84,13 @@ export const ApartmentViewMode: React.FC<ApartmentViewModeProps> = ({
       </div>
 
       {recordsForSelectedApartment.length === 0 ? (
-        <div className="flex items-center justify-center py-16 text-center">
-          <p className="text-sm text-ink-soft">
-            Chưa có dữ liệu điện nước cho căn hộ này.
-          </p>
-        </div>
+        <EmptyState
+          icon={BoltIcon}
+          tone="neutral"
+          title="Chưa có dữ liệu điện nước cho căn hộ này"
+          description="Dữ liệu điện nước sẽ hiển thị sau khi có chỉ số mới."
+          size="md"
+        />
       ) : (
         <>
           {/* Mobile Card Layout */}

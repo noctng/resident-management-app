@@ -185,7 +185,7 @@ const ApartmentsPage: React.FC<ApartmentsPageProps> = ({
       {/* ── Page Header ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className=" font-seriftext-2xl sm:text-3xl font-bold text-ink flex items-center gap-2">
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-ink flex items-center gap-2">
             <BuildingOfficeIcon className="w-8 h-8 text-accent" />
             Quản Lý Căn Hộ & Bất Động Sản Bàn Giao
           </h1>

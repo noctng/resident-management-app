@@ -5,6 +5,7 @@ import {
   ClockIcon,
   PhotoIcon,
 } from '../../components/icons';
+import { EmptyState } from '../../components/ui';
 
 const FEEDBACK_STATUS_BADGE: Record<
   Feedback['status'],
@@ -159,9 +160,13 @@ export const PortalFeedbackSection: React.FC<PortalFeedbackSectionProps> = ({
           Lịch sử Phản Ánh
         </h3>
         {feedbackList.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-64 bg-surface-alt/50 rounded-2xl border-2 border-dashed border-brand-border text-ink-faint">
-            <p className="text-xs font-medium">Chưa có phản ánh nào</p>
-          </div>
+          <EmptyState
+            icon={ChatBubbleBottomCenterTextIcon}
+            tone="neutral"
+            title="Chưa có phản ánh nào"
+            description="Phản ánh mới sẽ xuất hiện tại đây sau khi bạn gửi phản hồi cho Ban Quản Lý."
+            size="md"
+          />
         ) : (
           <ul className="space-y-3 max-h-[500px] overflow-y-auto pr-1 custom-scrollbar">
             {feedbackList.map((fb) => (

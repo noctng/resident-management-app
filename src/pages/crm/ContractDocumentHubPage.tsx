@@ -4,6 +4,7 @@ import { CrmSubNav } from '../../components/crm/CrmSubNav';
 import { PdfViewerModal } from '../../components/crm/PdfViewerModal';
 import { api } from '../../services/api';
 import { useToast, useConfirm } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import {
   FolderIcon,
   DocumentTextIcon,
@@ -204,7 +205,7 @@ export const ContractDocumentHubPage: React.FC<ContractDocumentHubPageProps> = (
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className="font-serif text-2xl font-bold text-ink flex items-center gap-2">
             <FolderIcon className="w-7 h-7 text-accent" />
             <span>Kho Lưu Trữ Bản Scan Hợp Đồng & Hồ Sơ Pháp Lý</span>
           </h1>
@@ -309,13 +310,13 @@ export const ContractDocumentHubPage: React.FC<ContractDocumentHubPageProps> = (
           <p>Đang tải danh sách bản scan...</p>
         </div>
       ) : documents.length === 0 ? (
-        <div className="p-16 text-center text-ink-soft bg-surface rounded-xl border border-dashed border-brand-border space-y-3">
-          <FolderIcon className="w-12 h-12 mx-auto text-ink-faint" />
-          <p className="font-bold text-ink text-base">Chưa có bản scan PDF nào</p>
-          <p className="text-xs text-ink-soft max-w-md mx-auto">
-            Bấm "+ Tải Lên Bản Scan PDF Mới" để lưu trữ bản cứng HĐMB, phiếu đặt cọc hoặc hồ sơ chuyển nhượng.
-          </p>
-        </div>
+        <EmptyState
+          icon={FolderIcon}
+          tone="neutral"
+          title="Chưa có bản scan PDF nào"
+          description="Bấm + Tải Lên Bản Scan PDF Mới để lưu trữ bản cứng HĐMB, phiếu đặt cọc hoặc hồ sơ chuyển nhượng."
+          size="md"
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {documents.map((doc) => {

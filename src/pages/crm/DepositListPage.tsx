@@ -231,7 +231,7 @@ export const DepositListPage: React.FC<DepositListPageProps> = ({ onNavigate, on
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className="font-serif text-2xl font-bold text-ink flex items-center gap-2">
             <BanknotesIcon className="w-7 h-7 text-primary-600" />
             Quản Lý Đặt Cọc (Deposit Receipts - PDC)
           </h1>

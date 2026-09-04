@@ -102,7 +102,7 @@ const ResidentAccountsPage: React.FC<ResidentAccountsPageProps> = ({ onBack }) =
           >
             <ArrowLeftIcon className="w-6 h-6" />
           </button>
-          <h1 className=" font-seriftext-3xl font-bold text-ink">
+          <h1 className="font-serif text-3xl font-bold text-ink">
             Quản Lý Tài Khoản Cư Dân
           </h1>
         </div>

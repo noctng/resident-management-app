@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import {
   WrenchScrewdriverIcon,
   PlusIcon,
@@ -133,13 +134,13 @@ export const PortalWarrantySection: React.FC<PortalWarrantySectionProps> = ({
           <p className="text-xs">Đang tải danh sách yêu cầu bảo hành...</p>
         </div>
       ) : claims.length === 0 ? (
-        <div className="p-12 text-center text-ink-soft bg-surface rounded-xl border border-dashed border-brand-border space-y-3">
-          <ShieldCheckIcon className="w-12 h-12 mx-auto text-brand-success" />
-          <p className="font-bold text-ink text-sm">Căn hộ hiện không có sự cố bảo hành nào</p>
-          <p className="text-xs text-ink-soft max-w-md mx-auto">
-            Khi phát sinh sự cố về điện, nước, thấm dột hoặc cửa khóa, bạn có thể bấm "+ Báo Sự Cố Bảo Hành" để BQL điều phối kỹ thuật viên đến xử lý.
-          </p>
-        </div>
+        <EmptyState
+          icon={ShieldCheckIcon}
+          tone="neutral"
+          title="Căn hộ hiện không có sự cố bảo hành nào"
+          description="Khi phát sinh sự cố về điện, nước, thấm dột hoặc cửa khóa, bạn có thể bấm + Báo Sự Cố Bảo Hành để BQL điều phối kỹ thuật viên đến xử lý."
+          size="md"
+        />
       ) : (
         <div className="space-y-3">
           {claims.map((claim) => {

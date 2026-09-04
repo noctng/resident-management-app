@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { EmptyState } from '../../components/ui';
 import { MegaphoneIcon, XMarkIcon, PinIcon, ArrowLeftIcon, ArrowRightIcon } from '../../components/icons';
 
 interface Announcement {
@@ -112,11 +113,13 @@ function PortalNewsSection({ onMarkRead }: Props) {
 
   if (posts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-ink-soft">
-        <MegaphoneIcon className="w-14 h-14 mb-4 opacity-20 text-ink-soft" />
-        <p className="text-sm font-medium">Chưa có tin tức nào</p>
-        <p className="text-xs mt-1 text-ink-faint">Ban Quản Lý chưa đăng bài viết nào</p>
-      </div>
+      <EmptyState
+        icon={MegaphoneIcon}
+        tone="neutral"
+        title="Chưa có tin tức nào"
+        description="Ban Quản Lý chưa đăng bài viết nào"
+        size="md"
+      />
     );
   }
 

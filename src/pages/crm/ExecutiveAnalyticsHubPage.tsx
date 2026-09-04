@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CrmSubNav } from '../../components/crm/CrmSubNav';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import {
   ChartBarIcon,
   BanknotesIcon,
@@ -91,7 +92,7 @@ export const ExecutiveAnalyticsHubPage: React.FC<ExecutiveAnalyticsHubPageProps>
       {/* Top Header & Global Controls */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-surface p-5 rounded-2xl border border-brand-border shadow-xs">
         <div>
-          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className="font-serif text-2xl font-bold text-ink flex items-center gap-2">
             <ChartBarIcon className="w-7 h-7 text-accent" />
             <span>Báo Cáo & Chỉ Số KPI Điều Hành Tổng Hợp</span>
           </h1>

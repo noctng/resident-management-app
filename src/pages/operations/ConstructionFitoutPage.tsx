@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import { useToast, useConfirm } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import {
   BuildingOfficeIcon,
   PlusIcon,
@@ -210,7 +211,7 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className="font-serif text-2xl font-bold text-ink flex items-center gap-2">
             <BuildingOfficeIcon className="w-7 h-7 text-accent" />
             <span>Quản Lý Thi Công, Cải Tạo & Ký Quỹ (C.9 / E.5.6)</span>
           </h1>
@@ -331,13 +332,13 @@ export const ConstructionFitoutPage: React.FC<ConstructionFitoutPageProps> = () 
               <p>Đang tải danh sách hồ sơ thi công...</p>
             </div>
           ) : registrations.length === 0 ? (
-            <div className="p-16 text-center text-ink-soft bg-surface rounded-xl border border-dashed border-brand-border space-y-3">
-              <BuildingOfficeIcon className="w-12 h-12 mx-auto text-ink-faint" />
-              <p className="font-bold text-ink text-base">Chưa có hồ sơ đăng ký thi công nào</p>
-              <p className="text-xs text-ink-soft max-w-md mx-auto">
-                Bấm "+ Đăng Ký Thi Công Mới" để lập hồ sơ hoàn thiện nội thất và theo dõi tiền ký quỹ 100.000.000đ.
-              </p>
-            </div>
+            <EmptyState
+              icon={BuildingOfficeIcon}
+              tone="neutral"
+              title="Chưa có hồ sơ đăng ký thi công nào"
+              description="Bấm + Đăng Ký Thi Công Mới để lập hồ sơ hoàn thiện nội thất và theo dõi tiền ký quỹ 100.000.000đ."
+              size="md"
+            />
           ) : (
             <div className="bg-surface rounded-2xl border border-brand-border shadow-sm overflow-hidden">
               <div className="overflow-x-auto">

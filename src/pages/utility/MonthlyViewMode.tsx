@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Apartment, UtilityRecord } from '../../types';
-import { EnvelopeIcon, MagnifyingGlassIcon, BoltIcon, BanknotesIcon, CheckCircleIcon, ArrowPathIcon } from '../../components/icons';
+import { EnvelopeIcon, MagnifyingGlassIcon, BoltIcon, BanknotesIcon, CheckCircleIcon, ArrowPathIcon, BuildingOfficeIcon } from '../../components/icons';
+import { EmptyState } from '../../components/ui';
 
 interface MonthlyStats {
   totalElectricity: number;
@@ -202,9 +203,13 @@ export const MonthlyViewMode: React.FC<MonthlyViewModeProps> = ({
       </div>
 
       {filteredMonthlyRecords.length === 0 ? (
-        <div className="bg-surface rounded-xl border border-brand-border p-12 text-center text-ink-soft">
-          <p className="text-sm font-semibold">Không tìm thấy căn hộ nào phù hợp với bộ lọc trong tháng {selectedMonth}/{selectedYear}.</p>
-        </div>
+        <EmptyState
+          icon={BuildingOfficeIcon}
+          tone="neutral"
+          title={`Không tìm thấy căn hộ nào phù hợp với bộ lọc trong tháng ${selectedMonth}/${selectedYear}.`}
+          description="Thử thay đổi từ khóa tìm kiếm hoặc bộ lọc trạng thái."
+          size="md"
+        />
       ) : (
         <div className="bg-surface rounded-xl shadow-sm border border-brand-border overflow-hidden">
           <div className="overflow-x-auto">
