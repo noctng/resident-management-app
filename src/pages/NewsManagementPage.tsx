@@ -5,6 +5,7 @@ import {
   ArrowLeftIcon, Cog6ToothIcon, UserIcon, ClockIcon, TvIcon, PhoneIcon, Squares2x2Icon, DocumentArrowDownIcon,
 } from '../components/icons';
 import { StatCard } from '../components/ui/Card';
+import { EmptyState } from '../components/ui';
 import { RichTextEditor } from '../components/RichTextEditor';
 import { useConfirm } from '../components/ui';
 
@@ -543,11 +544,19 @@ function NewsManagementPage() {
 
           {/* Posts List */}
           {loading ? (
-            <div className="text-center py-16 text-ink-soft">Đang tải danh sách bài viết...</div>
+            <div className="text-center py-16 text-ink-soft">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-accent mb-3"></div>
+              <p className="text-sm font-medium">Đang tải danh sách bài viết...</p>
+            </div>
           ) : filteredPosts.length === 0 ? (
             <div className="text-center py-20 bg-surface rounded-xl border border-brand-border text-ink-soft">
-              <MegaphoneIcon className="w-12 h-12 mx-auto mb-3 opacity-30" />
-              <p className="font-semibold text-sm">Chưa có bài viết nào</p>
+              <EmptyState
+                icon={MegaphoneIcon}
+                tone="neutral"
+                title="Chưa có bài viết nào"
+                description="Hãy soạn bài viết đầu tiên để thông báo cho cư dân"
+                size="md"
+              />
               <button
                 onClick={openCreate}
                 className="mt-3 px-4 py-2 bg-accent-soft text-accent-ink hover:brightness-95 rounded-lg text-xs font-bold transition cursor-pointer"
@@ -703,7 +712,7 @@ function NewsManagementPage() {
                     <span className="text-sm text-ink-soft">Vừa xong</span>
                   </div>
 
-                  <h2 className="text-xl sm: font-seriftext-2xl font-bold text-ink  leading-snug">
+                  <h2 className="text-xl sm:font-serif text-2xl font-bold text-ink leading-snug">
                     {previewModalPost.title || 'Tiêu đề bài viết'}
                   </h2>
 
