@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect , useRef} from 'react';
 import { useFocusTrap } from '../hooks/useFocusTrap';
-import { bankApps, findBankAppsByCode, type BankApp } from '../data/bankApps';
+import { bankApps, findBankAppsByCode, getBankAppDeeplink, type BankApp } from '../data/bankApps';
 import { XMarkIcon, QrCodeIcon, Squares2x2Icon, CheckCircleIcon } from './icons';
 import type { UtilityRecord } from '../types';
 
@@ -86,16 +86,22 @@ function getBankInitials(appName: string): string {
     .toUpperCase();
 }
 
-/** Small bank app button — uses location.href for iOS universal link support */
-const BankAppButton: React.FC<{ app: BankApp; isConfigured: boolean }> = ({
-  app,
-  isConfigured,
-}) => {
+/** Small bank app button — uses deeplink with full payment parameters.
+ *  Deep link format (VietQR): https://dl.vietqr.io/pay?app=APPID&ba=ACCOUNT@BANK&am=AMOUNT&tn=INFO&bn=NAME
+ *
+ *  Note: not all banking apps support auto-fill of amount and content yet.
+ *  Apps that DO support it will open with pre-filled payment details.
+ *  Apps that don't will just open the app — user still needs to enter details manually.
+ */
+const BankAppButton: React.FC<{
+  app: BankApp;
+  isConfigured: boolean;
+  deeplink?: string;
+}> = ({ app, isConfigured, deeplink = `https://dl.vietqr.io/pay?app=${app.appId}` }) => {
   const color = bankColors[app.bankCode] || '#6b7280';
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    const deeplink = `https://dl.vietqr.io/pay?app=${app.appId}`;
     window.location.href = deeplink;
   };
 
@@ -608,13 +614,23 @@ const PaymentQRModal: React.FC<PaymentQRModalProps> = ({
               Mở app ngân hàng
             </h4>
             <div className="space-y-2">
-              {displayApps.map((app) => (
-                <BankAppButton
-                  key={app.appId}
-                  app={app}
-                  isConfigured={configuredApps.some((c) => c.appId === app.appId)}
-                />
-              ))}
+              {displayApps.map((app) => {
+                const deeplink = getBankAppDeeplink(app.appId, {
+                  accountNumber: effectiveAccount,
+                  bankCode: effectiveBankCode,
+                  amount,
+                  transferContent,
+                  accountName,
+                });
+                return (
+                  <BankAppButton
+                    key={app.appId}
+                    app={app}
+                    isConfigured={configuredApps.some((c) => c.appId === app.appId)}
+                    deeplink={deeplink}
+                  />
+                );
+              })}
             </div>
             {!showAllApps && otherApps.length > 6 && (
               <button
