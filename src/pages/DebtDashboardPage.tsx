@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { formatDate } from '../utils/formatters';
 import { api } from '../services/api';
 import { StatCard } from '../components/ui/Card';
+import { EmptyState } from '../components/ui';
 import {
   DocumentChartBarIcon,
   CheckCircleIcon,
@@ -211,12 +212,13 @@ export default function DebtDashboardPage() {
           </h2>
           <div className="space-y-4 flex-grow overflow-y-auto max-h-[400px] pr-2 custom-scrollbar">
             {topDebtors.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-48 py-8 text-center bg-surface-alt rounded-xl border border-dashed border-brand-border">
-                <CheckCircleIcon className="w-12 h-12 text-ink-faint mb-2" />
-                <p className="text-ink-soft font-medium">
-                  Không có công nợ quá hạn
-                </p>
-              </div>
+              <EmptyState
+                icon={CheckCircleIcon}
+                tone="teal"
+                title="Không có công nợ quá hạn"
+                description="Tất cả căn hộ đã thanh toán đúng hạn"
+                size="md"
+              />
             ) : (
               topDebtors.map((debtor, idx) => (
                 <div
@@ -378,11 +380,14 @@ export default function DebtDashboardPage() {
               ))}
               {debtHeatmap.length === 0 && (
                 <tr>
-                  <td
-                    colSpan={5}
-                    className="px-6 py-8 text-center text-ink-soft"
-                  >
-                    Không có dữ liệu công nợ
+                  <td colSpan={5} className="px-6 py-8 text-center text-ink-soft">
+                    <EmptyState
+                      icon={BuildingOfficeIcon}
+                      tone="neutral"
+                      title="Không có dữ liệu công nợ"
+                      description="Thử thay đổi bộ lọc hoặc kiểm tra lại sau"
+                      size="sm"
+                    />
                   </td>
                 </tr>
               )}
@@ -447,11 +452,14 @@ export default function DebtDashboardPage() {
               ))}
               {recentPayments.length === 0 && (
                 <tr>
-                  <td
-                    colSpan={5}
-                    className="px-6 py-8 text-center text-ink-soft"
-                  >
-                    Không có giao dịch gần đây
+                  <td colSpan={5} className="px-6 py-8 text-center text-ink-soft">
+                    <EmptyState
+                      icon={ClockIcon}
+                      tone="neutral"
+                      title="Không có giao dịch gần đây"
+                      description="Giao dịch thanh toán mới sẽ hiển thị tại đây"
+                      size="sm"
+                    />
                   </td>
                 </tr>
               )}
