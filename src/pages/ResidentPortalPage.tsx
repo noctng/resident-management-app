@@ -1189,6 +1189,9 @@ function ResidentPortalPage({
                             {formatCurrency(Number(item.electricity_cost || 0))}
                           </div>
                           <div className="text-[11px] text-ink-soft mt-1">
+                            Chỉ số: {item.electricity_old_reading ?? '—'} → {item.electricity_new_reading ?? '—'}
+                          </div>
+                          <div className="text-[11px] text-ink-soft mt-1">
                             Tiêu thụ: {item.electricity_usage || 0} kWh
                           </div>
                         </div>
@@ -1200,6 +1203,9 @@ function ResidentPortalPage({
                           </span>
                           <div className="font-bold text-ink text-sm font-mono tabular-nums">
                             {formatCurrency(Number(item.water_cost || 0))}
+                          </div>
+                          <div className="text-[11px] text-ink-soft mt-1">
+                            Chỉ số: {item.water_old_reading ?? '—'} → {item.water_new_reading ?? '—'}
                           </div>
                           <div className="text-[11px] text-ink-soft mt-1">
                             Tiêu thụ: {item.water_usage || 0} m³
