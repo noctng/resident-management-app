@@ -80,13 +80,10 @@ export const BulkReportModal: React.FC<BulkReportModalProps> = ({ isOpen, onClos
         </div>
         <div className="p-4 bg-surface-alt/60 border-t border-brand-border flex justify-end">
           <button
-            onClick={() => {
-              onClose();
-              window.location.reload();
-            }}
+            onClick={onClose}
             className="px-4 py-2 bg-accent hover:bg-accent-hover text-white rounded-xl text-sm font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
           >
-            Đóng &amp; Làm mới
+            Đóng
           </button>
         </div>
       </div>

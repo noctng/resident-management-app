@@ -243,7 +243,6 @@ const UtilityPage: React.FC<UtilityPageProps> = ({
     setRecalculating(true);
     try {
       await api.post('/utility-records/recalculate', {});
-      window.location.reload();
     } catch (error: any) {
       console.error(error);
     } finally {
@@ -581,7 +580,7 @@ const UtilityPage: React.FC<UtilityPageProps> = ({
         initialApartmentId={selectedApartmentId}
         initialMonth={selectedMonth}
         initialYear={selectedYear}
-        onRecordAdded={() => window.location.reload()}
+        onRecordAdded={() => {}}
       />
 
       <BulkReportModal

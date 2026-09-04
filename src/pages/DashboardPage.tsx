@@ -13,6 +13,7 @@ import {
   ArrowRightIcon,
 } from '../components/icons';
 import { StatCard } from '../components/ui/Card';
+import { EmptyState } from '../components/ui';
 
 interface DashboardPageProps {
   apartments: Apartment[];
@@ -205,9 +206,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             )}
           </div>
           {revenueChartData.length === 0 ? (
-            <div className="h-[240px] flex items-center justify-center text-sm text-ink-soft">
-              Chưa có dữ liệu doanh thu để hiển thị
-            </div>
+            <EmptyState
+              icon={BanknotesIcon}
+              tone="neutral"
+              title="Chưa có dữ liệu doanh thu để hiển thị"
+              description="Dữ liệu doanh thu 6 tháng sẽ xuất hiện sau khi có bản ghi phát sinh."
+              size="md"
+            />
           ) : (
             <div className="h-[240px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -258,7 +263,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </div>
           {showFeedbackPanel ? (
             latestFeedback.length === 0 ? (
-              <p className="text-sm text-ink-soft py-10 text-center">Không có phản ánh đang mở</p>
+              <EmptyState
+                icon={ChatBubbleBottomCenterTextIcon}
+                tone="neutral"
+                title="Không có phản ánh đang mở"
+                description="Phản ánh mới sẽ hiển thị ở đây khi cư dân gửi phản hồi."
+                size="md"
+              />
             ) : (
               <ul className="space-y-3 flex-1">
                 {latestFeedback.map((fb) => (
@@ -296,7 +307,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             </span>
           </div>
           {blockEntries.length === 0 ? (
-            <p className="text-center py-10 text-ink-soft text-sm">Chưa có dữ liệu cư dân theo tòa</p>
+            <EmptyState
+              icon={BuildingOfficeIcon}
+              tone="neutral"
+              title="Chưa có dữ liệu cư dân theo tòa"
+              description="Phân bổ cư dân sẽ hiển thị sau khi có dữ liệu căn hộ và nhân khẩu."
+              size="md"
+            />
           ) : (
             <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
               {blockEntries.map(([block, count]) => (
