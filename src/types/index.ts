@@ -97,8 +97,18 @@ export interface UtilityRecord {
   apartmentId: string;
   month: number;
   year: number;
-  electricity: UtilityUsage;
-  water: UtilityUsage;
+  // Electricity — flat fields matching backend API response
+  electricity_old_reading: number;
+  electricity_new_reading: number;
+  electricity_usage: number;
+  electricity_cost: number;
+  electricity_tax: number;
+  // Water — flat fields matching backend API response
+  water_old_reading: number;
+  water_new_reading: number;
+  water_usage: number;
+  water_cost: number;
+  water_tax: number;
   paymentStatus?: 'PAID' | 'UNPAID';
   paidDate?: string;
   emailSentAt?: string;

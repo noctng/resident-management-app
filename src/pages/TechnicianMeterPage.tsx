@@ -137,8 +137,8 @@ export const TechnicianMeterPage: React.FC<TechnicianMeterPageProps> = ({
 
     if (past.length > 0) {
       return {
-        electricity: past[0].electricity.newReading,
-        water: past[0].water.newReading,
+        electricity: past[0].electricity_new_reading,
+        water: past[0].water_new_reading,
       };
     }
     return { electricity: 0, water: 0 };
@@ -147,8 +147,8 @@ export const TechnicianMeterPage: React.FC<TechnicianMeterPageProps> = ({
   // Set initial reading when switching apartment or month/year
   useEffect(() => {
     if (currentMonthRecord) {
-      setNewElectricityReading(String(currentMonthRecord.electricity.newReading));
-      setNewWaterReading(String(currentMonthRecord.water.newReading));
+      setNewElectricityReading(String(currentMonthRecord.electricity_new_reading));
+      setNewWaterReading(String(currentMonthRecord.water_new_reading));
     } else {
       setNewElectricityReading('');
       setNewWaterReading('');
@@ -565,7 +565,7 @@ export const TechnicianMeterPage: React.FC<TechnicianMeterPageProps> = ({
                   <span>{selectedApartment.code}</span>
                   {currentMonthRecord && (
                     <span className="text-[11px] font-normal text-ink-soft tabular-nums truncate">
-                      ({currentMonthRecord.electricity.consumption} kWh / {currentMonthRecord.water.consumption} m³)
+                      ({currentMonthRecord.electricity_usage} kWh / {currentMonthRecord.water_usage} m³)
                     </span>
                   )}
                 </div>
@@ -706,7 +706,7 @@ export const TechnicianMeterPage: React.FC<TechnicianMeterPageProps> = ({
                                 <CheckCircleIcon className="w-3 h-3" />
                                 <span>Đã ghi</span>
                                 <span className="font-normal font-mono tabular-nums">
-                                  ({rec.electricity.consumption} kWh / {rec.water.consumption} m³)
+                                  ({rec.electricity_usage} kWh / {rec.water_usage} m³)
                                 </span>
                               </span>
                             ) : (
@@ -1055,7 +1055,7 @@ export const TechnicianMeterPage: React.FC<TechnicianMeterPageProps> = ({
                       </div>
                       {isRecorded && rec ? (
                         <p className="text-[11px] text-ink-soft mt-1 font-mono tabular-nums pl-4">
-                          Điện {rec.electricity.consumption} kWh • Nước {rec.water.consumption} m³
+                          Điện {rec.electricity_usage} kWh • Nước {rec.water_usage} m³
                         </p>
                       ) : (
                         <p className="text-[11px] text-ink-faint mt-1 pl-4">Chưa ghi chỉ số kỳ này</p>
@@ -1122,11 +1122,11 @@ export const TechnicianMeterPage: React.FC<TechnicianMeterPageProps> = ({
                       <div className="grid grid-cols-2 gap-2 text-ink-soft">
                         <div className="p-2 bg-brand-warning-soft/50 rounded-lg">
                           <p className="font-bold text-brand-warning">Điện</p>
-                          <p className="font-mono tabular-nums text-ink">{rec.electricity.oldReading} → {rec.electricity.newReading} ({rec.electricity.consumption} kWh)</p>
+                          <p className="font-mono tabular-nums text-ink">{rec.electricity_old_reading} → {rec.electricity_new_reading} ({rec.electricity_usage} kWh)</p>
                         </div>
                         <div className="p-2 bg-brand-teal-soft/50 rounded-lg">
                           <p className="font-bold text-brand-teal">Nước</p>
-                          <p className="font-mono tabular-nums text-ink">{rec.water.oldReading} → {rec.water.newReading} ({rec.water.consumption} m³)</p>
+                          <p className="font-mono tabular-nums text-ink">{rec.water_old_reading} → {rec.water_new_reading} ({rec.water_usage} m³)</p>
                         </div>
                       </div>
                     </div>

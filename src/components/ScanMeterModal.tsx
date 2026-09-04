@@ -178,8 +178,8 @@ const ScanMeterModal: React.FC<ScanMeterModalProps> = ({
 
     if (past.length > 0) {
       return {
-        electricity: past[0].electricity.newReading,
-        water: past[0].water.newReading,
+        electricity: past[0].electricity_new_reading,
+        water: past[0].water_new_reading,
       };
     }
     return { electricity: 0, water: 0 };
@@ -188,8 +188,8 @@ const ScanMeterModal: React.FC<ScanMeterModalProps> = ({
   // Set initial reading when switching apartment or month/year
   useEffect(() => {
     if (currentMonthRecord) {
-      setNewElectricityReading(String(currentMonthRecord.electricity.newReading));
-      setNewWaterReading(String(currentMonthRecord.water.newReading));
+      setNewElectricityReading(String(currentMonthRecord.electricity_new_reading));
+      setNewWaterReading(String(currentMonthRecord.water_new_reading));
     } else {
       setNewElectricityReading('');
       setNewWaterReading('');
@@ -548,7 +548,7 @@ const ScanMeterModal: React.FC<ScanMeterModalProps> = ({
                     <span>{selectedApartment.code}</span>
                     {currentMonthRecord && (
                       <span className="text-[11px] font-normal text-brand-success">
-                        ({currentMonthRecord.electricity.consumption} kWh / {currentMonthRecord.water.consumption} m³)
+                        ({currentMonthRecord.electricity_usage} kWh / {currentMonthRecord.water_usage} m³)
                       </span>
                     )}
                   </div>
@@ -685,7 +685,7 @@ const ScanMeterModal: React.FC<ScanMeterModalProps> = ({
                                   <span className="w-1.5 h-1.5 rounded-full bg-brand-success" />
                                   <span>Đã ghi</span>
                                   <span className="font-normal font-mono">
-                                    ({rec.electricity.consumption} kWh / {rec.water.consumption} m³)
+                                    ({rec.electricity_usage} kWh / {rec.water_usage} m³)
                                   </span>
                                 </span>
                               ) : (

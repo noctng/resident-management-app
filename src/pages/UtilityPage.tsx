@@ -290,22 +290,22 @@ const UtilityPage: React.FC<UtilityPageProps> = ({
       (acc, { record }) => {
         if (record) {
           const elecUsage =
-            record.electricity.consumption ||
+            record.electricity_usage ||
             Math.max(
               0,
-              (record.electricity.newReading || 0) - (record.electricity.oldReading || 0)
+              (record.electricity_new_reading || 0) - (record.electricity_old_reading || 0)
             );
           const waterUsage =
-            record.water.consumption ||
-            Math.max(0, (record.water.newReading || 0) - (record.water.oldReading || 0));
+            record.water_usage ||
+            Math.max(0, (record.water_new_reading || 0) - (record.water_old_reading || 0));
 
           const elecCost =
-            record.electricity.cost > 0
-              ? record.electricity.cost
+            record.electricity_cost > 0
+              ? record.electricity_cost
               : calculateElectricityCost(elecUsage);
-          const waterCost = record.water.cost > 0 ? record.water.cost : waterUsage * WATER_PRICE;
-          const elecTax = record.electricity.tax || 0;
-          const waterTax = record.water.tax || 0;
+          const waterCost = record.water_cost > 0 ? record.water_cost : waterUsage * WATER_PRICE;
+          const elecTax = record.electricity_tax || 0;
+          const waterTax = record.water_tax || 0;
 
           const recordTotal = elecCost + waterCost;
           acc.totalElectricity += elecCost - elecTax;

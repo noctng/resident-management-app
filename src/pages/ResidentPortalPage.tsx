@@ -974,18 +974,18 @@ function ResidentPortalPage({
                           <div className="flex justify-between">
                             <span>Chỉ số:</span>
                             <span className="font-mono tabular-nums">
-                              {record.electricity?.oldReading ?? '—'} → {record.electricity?.newReading ?? '—'}
+                              {record.electricity_old_reading ?? '—'} → {record.electricity_new_reading ?? '—'}
                             </span>
                           </div>
                           <div className="flex justify-between">
                             <span>Tiêu thụ:</span>
                             <span className="font-semibold text-brand-warning font-mono tabular-nums">
-                              {(record.electricity?.consumption ?? 0)} kWh
+                              {(record.electricity_usage || 0)} kWh
                             </span>
                           </div>
                           <div className="flex justify-between pt-1 border-t border-brand-warning/30 font-bold text-ink">
                             <span>Thành tiền:</span>
-                            <span className="font-mono tabular-nums">{formatCurrency(record.electricity?.cost ?? 0)}</span>
+                            <span className="font-mono tabular-nums">{formatCurrency(record.electricity_cost || 0)}</span>
                           </div>
                         </div>
                       </div>
@@ -1008,18 +1008,18 @@ function ResidentPortalPage({
                           <div className="flex justify-between">
                             <span>Chỉ số:</span>
                             <span className="font-mono tabular-nums">
-                              {record.water?.oldReading ?? '—'} → {record.water?.newReading ?? '—'}
+                              {record.water_old_reading ?? '—'} → {record.water_new_reading ?? '—'}
                             </span>
                           </div>
                           <div className="flex justify-between">
                             <span>Tiêu thụ:</span>
                             <span className="font-semibold text-brand-teal font-mono tabular-nums">
-                              {(record.water?.consumption ?? 0)} m³
+                              {(record.water_usage || 0)} m³
                             </span>
                           </div>
                           <div className="flex justify-between pt-1 border-t border-brand-teal/30 font-bold text-ink">
                             <span>Thành tiền:</span>
-                            <span className="font-mono tabular-nums">{formatCurrency(record.water?.cost ?? 0)}</span>
+                            <span className="font-mono tabular-nums">{formatCurrency(record.water_cost || 0)}</span>
                           </div>
                         </div>
                       </div>
@@ -1039,7 +1039,7 @@ function ResidentPortalPage({
                         <span className="text-sm font-semibold text-ink">
                           Tổng:{' '}
                           <span className="text-ink font-mono tabular-nums">
-                            {formatCurrency((record.electricity?.cost ?? 0) + (record.water?.cost ?? 0))}
+                            {formatCurrency((record.electricity_cost || 0) + (record.water_cost || 0))}
                           </span>
                         </span>
 
@@ -1409,7 +1409,7 @@ function ResidentPortalPage({
           onClose={() => setPaymentModal(null)}
           title="Thanh Toán Điện Nước"
           type="utility"
-          amount={paymentModal.record.electricity.cost + paymentModal.record.water.cost}
+          amount={paymentModal.record.electricity_cost + paymentModal.record.water_cost}
           transferContent={`EW-${selectedApartment.code}-${String(paymentModal.record.month).padStart(2, '0')}${paymentModal.record.year}`}
           apartmentCode={selectedApartment.code}
           apartmentId={selectedApartment.id}

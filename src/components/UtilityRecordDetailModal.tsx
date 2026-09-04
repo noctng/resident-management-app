@@ -72,11 +72,11 @@ const UtilityRecordDetailModal: React.FC<UtilityRecordDetailModalProps> = ({
 
   // Calculate usage if not provided (fallback)
   const electricityUsage =
-    record.electricity.consumption ||
-    Math.max(0, record.electricity.newReading - record.electricity.oldReading);
+    record.electricity_usage ||
+    Math.max(0, record.electricity_new_reading - record.electricity_old_reading);
 
   const waterUsage =
-    record.water.consumption || Math.max(0, record.water.newReading - record.water.oldReading);
+    record.water_usage || Math.max(0, record.water_new_reading - record.water_old_reading);
 
   const handleViewImage = (imgType: 'E' | 'W') => {
     // Format: TYPE-Code-MonthYear (e.g., E-A101-122025)
@@ -148,7 +148,7 @@ const UtilityRecordDetailModal: React.FC<UtilityRecordDetailModalProps> = ({
                   Chỉ số cũ
                 </span>
                 <span className="font-semibold text-ink text-lg font-mono tabular-nums">
-                  {record.electricity.oldReading}
+                  {record.electricity_old_reading}
                 </span>
               </div>
               <div className="bg-surface p-3 rounded-lg border border-brand-border ">
@@ -156,7 +156,7 @@ const UtilityRecordDetailModal: React.FC<UtilityRecordDetailModalProps> = ({
                   Chỉ số mới
                 </span>
                 <span className="font-semibold text-ink text-lg font-mono tabular-nums">
-                  {record.electricity.newReading}
+                  {record.electricity_new_reading}
                 </span>
               </div>
               <div className="bg-brand-warning-soft/60 p-3 rounded-lg border border-brand-border ">
@@ -177,24 +177,24 @@ const UtilityRecordDetailModal: React.FC<UtilityRecordDetailModalProps> = ({
                 </span>
                 <span className="font-semibold text-ink font-mono tabular-nums">
                   {formatCurrency(
-                    (record.electricity.cost > 0
-                      ? record.electricity.cost
-                      : calculateElectricityCost(electricityUsage)) - (record.electricity.tax || 0)
+                    (record.electricity_cost > 0
+                      ? record.electricity_cost
+                      : calculateElectricityCost(electricityUsage)) - (record.electricity_tax || 0)
                   )}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-ink-soft text-sm">Thuế VAT:</span>
                 <span className="font-semibold text-brand-warning">
-                  {formatCurrency(record.electricity.tax || 0)}
+                  {formatCurrency(record.electricity_tax || 0)}
                 </span>
               </div>
               <div className="flex justify-between items-center pt-1 border-t border-brand-border">
                 <span className="text-ink-soft font-medium">Thành tiền:</span>
                 <span className="text-xl font-bold text-ink font-mono tabular-nums">
                   {formatCurrency(
-                    record.electricity.cost > 0
-                      ? record.electricity.cost
+                    record.electricity_cost > 0
+                      ? record.electricity_cost
                       : calculateElectricityCost(electricityUsage)
                   )}
                 </span>
@@ -238,7 +238,7 @@ const UtilityRecordDetailModal: React.FC<UtilityRecordDetailModalProps> = ({
                   Chỉ số cũ
                 </span>
                 <span className="font-semibold text-ink text-lg font-mono tabular-nums">
-                  {record.water.oldReading}
+                  {record.water_old_reading}
                 </span>
               </div>
               <div className="bg-surface p-3 rounded-lg border border-brand-border ">
@@ -246,7 +246,7 @@ const UtilityRecordDetailModal: React.FC<UtilityRecordDetailModalProps> = ({
                   Chỉ số mới
                 </span>
                 <span className="font-semibold text-ink text-lg font-mono tabular-nums">
-                  {record.water.newReading}
+                  {record.water_new_reading}
                 </span>
               </div>
               <div className="bg-brand-teal-soft/60 p-3 rounded-lg border border-brand-border ">
@@ -264,22 +264,22 @@ const UtilityRecordDetailModal: React.FC<UtilityRecordDetailModalProps> = ({
                 </span>
                 <span className="font-semibold text-ink font-mono tabular-nums">
                   {formatCurrency(
-                    (record.water.cost > 0 ? record.water.cost : waterUsage * WATER_PRICE) -
-                      (record.water.tax || 0)
+                    (record.water_cost > 0 ? record.water_cost : waterUsage * WATER_PRICE) -
+                      (record.water_tax || 0)
                   )}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-ink-soft text-sm">Thuế VAT:</span>
                 <span className="font-semibold text-brand-warning">
-                  {formatCurrency(record.water.tax || 0)}
+                  {formatCurrency(record.water_tax || 0)}
                 </span>
               </div>
               <div className="flex justify-between items-center pt-1 border-t border-brand-border">
                 <span className="text-ink-soft font-medium">Thành tiền:</span>
                 <span className="text-xl font-bold text-ink font-mono tabular-nums">
                   {formatCurrency(
-                    record.water.cost > 0 ? record.water.cost : waterUsage * WATER_PRICE
+                    record.water_cost > 0 ? record.water_cost : waterUsage * WATER_PRICE
                   )}
                 </span>
               </div>
@@ -359,10 +359,10 @@ const UtilityRecordDetailModal: React.FC<UtilityRecordDetailModalProps> = ({
             </span>
             <span className="text-2xl font-bold text-brand-success font-mono tabular-nums">
               {formatCurrency(
-                (record.electricity.cost > 0
-                  ? record.electricity.cost
+                (record.electricity_cost > 0
+                  ? record.electricity_cost
                   : calculateElectricityCost(electricityUsage)) +
-                  (record.water.cost > 0 ? record.water.cost : waterUsage * WATER_PRICE) +
+                  (record.water_cost > 0 ? record.water_cost : waterUsage * WATER_PRICE) +
                   ((record as any).managementFeeData
                     ? (Object.values((record as any).managementFeeData) as number[]).reduce(
                         (sum, val) => sum + val,

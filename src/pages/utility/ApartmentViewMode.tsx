@@ -97,19 +97,19 @@ export const ApartmentViewMode: React.FC<ApartmentViewModeProps> = ({
           <div className="block lg:hidden space-y-4">
             {recordsForSelectedApartment.map((record) => {
               const elecUsage =
-                record.electricity.consumption ||
+                record.electricity_usage ||
                 Math.max(
                   0,
-                  (record.electricity.newReading || 0) - (record.electricity.oldReading || 0)
+                  (record.electricity_new_reading || 0) - (record.electricity_old_reading || 0)
                 );
               const waterUsage =
-                record.water.consumption ||
-                Math.max(0, (record.water.newReading || 0) - (record.water.oldReading || 0));
+                record.water_usage ||
+                Math.max(0, (record.water_new_reading || 0) - (record.water_old_reading || 0));
               const elecCost =
-                record.electricity.cost > 0
-                  ? record.electricity.cost
+                record.electricity_cost > 0
+                  ? record.electricity_cost
                   : calculateElectricityCost(elecUsage);
-              const waterCost = record.water.cost > 0 ? record.water.cost : waterUsage * waterPrice;
+              const waterCost = record.water_cost > 0 ? record.water_cost : waterUsage * waterPrice;
 
               return (
                 <div
@@ -133,10 +133,10 @@ export const ApartmentViewMode: React.FC<ApartmentViewModeProps> = ({
                     <div className="p-2.5 bg-brand-warning-soft/50 rounded-xl border border-brand-warning/20">
                       <p className="font-bold text-brand-warning mb-1">Điện</p>
                       <p className="text-ink-soft font-mono tabular-nums">
-                        Chỉ số: {record.electricity.oldReading} → {record.electricity.newReading}
+                        Chỉ số: {record.electricity_old_reading} → {record.electricity_new_reading}
                       </p>
                       <p className="font-semibold text-ink mt-1 font-mono tabular-nums">
-                        Dùng: {record.electricity.consumption} kWh
+                        Dùng: {record.electricity_usage} kWh
                       </p>
                       <p className="font-bold text-brand-warning mt-0.5 font-mono tabular-nums">
                         {formatCurrency(elecCost)}
@@ -146,10 +146,10 @@ export const ApartmentViewMode: React.FC<ApartmentViewModeProps> = ({
                     <div className="p-2.5 bg-brand-teal-soft/50 rounded-xl border border-brand-teal/20">
                       <p className="font-bold text-brand-teal mb-1">Nước</p>
                       <p className="text-ink-soft font-mono tabular-nums">
-                        Chỉ số: {record.water.oldReading} → {record.water.newReading}
+                        Chỉ số: {record.water_old_reading} → {record.water_new_reading}
                       </p>
                       <p className="font-semibold text-ink mt-1 font-mono tabular-nums">
-                        Dùng: {record.water.consumption} m³
+                        Dùng: {record.water_usage} m³
                       </p>
                       <p className="font-bold text-brand-teal mt-0.5 font-mono tabular-nums">
                         {formatCurrency(waterCost)}
@@ -201,20 +201,20 @@ export const ApartmentViewMode: React.FC<ApartmentViewModeProps> = ({
               <tbody className="divide-y divide-brand-border">
                 {recordsForSelectedApartment.map((record) => {
                   const elecUsage =
-                    record.electricity.consumption ||
+                    record.electricity_usage ||
                     Math.max(
                       0,
-                      (record.electricity.newReading || 0) - (record.electricity.oldReading || 0)
+                      (record.electricity_new_reading || 0) - (record.electricity_old_reading || 0)
                     );
                   const waterUsage =
-                    record.water.consumption ||
-                    Math.max(0, (record.water.newReading || 0) - (record.water.oldReading || 0));
+                    record.water_usage ||
+                    Math.max(0, (record.water_new_reading || 0) - (record.water_old_reading || 0));
                   const elecCost =
-                    record.electricity.cost > 0
-                      ? record.electricity.cost
+                    record.electricity_cost > 0
+                      ? record.electricity_cost
                       : calculateElectricityCost(elecUsage);
                   const waterCost =
-                    record.water.cost > 0 ? record.water.cost : waterUsage * waterPrice;
+                    record.water_cost > 0 ? record.water_cost : waterUsage * waterPrice;
 
                   return (
                     <tr
@@ -224,27 +224,27 @@ export const ApartmentViewMode: React.FC<ApartmentViewModeProps> = ({
                       <td className="px-3 py-2.5 font-bold text-ink font-mono tabular-nums">
                         {record.month}/{record.year}
                       </td>
-                      <td className="px-2 py-2.5 text-center font-mono tabular-nums text-ink-soft">{record.electricity.oldReading}</td>
-                      <td className="px-2 py-2.5 text-center font-mono tabular-nums text-ink">{record.electricity.newReading}</td>
+                      <td className="px-2 py-2.5 text-center font-mono tabular-nums text-ink-soft">{record.electricity_old_reading}</td>
+                      <td className="px-2 py-2.5 text-center font-mono tabular-nums text-ink">{record.electricity_new_reading}</td>
                       <td className="px-2 py-2.5 font-bold text-brand-warning text-center bg-brand-warning-soft/40 font-mono tabular-nums">
-                        {record.electricity.consumption}
+                        {record.electricity_usage}
                       </td>
                       <td className="px-2 py-2.5 font-semibold text-right font-mono tabular-nums">
-                        {formatCurrency(elecCost - (record.electricity.tax || 0))}
+                        {formatCurrency(elecCost - (record.electricity_tax || 0))}
                       </td>
                       <td className="px-2 py-2.5 text-right text-brand-warning font-mono tabular-nums">
-                        {record.electricity.tax ? formatCurrency(record.electricity.tax) : '-'}
+                        {record.electricity_tax ? formatCurrency(record.electricity_tax) : '-'}
                       </td>
-                      <td className="px-2 py-2.5 text-center font-mono tabular-nums text-ink-soft">{record.water.oldReading}</td>
-                      <td className="px-2 py-2.5 text-center font-mono tabular-nums text-ink">{record.water.newReading}</td>
+                      <td className="px-2 py-2.5 text-center font-mono tabular-nums text-ink-soft">{record.water_old_reading}</td>
+                      <td className="px-2 py-2.5 text-center font-mono tabular-nums text-ink">{record.water_new_reading}</td>
                       <td className="px-2 py-2.5 font-bold text-brand-teal text-center bg-brand-teal-soft/40 font-mono tabular-nums">
-                        {record.water.consumption}
+                        {record.water_usage}
                       </td>
                       <td className="px-2 py-2.5 font-semibold text-right font-mono tabular-nums">
-                        {formatCurrency(waterCost - (record.water.tax || 0))}
+                        {formatCurrency(waterCost - (record.water_tax || 0))}
                       </td>
                       <td className="px-2 py-2.5 text-right text-brand-warning font-mono tabular-nums">
-                        {record.water.tax ? formatCurrency(record.water.tax) : '-'}
+                        {record.water_tax ? formatCurrency(record.water_tax) : '-'}
                       </td>
                       <td className="px-2 py-2.5 text-center">
                         <button

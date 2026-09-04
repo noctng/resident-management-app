@@ -29,8 +29,8 @@ const AddUtilityRecordModal: React.FC<AddUtilityRecordModalProps> = ({
   const [newWater, setNewWater] = useState('');
   const [error, setError] = useState('');
 
-  const oldElectricityReading = latestRecord?.electricity.newReading ?? 0;
-  const oldWaterReading = latestRecord?.water.newReading ?? 0;
+  const oldElectricityReading = latestRecord?.electricity_new_reading ?? 0;
+  const oldWaterReading = latestRecord?.water_new_reading ?? 0;
 
   const inputStyle =
     'mt-1 block w-full px-3 py-2 border border-brand-border rounded-md shadow-sm focus:ring-2 focus:ring-accent/30 focus:border-accent focus:outline-none bg-surface text-ink';

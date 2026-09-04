@@ -236,19 +236,19 @@ export const MonthlyViewMode: React.FC<MonthlyViewModeProps> = ({
                   let waterCost = 0;
                   if (record) {
                     const elecUsage =
-                      record.electricity.consumption ||
+                      record.electricity_usage ||
                       Math.max(
                         0,
-                        (record.electricity.newReading || 0) - (record.electricity.oldReading || 0)
+                        (record.electricity_new_reading || 0) - (record.electricity_old_reading || 0)
                       );
                     const waterUsage =
-                      record.water.consumption ||
-                      Math.max(0, (record.water.newReading || 0) - (record.water.oldReading || 0));
+                      record.water_usage ||
+                      Math.max(0, (record.water_new_reading || 0) - (record.water_old_reading || 0));
                     elecCost =
-                      record.electricity.cost > 0
-                        ? record.electricity.cost
+                      record.electricity_cost > 0
+                        ? record.electricity_cost
                         : calculateElectricityCost(elecUsage);
-                    waterCost = record.water.cost > 0 ? record.water.cost : waterUsage * waterPrice;
+                    waterCost = record.water_cost > 0 ? record.water_cost : waterUsage * waterPrice;
                   }
 
                   return (
@@ -265,34 +265,34 @@ export const MonthlyViewMode: React.FC<MonthlyViewModeProps> = ({
 
                       {/* Chỉ số điện */}
                       <td className="py-3 px-2 text-center text-ink-soft font-mono tabular-nums">
-                        {record ? record.electricity.oldReading : '-'}
+                        {record ? record.electricity_old_reading : '-'}
                       </td>
                       <td className="py-3 px-2 text-center font-bold text-ink font-mono tabular-nums">
-                        {record ? record.electricity.newReading : '-'}
+                        {record ? record.electricity_new_reading : '-'}
                       </td>
 
                       {/* Chỉ số nước */}
                       <td className="py-3 px-2 text-center text-ink-soft font-mono tabular-nums">
-                        {record ? record.water.oldReading : '-'}
+                        {record ? record.water_old_reading : '-'}
                       </td>
                       <td className="py-3 px-2 text-center font-bold text-ink font-mono tabular-nums">
-                        {record ? record.water.newReading : '-'}
+                        {record ? record.water_new_reading : '-'}
                       </td>
 
                       {/* Tiền điện */}
                       <td className="py-3 px-3 text-right font-medium text-ink whitespace-nowrap font-mono tabular-nums">
-                        {record ? formatCurrency(elecCost - (record.electricity.tax || 0)) : '-'}
+                        {record ? formatCurrency(elecCost - (record.electricity_tax || 0)) : '-'}
                       </td>
                       <td className="py-3 px-2 text-right text-brand-warning font-mono tabular-nums whitespace-nowrap">
-                        {record && record.electricity.tax ? formatCurrency(record.electricity.tax) : '-'}
+                        {record && record.electricity_tax ? formatCurrency(record.electricity_tax) : '-'}
                       </td>
 
                       {/* Tiền nước */}
                       <td className="py-3 px-3 text-right font-medium text-ink whitespace-nowrap font-mono tabular-nums">
-                        {record ? formatCurrency(waterCost - (record.water.tax || 0)) : '-'}
+                        {record ? formatCurrency(waterCost - (record.water_tax || 0)) : '-'}
                       </td>
                       <td className="py-3 px-2 text-right text-brand-warning font-mono tabular-nums whitespace-nowrap">
-                        {record && record.water.tax ? formatCurrency(record.water.tax) : '-'}
+                        {record && record.water_tax ? formatCurrency(record.water_tax) : '-'}
                       </td>
 
                       {/* Tổng */}
