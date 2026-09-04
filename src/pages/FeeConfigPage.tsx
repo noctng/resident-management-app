@@ -19,6 +19,7 @@ import {
   UserIcon,
 } from '../components/icons';
 import { StatCard } from '../components/ui/Card';
+import { EmptyState } from '../components/ui';
 
 export default function FeeConfigPage() {
   const [currentConfig, setCurrentConfig] = useState<FeeConfig | null>(null);
@@ -135,7 +136,7 @@ export default function FeeConfigPage() {
     <div className="max-w-7xl mx-auto p-6 space-y-8 animate-fade-in bg-bg/50 min-h-screen">
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-3">
+          <h1 className="font-serif text-2xl font-bold text-ink flex items-center gap-3">
             <span className="p-2 bg-accent text-white rounded-xl">
               <CurrencyDollarIcon className="w-6 h-6" />
             </span>
@@ -692,10 +693,13 @@ export default function FeeConfigPage() {
                 </div>
               ) : (
                 <div className="text-center py-20 bg-surface-alt rounded-2xl border border-dashed border-brand-border">
-                  <CurrencyDollarIcon className="w-16 h-16 text-ink-faint mx-auto mb-4" />
-                  <p className="text-ink-soft font-medium">
-                    Chưa có cấu hình phí nào được thiết lập.
-                  </p>
+                  <EmptyState
+                    icon={CurrencyDollarIcon}
+                    tone="neutral"
+                    title="Chưa có cấu hình phí nào được thiết lập"
+                    description="Hãy thiết lập mức phí cơ bản để hệ thống bắt đầu tính toán phí hàng tháng."
+                    size="md"
+                  />
                   <button
                     onClick={() => setIsEditing(true)}
                     className="mt-4 px-4 py-2 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-medium transition-colors"
@@ -745,11 +749,14 @@ export default function FeeConfigPage() {
             <tbody className="bg-surface divide-y divide-brand-border">
               {configHistory.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan={7}
-                    className="px-6 py-12 text-center text-ink-soft"
-                  >
-                    Chưa có lịch sử thay đổi nào
+                  <td colSpan={7} className="px-6 py-12 text-center text-ink-soft">
+                    <EmptyState
+                      icon={ClockIcon}
+                      tone="neutral"
+                      title="Chưa có lịch sử thay đổi"
+                      description="Các lần thay đổi cấu hình sẽ được lưu tại đây"
+                      size="sm"
+                    />
                   </td>
                 </tr>
               ) : (
