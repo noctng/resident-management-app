@@ -368,7 +368,6 @@ export const InvoiceViewModal: React.FC<InvoiceViewModalProps> = ({
                   overflow: 'hidden',
                   borderRadius: '12px',
                   boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.1)',
-                  transition: 'width 0.15s ease-out, height 0.15s ease-out',
                 }}
               >
                 <iframe
