@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import type { User, Permission } from '../types';
-import { ArrowLeftIcon, PlusIcon, TrashIcon, KeyIcon, PencilIcon, ClockIcon } from '../components/icons';
+import { ArrowLeftIcon, PlusIcon, TrashIcon, KeyIcon, PencilIcon, ClockIcon, UserIcon } from '../components/icons';
 import AddUserModal from '../components/AddUserModal';
 import EditUserModal from '../components/EditUserModal';
 import { PERMISSION_LABELS, ROLE_LABELS } from '../components/PermissionSelector';
 import { useToast, useConfirm } from '../components/ui';
+import { EmptyState } from '../components/ui';
 
 interface UserManagementPageProps {
   onBack: () => void;
@@ -271,7 +272,13 @@ const UserManagementPage: React.FC<UserManagementPageProps> = ({ onBack, current
               </tbody>
             </table>
             {users.length === 0 && (
-              <p className="text-center text-ink-soft p-10 text-sm">Chưa có người dùng nào.</p>
+              <EmptyState
+                icon={UserIcon}
+                tone="neutral"
+                title="Chưa có người dùng nào"
+                description="Thêm người dùng mới để bắt đầu quản lý hệ thống"
+                size="md"
+              />
             )}
           </div>
         )}
