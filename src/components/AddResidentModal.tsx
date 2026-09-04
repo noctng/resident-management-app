@@ -199,6 +199,38 @@ const AddResidentModal: React.FC<AddResidentModalProps> = ({ isOpen, onClose, on
 
           <div>
             <label
+              htmlFor="add-taxCode"
+              className="block text-xs font-semibold text-ink-soft mb-1"
+            >
+              Mã Số Thuế (Tax Code)
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                id="add-taxCode"
+                placeholder="VD: 0309613403 hoặc MST cá nhân"
+                value={taxCode}
+                onChange={(e) => setTaxCode(e.target.value)}
+                className="flex-1 block w-full px-3 py-2 text-xs rounded-lg border border-brand-border bg-surface-alt text-ink font-mono tabular-nums placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+              />
+              <button
+                type="button"
+                onClick={handleTaxLookup}
+                disabled={!taxCode.trim() || lookingUp}
+                className="px-3 py-2 rounded-lg bg-accent/10 border border-accent/30 text-accent hover:bg-accent/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1.5 text-xs font-medium"
+              >
+                {lookingUp ? (
+                  <span className="inline-block h-4 w-4 border-2 border-accent/40 border-t-accent rounded-full animate-spin" />
+                ) : (
+                  <MagnifyingGlassIcon className="w-4 h-4" />
+                )}
+                {lookingUp ? 'Đang tra...' : 'Tra cứu'}
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label
               htmlFor="add-companyName"
               className="block text-xs font-semibold text-ink-soft mb-1"
             >
@@ -229,38 +261,6 @@ const AddResidentModal: React.FC<AddResidentModalProps> = ({ isOpen, onClose, on
               onChange={(e) => setBuyerName(e.target.value)}
               className="block w-full px-3 py-2 text-xs rounded-lg border border-brand-border bg-surface-alt text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
             />
-          </div>
-
-          <div>
-            <label
-              htmlFor="add-taxCode"
-              className="block text-xs font-semibold text-ink-soft mb-1"
-            >
-              Mã Số Thuế (Tax Code)
-            </label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                id="add-taxCode"
-                placeholder="VD: 0309613403 hoặc MST cá nhân"
-                value={taxCode}
-                onChange={(e) => setTaxCode(e.target.value)}
-                className="flex-1 block w-full px-3 py-2 text-xs rounded-lg border border-brand-border bg-surface-alt text-ink font-mono tabular-nums placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
-              />
-              <button
-                type="button"
-                onClick={handleTaxLookup}
-                disabled={!taxCode.trim() || lookingUp}
-                className="px-3 py-2 rounded-lg bg-accent/10 border border-accent/30 text-accent hover:bg-accent/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1.5 text-xs font-medium"
-              >
-                {lookingUp ? (
-                  <span className="inline-block h-4 w-4 border-2 border-accent/40 border-t-accent rounded-full animate-spin" />
-                ) : (
-                  <MagnifyingGlassIcon className="w-4 h-4" />
-                )}
-                {lookingUp ? 'Đang tra...' : 'Tra cứu'}
-              </button>
-            </div>
           </div>
 
           <div>
