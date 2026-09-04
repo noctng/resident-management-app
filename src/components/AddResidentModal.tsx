@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Modal from './ui/Modal';
 import type { Resident } from '../types';
-import { DocumentTextIcon } from './icons';
+import { DocumentTextIcon, MagnifyingGlassIcon } from './icons';
+import { useTaxLookup } from '../services/taxLookup';
 
 interface AddResidentModalProps {
   isOpen: boolean;
@@ -26,6 +27,16 @@ const AddResidentModal: React.FC<AddResidentModalProps> = ({ isOpen, onClose, on
   const [buyerName, setBuyerName] = useState('');
   const [taxCode, setTaxCode] = useState('');
   const [invoiceAddress, setInvoiceAddress] = useState('');
+
+  const { lookingUp, lookup } = useTaxLookup();
+
+  const handleTaxLookup = () => {
+    lookup(taxCode, {
+      setCompanyName,
+      setBuyerName,
+      setInvoiceAddress,
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -227,14 +238,29 @@ const AddResidentModal: React.FC<AddResidentModalProps> = ({ isOpen, onClose, on
             >
               Mã Số Thuế (Tax Code)
             </label>
-            <input
-              type="text"
-              id="add-taxCode"
-              placeholder="VD: 0309613403 hoặc MST cá nhân"
-              value={taxCode}
-              onChange={(e) => setTaxCode(e.target.value)}
-              className="block w-full px-3 py-2 text-xs rounded-lg border border-brand-border bg-surface-alt text-ink font-mono tabular-nums placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
-            />
+            <div className="flex gap-2">
+              <input
+                type="text"
+                id="add-taxCode"
+                placeholder="VD: 0309613403 hoặc MST cá nhân"
+                value={taxCode}
+                onChange={(e) => setTaxCode(e.target.value)}
+                className="flex-1 block w-full px-3 py-2 text-xs rounded-lg border border-brand-border bg-surface-alt text-ink font-mono tabular-nums placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+              />
+              <button
+                type="button"
+                onClick={handleTaxLookup}
+                disabled={!taxCode.trim() || lookingUp}
+                className="px-3 py-2 rounded-lg bg-accent/10 border border-accent/30 text-accent hover:bg-accent/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1.5 text-xs font-medium"
+              >
+                {lookingUp ? (
+                  <span className="inline-block h-4 w-4 border-2 border-accent/40 border-t-accent rounded-full animate-spin" />
+                ) : (
+                  <MagnifyingGlassIcon className="w-4 h-4" />
+                )}
+                {lookingUp ? 'Đang tra...' : 'Tra cứu'}
+              </button>
+            </div>
           </div>
 
           <div>
