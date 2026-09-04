@@ -331,13 +331,13 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
           <p>Đang tải danh sách hồ sơ chuyển nhượng...</p>
         </div>
       ) : transfers.length === 0 ? (
-        <div className="p-16 text-center text-ink-soft bg-surface rounded-xl border border-dashed border-brand-border space-y-3">
-          <ArrowsRightLeftIcon className="w-12 h-12 mx-auto text-ink-faint" />
-          <p className="font-bold text-ink text-base">Chưa có giao dịch chuyển nhượng nào</p>
-          <p className="text-sm text-ink-soft max-w-md mx-auto">
-            Bấm "+ Lập Hồ Sơ Chuyển Nhượng Mới" để bắt đầu quy trình chuyển nhượng HĐMB theo Điều 7.3 Luật KDBĐS 2023.
-          </p>
-        </div>
+        <EmptyState
+          icon={ArrowsRightLeftIcon}
+          tone="neutral"
+          title="Chưa có giao dịch chuyển nhượng nào"
+          description="Bấm + Lập Hồ Sơ Chuyển Nhượng Mới để bắt đầu quy trình chuyển nhượng HĐMB theo Điều 7.3 Luật KDBĐS 2023."
+          size="md"
+        />
       ) : (
         <div className="bg-surface rounded-2xl border border-brand-border shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
@@ -695,7 +695,13 @@ export const PropertyTransferPage: React.FC<PropertyTransferPageProps> = ({ onNa
                   <p>Đang tải chuỗi sở hữu...</p>
                 </div>
               ) : !chainData?.timeline || chainData.timeline.length === 0 ? (
-                <div className="p-12 text-center text-ink-soft">Chưa có dữ liệu lịch sử sở hữu.</div>
+                <EmptyState
+                  icon={ClockIcon}
+                  tone="neutral"
+                  title="Chưa có dữ liệu lịch sử sở hữu"
+                  description="Chuỗi sở hữu sẽ hiển thị sau khi có giao dịch chuyển nhượng."
+                  size="md"
+                />
               ) : (
                 <div className="relative pl-6 border-l-2 border-accent/40 space-y-6">
                   {chainData.timeline.map((step: any, idx: number) => (

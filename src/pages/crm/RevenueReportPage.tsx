@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import RevenueChart from '../../components/crm/RevenueChart';
 import { useToast } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import {
   ChartBarIcon,
   BanknotesIcon,
@@ -12,6 +13,7 @@ import {
   ExclamationTriangleIcon,
   DocumentArrowDownIcon,
   ChevronLeftIcon,
+  ArrowPathIcon,
 } from '../../components/icons';
 import { StatCard } from '../../components/ui/Card';
 
@@ -158,7 +160,7 @@ const RevenueReportPage: React.FC<Props> = ({ onNavigate, onBack }) => {
           >
             <ChevronLeftIcon className="w-4 h-4" /> Quay lại
           </button>
-          <h1 className=" font-seriftext-3xl font-bold text-ink flex items-center gap-3">
+          <h1 className="font-serif text-3xl font-bold text-ink flex items-center gap-3">
             <ChartBarIcon className="w-6 h-6 text-accent" /> Báo Cáo Doanh Thu
           </h1>
         </div>
@@ -293,8 +295,8 @@ const RevenueReportPage: React.FC<Props> = ({ onNavigate, onBack }) => {
       {/* Loading State */}
       {loading && (
         <div className="flex flex-col items-center justify-center p-20 text-ink-soft">
-          <div className="w-10 h-10 mb-4 rounded-full border-4 border-brand-border border-t-accent animate-spin" />
-          <div className="text-lg font-medium">Đang tải dữ liệu...</div>
+          <ArrowPathIcon className="w-8 h-8 animate-spin text-accent mb-2" />
+          <p className="text-sm font-medium">Đang tải dữ liệu...</p>
         </div>
       )}
 

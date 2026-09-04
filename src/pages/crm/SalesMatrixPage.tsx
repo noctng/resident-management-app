@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import type { ProductUnit, SalesMatrixStats, RealEstatePhase, ProductSalesStatus } from '../../types';
 import { useToast, useConfirm } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import {
   BuildingOfficeIcon,
   MagnifyingGlassIcon,
@@ -143,7 +144,7 @@ export const SalesMatrixPage: React.FC<SalesMatrixPageProps> = ({ onNavigate, on
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className="font-serif text-2xl font-bold text-ink flex items-center gap-2">
             <BuildingOfficeIcon className="w-7 h-7 text-primary-600" />
             Ma Trận Bán Hàng Trực Quan (Sales Matrix)
           </h1>
@@ -273,11 +274,13 @@ export const SalesMatrixPage: React.FC<SalesMatrixPageProps> = ({ onNavigate, on
             <p className="text-sm font-medium">Đang tải dữ liệu ma trận bán hàng phân khu {activePhase}...</p>
           </div>
         ) : blockKeys.length === 0 ? (
-          <div className="bg-surface p-16 rounded-2xl border border-brand-border text-center text-ink-soft">
-            <BuildingOfficeIcon className="w-12 h-12 mx-auto text-ink-faint mb-3" />
-            <p className="text-base font-semibold text-ink">Chưa có sản phẩm nào trong phân khu này</p>
-            <p className="text-sm text-ink-soft mt-1">Vui lòng chọn phân khu khác hoặc thay đổi bộ lọc tìm kiếm.</p>
-          </div>
+          <EmptyState
+            icon={BuildingOfficeIcon}
+            tone="neutral"
+            title="Chưa có sản phẩm nào trong phân khu này"
+            description="Vui lòng chọn phân khu khác hoặc thay đổi bộ lọc tìm kiếm."
+            size="md"
+          />
         ) : (
           blockKeys.map((blockName) => {
             const unitsInBlock = currentPhaseBlocks[blockName] || [];

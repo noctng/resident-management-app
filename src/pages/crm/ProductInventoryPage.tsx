@@ -330,10 +330,13 @@ export const ProductInventoryPage: React.FC<ProductInventoryPageProps> = ({ onNa
             <span className="text-xs">Đang tải danh sách kho sản phẩm...</span>
           </div>
         ) : units.length === 0 ? (
-          <div className="p-16 text-center text-ink-soft">
-            <BuildingOfficeIcon className="w-12 h-12 mx-auto text-ink-faint mb-2" />
-            <p className="font-bold text-ink">Không tìm thấy sản phẩm phù hợp</p>
-          </div>
+          <EmptyState
+            icon={Squares2x2Icon}
+            tone="neutral"
+            title="Không tìm thấy sản phẩm phù hợp"
+            description="Bạn có thể thay đổi bộ lọc trạng thái hoặc từ khóa tìm kiếm."
+            size="md"
+          />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
