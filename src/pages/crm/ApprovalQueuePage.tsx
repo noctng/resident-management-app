@@ -3,6 +3,7 @@ import { api } from '../../services/api';
 import type { ApprovalWorkflow } from '../../types';
 import { CheckCircleIcon, XCircleIcon, ClockIcon } from '../../components/icons';
 import { useToast, useConfirm } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 
 interface Props {
   onBack: () => void;
@@ -123,7 +124,7 @@ const ApprovalQueuePage: React.FC<Props> = ({ onBack }) => {
     <div className="max-w-6xl mx-auto p-6 space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className=" font-seriftext-2xl font-bold text-ink">Hàng đợi Phê duyệt</h1>
+          <h1 className="font-serif text-2xl font-bold text-ink">Hàng đợi Phê duyệt</h1>
           <p className="text-sm text-ink-soft mt-1">
             Quản lý và xử lý các yêu cầu thay đổi hợp đồng
           </p>
@@ -162,17 +163,17 @@ const ApprovalQueuePage: React.FC<Props> = ({ onBack }) => {
       {/* Approvals List */}
       <div className="space-y-4">
         {filteredApprovals.length === 0 ? (
-          <div className="text-center py-16 bg-surface rounded-xl border border-dashed border-brand-border">
-            <div className="mx-auto w-12 h-12 bg-surface-alt rounded-full flex items-center justify-center mb-3">
-              <ClockIcon className="w-6 h-6 text-ink-soft" />
-            </div>
-            <h2 className="text-sm font-medium text-ink">Không có yêu cầu nào</h2>
-            <p className="text-sm text-ink-soft mt-1">
-              {filter === 'ALL'
+          <EmptyState
+            icon={ClockIcon}
+            tone="neutral"
+            title="Không có yêu cầu nào"
+            description={
+              filter === 'ALL'
                 ? 'Không có yêu cầu phê duyệt nào trong hệ thống.'
-                : 'Không có yêu cầu nào phù hợp với bộ lọc hiện tại.'}
-            </p>
-          </div>
+                : 'Không có yêu cầu nào phù hợp với bộ lọc hiện tại.'
+            }
+            size="md"
+          />
         ) : (
           filteredApprovals.map((approval) => (
             <div

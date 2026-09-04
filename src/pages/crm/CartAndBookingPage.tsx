@@ -2,6 +2,7 @@ import { CrmSubNav } from '../../components/crm/CrmSubNav';
 import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import { useToast, useConfirm } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import type { SalesCartItem, SalesBooking, RealEstatePhase } from '../../types';
 import {
   BuildingOfficeIcon,
@@ -163,7 +164,7 @@ export const CartAndBookingPage: React.FC<CartAndBookingPageProps> = ({ onNaviga
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className="font-serif text-2xl font-bold text-ink flex items-center gap-2">
             <BuildingOfficeIcon className="w-7 h-7 text-primary-600" />
             Giỏ Hàng & Quản Lý Giữ Chỗ (Cart & Booking Lock)
           </h1>
@@ -237,11 +238,13 @@ export const CartAndBookingPage: React.FC<CartAndBookingPageProps> = ({ onNaviga
               <span>Đang tải danh sách giữ chỗ...</span>
             </div>
           ) : bookings.length === 0 ? (
-            <div className="p-16 text-center text-ink-soft bg-surface rounded-xl border border-brand-border">
-              <BuildingOfficeIcon className="w-12 h-12 mx-auto text-ink-faint mb-2" />
-              <p className="font-bold text-ink">Chưa có phiếu giữ chỗ nào</p>
-              <p className="text-sm text-ink-soft mt-1">Các căn được giữ chỗ từ Ma Trận Bán Hàng sẽ hiển thị và đếm ngược tại đây.</p>
-            </div>
+            <EmptyState
+              icon={BuildingOfficeIcon}
+              tone="neutral"
+              title="Chưa có phiếu giữ chỗ nào"
+              description="Các căn được giữ chỗ từ Ma Trận Bán Hàng sẽ hiển thị và đếm ngược tại đây."
+              size="md"
+            />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {bookings.map((booking) => {
@@ -369,11 +372,13 @@ export const CartAndBookingPage: React.FC<CartAndBookingPageProps> = ({ onNaviga
               <span>Đang tải giỏ hàng tư vấn...</span>
             </div>
           ) : cartItems.length === 0 ? (
-            <div className="p-16 text-center text-ink-soft bg-surface rounded-xl border border-brand-border">
-              <BuildingOfficeIcon className="w-12 h-12 mx-auto text-ink-faint mb-2" />
-              <p className="font-bold text-ink">Giỏ hàng tư vấn đang trống</p>
-              <p className="text-sm text-ink-soft mt-1">Truy cập Ma Trận Bán Hàng và bấm "Thêm Giỏ Hàng" để đưa các căn quan tâm vào đây.</p>
-            </div>
+            <EmptyState
+              icon={BuildingOfficeIcon}
+              tone="neutral"
+              title="Giỏ hàng tư vấn đang trống"
+              description="Truy cập Ma Trận Bán Hàng và bấm Thêm Giỏ Hàng để đưa các căn quan tâm vào đây."
+              size="md"
+            />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {cartItems.map((item) => (

@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { api } from '../../services/api';
 import type { DepositReceipt, DepositStatus, ProductUnit } from '../../types';
 import { useToast, useConfirm } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import {
   BanknotesIcon,
   MagnifyingGlassIcon,
@@ -295,10 +296,13 @@ export const DepositListPage: React.FC<DepositListPageProps> = ({ onNavigate, on
             <span className="text-xs">Đang tải danh sách phiếu đặt cọc...</span>
           </div>
         ) : deposits.length === 0 ? (
-          <div className="p-16 text-center text-ink-soft">
-            <BanknotesIcon className="w-12 h-12 mx-auto text-ink-faint mb-2" />
-            <p className="font-bold text-ink">Chưa có phiếu đặt cọc nào</p>
-          </div>
+          <EmptyState
+            icon={BanknotesIcon}
+            tone="neutral"
+            title="Chưa có phiếu đặt cọc nào"
+            description="Phiếu đặt cọc sẽ hiển thị sau khi có giao dịch đặt cọc mới"
+            size="md"
+          />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">

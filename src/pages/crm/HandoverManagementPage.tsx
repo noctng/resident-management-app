@@ -2,6 +2,7 @@ import { CrmSubNav } from '../../components/crm/CrmSubNav';
 import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import {
   BuildingOfficeIcon,
   CheckCircleIcon,
@@ -139,7 +140,7 @@ export const HandoverManagementPage: React.FC<HandoverManagementPageProps> = ({ 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className="font-serif text-2xl font-bold text-ink flex items-center gap-2">
             <BuildingOfficeIcon className="w-7 h-7 text-accent" />
             Nghiệm Thu Bàn Giao & Cầu Nối Vận Hành (Operations Bridge)
           </h1>
@@ -166,7 +167,13 @@ export const HandoverManagementPage: React.FC<HandoverManagementPageProps> = ({ 
               <span className="text-xs">Đang tải...</span>
             </div>
           ) : contracts.length === 0 ? (
-            <div className="p-8 text-center text-ink-soft text-xs">Chưa có hợp đồng nào.</div>
+            <EmptyState
+              icon={BuildingOfficeIcon}
+              tone="neutral"
+              title="Chưa có hợp đồng nào"
+              description="Chọn hoặc thêm hợp đồng để bắt đầu quy trình bàn giao căn hộ"
+              size="sm"
+            />
           ) : (
             <div className="space-y-2 max-h-[600px] overflow-y-auto pr-1">
               {contracts.map((c) => {
@@ -310,10 +317,13 @@ export const HandoverManagementPage: React.FC<HandoverManagementPageProps> = ({ 
                   </div>
 
                   {(!handoverDetail?.snag_items || handoverDetail.snag_items.length === 0) ? (
-                    <div className="p-8 text-center text-ink-soft bg-surface-alt rounded-xl border border-dashed border-brand-border text-xs flex flex-col items-center gap-2">
-                      <CheckCircleIcon className="w-6 h-6 text-brand-success" />
-                      <span>Căn hộ đạt 100% tiêu chuẩn nghiệm thu, không có lỗi kỹ thuật nào được ghi nhận.</span>
-                    </div>
+                    <EmptyState
+                      icon={CheckCircleIcon}
+                      tone="teal"
+                      title="Căn hộ đạt 100% tiêu chuẩn nghiệm thu"
+                      description="Không có lỗi kỹ thuật nào được ghi nhận."
+                      size="sm"
+                    />
                   ) : (
                     <div className="space-y-2">
                       {handoverDetail.snag_items.map((snag: any) => {

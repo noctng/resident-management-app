@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CrmSubNav } from '../../components/crm/CrmSubNav';
 import { api } from '../../services/api';
 import { useToast, useConfirm } from '../../components/ui';
+import { EmptyState } from '../../components/ui';
 import {
   BanknotesIcon,
   SparklesIcon,
@@ -176,7 +177,7 @@ export const CommissionPage: React.FC<CommissionPageProps> = ({ onNavigate, onBa
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className=" font-seriftext-2xl font-bold text-ink flex items-center gap-2">
+          <h1 className="font-serif text-2xl font-bold text-ink flex items-center gap-2">
             <SparklesIcon className="w-7 h-7 text-accent" />
             <span>Quản Lý Hoa Hồng Sale & Kênh Phân Phối</span>
           </h1>
@@ -301,11 +302,13 @@ export const CommissionPage: React.FC<CommissionPageProps> = ({ onNavigate, onBa
               <p>Đang tải danh sách hoa hồng...</p>
             </div>
           ) : commissions.length === 0 ? (
-            <div className="p-16 text-center text-ink-soft bg-surface rounded-xl border border-dashed border-brand-border">
-              <SparklesIcon className="w-12 h-12 mx-auto text-ink-faint mb-2" />
-              <p className="font-bold text-ink text-base">Chưa có bản ghi hoa hồng nào</p>
-              <p className="text-xs text-ink-soft mt-1">Hoa hồng sẽ tự động phát sinh khi Hợp đồng Mua bán được kích hoạt.</p>
-            </div>
+            <EmptyState
+              icon={SparklesIcon}
+              tone="neutral"
+              title="Chưa có bản ghi hoa hồng nào"
+              description="Hoa hồng sẽ tự động phát sinh khi Hợp đồng Mua bán được kích hoạt."
+              size="md"
+            />
           ) : (
             <div className="bg-surface rounded-2xl border border-brand-border shadow-sm overflow-hidden">
               <div className="overflow-x-auto">
