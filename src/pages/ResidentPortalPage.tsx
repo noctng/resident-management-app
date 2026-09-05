@@ -152,10 +152,16 @@ function ResidentPortalPage({
     year: number;
   } | null>(null);
 
-  const [localUtilityRecords, setLocalUtilityRecords] = useState<UtilityRecord[]>(utilityRecords);
+  const [localUtilityRecords, setLocalUtilityRecords] = useState<UtilityRecord[]>([]);
 
   useEffect(() => {
-    setLocalUtilityRecords(utilityRecords);
+    const normalized = (utilityRecords || []).map((r: any) => ({
+      ...r,
+      id: r.id || r.utility_id || `util-${r.apartmentId || r.apartment_id}-${r.month}-${r.year}`,
+      apartmentId: r.apartmentId || r.apartment_id,
+      paymentStatus: r.paymentStatus || r.utility_status || 'UNPAID',
+    }));
+    setLocalUtilityRecords(normalized);
   }, [utilityRecords]);
 
   const fetchUtilityRecords = async () => {
