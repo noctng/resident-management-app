@@ -62,9 +62,12 @@ export function getBankAppDeeplink(appId: string, params?: PaymentDeeplinkParams
   url.searchParams.set('app', appId);
 
   if (params) {
-    // ba = "accountNumber@bankCode" format
-    const accountRef = `${params.accountNumber}@${params.bankCode.toUpperCase()}`;
-    url.searchParams.set('ba', accountRef);
+    // ba = "accountNumber@bankCode" — only set when both parts are valid strings
+    const accountNumber = params.accountNumber;
+    const bankCode = params.bankCode;
+    if (typeof accountNumber === 'string' && accountNumber.trim() && typeof bankCode === 'string' && bankCode.trim()) {
+      url.searchParams.set('ba', `${accountNumber}@${bankCode.toUpperCase()}`);
+    }
 
     if (params.amount > 0) {
       url.searchParams.set('am', params.amount.toString());
@@ -72,7 +75,8 @@ export function getBankAppDeeplink(appId: string, params?: PaymentDeeplinkParams
     if (params.transferContent) {
       url.searchParams.set('tn', params.transferContent);
     }
-    if (params.accountName) {
+    // accountName is nullable — only include when it is a non-empty string
+    if (typeof params.accountName === 'string' && params.accountName.trim()) {
       url.searchParams.set('bn', params.accountName);
     }
     if (params.returnUrl) {
