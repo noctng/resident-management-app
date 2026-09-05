@@ -19,3 +19,6 @@ export {
 export { default as Input } from './Input';
 export { ToastProvider, useToast } from './Toast';
 export { ConfirmProvider, useConfirm } from './ConfirmDialog';
+export { default as Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs';
+export { default as FilterBar } from './FilterBar';
+export { default as QuickViewDrawer } from './QuickViewDrawer';

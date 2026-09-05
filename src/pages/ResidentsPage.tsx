@@ -22,7 +22,7 @@ import ImportResidentModal from '../components/ImportResidentModal';
 import { DocumentArrowUpIcon } from '../components/icons';
 import { useToast } from '../components/ui';
 import { StatCard } from '../components/ui/Card';
-import { EmptyState } from '../components/ui';
+import { EmptyState, QuickViewDrawer } from '../components/ui';
 
 interface ResidentsPageProps {
   residents: Resident[];
@@ -62,6 +62,7 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [quickViewResident, setQuickViewResident] = useState<Resident | null>(null);
   const toast = useToast();
 
   // Mobile default: cards, desktop: respect toggle
@@ -580,7 +581,15 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
                         </td>
                         <td className="py-3.5 px-4 whitespace-nowrap text-center">
                           <div className="flex items-center justify-center gap-1.5">
-                            <button onClick={() => onViewResident(resident)} className={ghostIconBtn} title="Xem chi tiết cư dân" aria-label="Xem chi tiết cư dân">
+                            <button
+                              onClick={() => {
+                                onViewResident(resident);
+                                setQuickViewResident(resident);
+                              }}
+                              className={ghostIconBtn}
+                              title="Xem chi tiết cư dân"
+                              aria-label="Xem chi tiết cư dân"
+                            >
                               <ViewfinderCircleIcon className="w-4 h-4" />
                             </button>
                             <button onClick={() => onEditResident(resident)} className={ghostIconBtn} title="Chỉnh sửa thông tin" aria-label="Chỉnh sửa thông tin cư dân">
@@ -779,6 +788,124 @@ const ResidentsPage: React.FC<ResidentsPageProps> = ({
           toast.success('Import cư dân thành công');
         }}
       />
+
+      {/* Quick View Drawer for Resident Details */}
+      {quickViewResident && (
+        <QuickViewDrawer
+          isOpen={!!quickViewResident}
+          onClose={() => setQuickViewResident(null)}
+          title={quickViewResident.name}
+          subtitle={`Mã cư dân: #${quickViewResident.id.slice(0, 8)}`}
+          action={
+            <button
+              onClick={() => {
+                const res = quickViewResident;
+                setQuickViewResident(null);
+                onEditResident(res);
+              }}
+              className="px-3 py-1.5 text-xs font-semibold bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors cursor-pointer"
+            >
+              Chỉnh sửa
+            </button>
+          }
+        >
+          <div className="space-y-6 text-sm">
+            {/* Header info */}
+            <div className="flex items-center gap-4 p-4 bg-surface-alt/60 rounded-xl border border-brand-border">
+              <span className="w-12 h-12 rounded-full bg-accent-soft text-accent-ink font-serif text-xl font-bold flex items-center justify-center shrink-0">
+                {quickViewResident.name.charAt(0).toUpperCase()}
+              </span>
+              <div>
+                <h4 className="font-bold text-ink text-base">{quickViewResident.name}</h4>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                    getRelationshipBadge(quickViewResident.relationshipStatus).class
+                  }`}>
+                    {getRelationshipBadge(quickViewResident.relationshipStatus).label}
+                  </span>
+                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                    quickViewResident.isActive ? 'bg-brand-success-soft text-brand-success' : 'bg-brand-warning-soft text-brand-warning'
+                  }`}>
+                    {quickViewResident.isActive ? 'Hoạt động' : 'Tạm vắng'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Personal Details */}
+            <div className="bg-surface border border-brand-border rounded-xl p-4 space-y-3">
+              <h5 className="font-bold text-ink text-xs uppercase tracking-wider text-ink-soft">Thông tin cá nhân</h5>
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <span className="text-ink-soft block mb-0.5">Số điện thoại:</span>
+                  <span className="font-mono font-medium text-ink">{quickViewResident.phoneNumber || '—'}</span>
+                </div>
+                <div>
+                  <span className="text-ink-soft block mb-0.5">CCCD / CMND:</span>
+                  <span className="font-mono font-medium text-ink">{quickViewResident.idNumber || '—'}</span>
+                </div>
+                <div>
+                  <span className="text-ink-soft block mb-0.5">Quyền tiện ích:</span>
+                  <span className={quickViewResident.canUseAmenities ? 'text-brand-success font-semibold' : 'text-ink-soft'}>
+                    {quickViewResident.canUseAmenities ? 'Cho phép sử dụng' : 'Khóa tiện ích'}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-ink-soft block mb-0.5">Trạng thái ở:</span>
+                  <span className="font-medium text-ink">{quickViewResident.isActive ? 'Thường trú / Tạm trú' : 'Tạm vắng'}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* E-Invoice Information */}
+            <div className="bg-surface border border-brand-border rounded-xl p-4 space-y-3">
+              <h5 className="font-bold text-ink text-xs uppercase tracking-wider text-ink-soft">Thông tin xuất hóa đơn (HĐĐT)</h5>
+              <div className="space-y-2 text-xs">
+                <div className="flex justify-between border-b border-brand-border/40 pb-1.5">
+                  <span className="text-ink-soft">Mã số thuế (MST):</span>
+                  <span className="font-mono font-semibold text-accent">{quickViewResident.taxCode || 'Chưa cập nhật'}</span>
+                </div>
+                <div className="flex justify-between border-b border-brand-border/40 pb-1.5">
+                  <span className="text-ink-soft">Tên công ty:</span>
+                  <span className="font-medium text-ink">{quickViewResident.companyName || 'Chưa cập nhật'}</span>
+                </div>
+                <div className="flex justify-between border-b border-brand-border/40 pb-1.5">
+                  <span className="text-ink-soft">Người mua hàng:</span>
+                  <span className="font-medium text-ink">{quickViewResident.buyerName || 'Chưa cập nhật'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-ink-soft">Địa chỉ hóa đơn:</span>
+                  <span className="font-medium text-ink text-right max-w-[200px] truncate">{quickViewResident.invoiceAddress || 'Chưa cập nhật'}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Apartments owned / occupied */}
+            <div className="bg-surface border border-brand-border rounded-xl p-4 space-y-3">
+              <h5 className="font-bold text-ink text-xs uppercase tracking-wider text-ink-soft">
+                Căn hộ trực thuộc ({getResidentApartments(quickViewResident.id).length})
+              </h5>
+              {getResidentApartments(quickViewResident.id).length === 0 ? (
+                <p className="text-xs text-ink-soft italic">Cư dân chưa được gắn với căn hộ nào.</p>
+              ) : (
+                <div className="space-y-2">
+                  {getResidentApartments(quickViewResident.id).map((apt) => (
+                    <div key={apt.id} className="flex items-center justify-between p-2.5 bg-surface-alt/50 rounded-lg border border-brand-border">
+                      <div className="flex items-center gap-2">
+                        <BuildingOfficeIcon className="w-4 h-4 text-accent" />
+                        <span className="font-mono font-bold text-ink text-xs">{apt.code}</span>
+                      </div>
+                      <span className="text-[11px] font-medium text-ink-soft">
+                        Tầng {apt.floor || '—'} · Tòa {apt.block_code || apt.blockCode || '—'}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </QuickViewDrawer>
+      )}
     </div>
   );
 };
