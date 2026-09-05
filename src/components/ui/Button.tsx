@@ -12,20 +12,20 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: 'bg-accent text-white hover:opacity-90 shadow-sm font-semibold',
+  primary: 'bg-accent text-white hover:bg-accent-hover shadow-elevation-surface font-semibold',
   secondary:
-    'bg-surface-alt text-ink border border-brand-border hover:bg-surface-alt/80 font-semibold',
-  danger: 'bg-brand-danger text-white hover:opacity-90 shadow-sm font-semibold',
+    'bg-surface text-ink border border-brand-border hover:bg-surface-alt font-semibold',
+  danger: 'bg-brand-danger text-white hover:opacity-90 shadow-elevation-surface font-semibold',
   ghost: 'text-ink-soft hover:bg-surface-alt hover:text-ink font-semibold',
   outline:
-    'border border-accent text-accent hover:bg-accent-soft/30 font-semibold',
+    'border border-brand-border text-ink hover:bg-surface-alt font-semibold',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  xs: 'px-2.5 py-1 text-xs gap-1',
-  sm: 'px-3 py-1.5 text-xs gap-1.5',
-  md: 'px-3.5 py-2 text-[13px] gap-2',
-  lg: 'px-5 py-2.5 text-sm gap-2',
+  xs: 'px-2.5 py-1 text-xs gap-1 rounded-md',
+  sm: 'px-3 py-1.5 text-xs gap-1.5 rounded-md',
+  md: 'px-3.5 py-2 text-xs gap-2 rounded-lg',
+  lg: 'px-5 py-2.5 text-sm gap-2 rounded-lg',
 };
 
 const Spinner = ({ size }: { size: ButtonSize }) => {
@@ -64,9 +64,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={isDisabled}
         className={[
-          'inline-flex items-center justify-center rounded-[8px]',
+          'inline-flex items-center justify-center font-sans tracking-tight',
           'transition-all duration-150 cursor-pointer select-none',
-          'focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1',
+          'focus:outline-none focus:ring-2 focus:ring-accent/30 focus:ring-offset-1',
           'disabled:opacity-50 disabled:cursor-not-allowed',
           variantClasses[variant],
           sizeClasses[size],

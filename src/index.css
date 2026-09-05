@@ -3,31 +3,31 @@
 @tailwind utilities;
 
 :root {
-  --bg: #f2f3ef;
+  --bg: #fafafa;
   --surface: #ffffff;
-  --surface-alt: #eaede6;
-  --ink: #17231f;
-  --ink-soft: #5a6960;
-  --ink-faint: #8b978e;
-  --sidebar-bg: #122120;
-  --sidebar-bg-2: #0c1716;
-  --sidebar-line: #26403c;
-  --sidebar-text: #b9cac3;
-  --sidebar-text-dim: #6e8a81;
-  --accent: #b8722e;
-  --accent-soft: #f0dcc2;
-  --accent-ink: #5b3714;
-  --teal: #3e6e64;
-  --teal-soft: #dce9e4;
-  --danger: #b94a3d;
-  --danger-soft: #f5dcd8;
-  --warning: #b98a2e;
-  --warning-soft: #f3e6c7;
-  --success: #3f7d53;
-  --success-soft: #dcebdf;
-  --border: #dfe2d9;
-  --radius: 10px;
-  --shadow: 0 1px 2px rgba(20, 30, 25, 0.04), 0 6px 20px -8px rgba(20, 30, 25, 0.12);
+  --surface-alt: #f4f4f5;
+  --ink: #09090b;
+  --ink-soft: #71717a;
+  --ink-faint: #a1a1aa;
+  --sidebar-bg: #09090b;
+  --sidebar-bg-2: #18181b;
+  --sidebar-line: #27272a;
+  --sidebar-text: #e4e4e7;
+  --sidebar-text-dim: #a1a1aa;
+  --accent: #18181b;
+  --accent-soft: #f4f4f5;
+  --accent-ink: #09090b;
+  --teal: #0284c7;
+  --teal-soft: #e0f2fe;
+  --danger: #e11d48;
+  --danger-soft: #ffe4e6;
+  --warning: #d97706;
+  --warning-soft: #fef3c7;
+  --success: #16a34a;
+  --success-soft: #dcfce7;
+  --border: #e4e4e7;
+  --radius: 8px;
+  --shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 @layer base {
@@ -38,7 +38,7 @@
   body {
     background-color: var(--bg);
     color: var(--ink);
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Be Vietnam Pro', 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
     max-width: 100vw;
@@ -47,7 +47,7 @@
   h2,
   h3,
   h4 {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
     font-weight: 700;
     letter-spacing: -0.01em;
   }
@@ -61,33 +61,33 @@
 @layer components {
   /* Custom scrollbar */
   .custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
   .custom-scrollbar::-webkit-scrollbar-track {
     background: transparent;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.12);
-    border-radius: 20px;
+    border-radius: 9999px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.22);
+    background: rgba(0, 0, 0, 0.25);
   }
 
   /* Form input base */
   .form-input {
-    @apply block w-full rounded-[8px] border border-[#DFE2D9]
-           bg-[#EAEDE6] 
-           text-[#17231F] 
-           placeholder-[#8B978E]
+    @apply block w-full rounded-[8px] border border-brand-border
+           bg-surface 
+           text-ink 
+           placeholder:text-ink-faint
            px-3 py-2 text-sm
-           focus:outline-none focus:ring-2 focus:ring-[#B8722E] focus:border-[#B8722E]
+           focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent
            transition-colors duration-150;
   }
 
   .form-label {
-    @apply block text-xs font-semibold text-[#5A6960]  mb-1;
+    @apply block text-xs font-semibold text-ink-soft mb-1;
   }
 
   /* Table base */
@@ -95,31 +95,23 @@
     @apply w-full text-sm text-left border-collapse;
   }
   .table-base thead th {
-    @apply px-4 py-3 text-xs uppercase tracking-wider font-semibold text-[#5A6960]
-           bg-[#EAEDE6] border-b border-[#DFE2D9] whitespace-nowrap;
+    @apply px-4 py-3 text-xs uppercase tracking-wider font-semibold text-ink-soft
+           bg-surface-alt border-b border-brand-border whitespace-nowrap;
   }
   .table-base tbody td {
-    @apply px-4 py-3 text-[#17231F] border-b border-[#DFE2D9] align-middle;
-  }
-  .table-base tbody tr:last-child td {
-    @apply border-b-0;
-  }
-  .table-base tbody tr {
-    @apply hover:bg-[#FAFAF7] transition-colors duration-100;
+    @apply px-4 py-3 border-b border-brand-border/60 text-ink;
   }
 
-  /* Panels & Cards */
-  .panel-card {
-    @apply bg-white border border-[#DFE2D9] rounded-[10px] shadow-[0_1px_2px_rgba(20,30,25,0.04),0_6px_20px_-8px_rgba(20,30,25,0.12)] overflow-hidden;
+  /* Minimalist button class helpers */
+  .btn-minimal {
+    @apply inline-flex items-center justify-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-[8px]
+           bg-accent text-white hover:bg-accent-hover transition-colors duration-150 cursor-pointer
+           focus:outline-none focus:ring-2 focus:ring-accent/40;
   }
 
-  .panel-head {
-    @apply px-4 py-3.5 border-b border-[#DFE2D9] flex items-center justify-between gap-3;
-  }
-}
-
-@layer utilities {
-  .animate-in {
-    animation-fill-mode: both;
+  .btn-minimal-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-[8px]
+           bg-surface text-ink border border-brand-border hover:bg-surface-alt transition-colors duration-150 cursor-pointer
+           focus:outline-none focus:ring-2 focus:ring-accent/40;
   }
 }
