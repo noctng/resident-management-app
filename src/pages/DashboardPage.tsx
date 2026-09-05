@@ -219,26 +219,26 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 <BarChart data={revenueChartData} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}>
                   <XAxis
                     dataKey="m"
-                    tick={{ fill: '#5A6960', fontSize: 11 }}
-                    axisLine={{ stroke: '#DFE2D9' }}
+                    tick={{ fill: 'var(--ink-soft)', fontSize: 11 }}
+                    axisLine={{ stroke: 'var(--border)' }}
                     tickLine={false}
                   />
-                  <YAxis tick={{ fill: '#8B978E', fontSize: 11 }} axisLine={false} tickLine={false} unit=" tr" />
+                  <YAxis tick={{ fill: 'var(--ink-faint)', fontSize: 11 }} axisLine={false} tickLine={false} unit=" tr" />
                   <Tooltip
-                    cursor={{ fill: '#EAEDE6', opacity: 0.5 }}
+                    cursor={{ fill: 'var(--surface-alt)', opacity: 0.6 }}
                     contentStyle={{
-                      background: '#FFFFFF',
-                      border: '1px solid #DFE2D9',
-                      borderRadius: 12,
+                      background: 'var(--surface)',
+                      border: '1px solid var(--border)',
+                      borderRadius: 8,
                       fontSize: 12,
                     }}
                     formatter={(value) => [`${value} triệu ₫`, 'Doanh thu']}
                   />
-                  <Bar dataKey="v" radius={[6, 6, 0, 0]}>
+                  <Bar dataKey="v" radius={[4, 4, 0, 0]}>
                     {revenueChartData.map((entry: { m: string; v: number }, i: number) => (
                       <Cell
                         key={entry.m}
-                        fill={i === revenueChartData.length - 1 ? '#B8722E' : '#E1B48E'}
+                        fill={i === revenueChartData.length - 1 ? 'var(--ink)' : 'var(--ink-soft)'}
                       />
                     ))}
                   </Bar>
