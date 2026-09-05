@@ -21,7 +21,7 @@ const feedbackService = require('../services/feedbackService');
 const vehicleService = require('../services/vehicleService');
 const amenityService = require('../services/amenityService');
 const constructionService = require('../services/constructionService');
-const residentService = require('../services/residentService');
+const upload = require('../middleware/uploadMiddleware');
 
 // Xác thực cư dân thực sự thuộc căn hộ (chống truy cập chéo)
 async function assertOwnsApartment(residentId, apartmentId) {
@@ -98,7 +98,7 @@ router.get(
 
 router.post(
   '/feedback',
-  [authenticateResident, requireResidentPerm('feedback', 'C')],
+  [authenticateResident, requireResidentPerm('feedback', 'C'), upload.array('imageData', 5)],
   async (req, res) => {
     const apartmentId = aptId(req);
     try {
@@ -111,7 +111,7 @@ router.post(
         resident_id: req.resident.id,
         source: 'RESIDENT_PORTAL',
       };
-      const created = await feedbackService.createFeedback(payload);
+      const created = await feedbackService.createFeedback(payload, req.files);
       res.status(201).json(created);
     } catch (e) {
       console.error('[ResidentPortal] createFeedback error:', e);
