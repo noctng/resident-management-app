@@ -4,6 +4,7 @@ const contractController = require('../controllers/contractController');
 const contractLifecycleController = require('../controllers/contractLifecycleController');
 const handoverController = require('../controllers/handoverController');
 const { authenticateToken, checkPermission } = require('../middleware/authMiddleware');
+const upload = require('../middleware/uploadMiddleware');
 
 const auth = [authenticateToken, checkPermission('crm')];
 
@@ -20,7 +21,7 @@ router.post('/payments', auth, contractController.addPayment);
 router.put('/payments/:id', auth, contractController.updatePaymentStatus);
 
 // Document management
-router.post('/:id/documents', auth, contractController.uploadContractDocument);
+router.post('/:id/documents', auth, upload.single('file'), contractController.uploadContractDocument);
 router.get('/:id/documents', auth, contractController.getContractDocuments);
 
 // Transfer
