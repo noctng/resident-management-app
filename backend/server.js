@@ -116,13 +116,13 @@ app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
 // Static files (Feedback pictures)
-const feedbackPictureDir = 'D:/nginx/nginx-1.28.0/html/dist/picture_feedback';
+const feedbackPictureDir = '/home/dell/workspace/resident-management-app/backend/nginx-1.28.0/html/dist/picture_feedback';
 if (!fs.existsSync(feedbackPictureDir)) {
     fs.mkdirSync(feedbackPictureDir, { recursive: true });
 }
 app.use('/picture_feedback', express.static(feedbackPictureDir, { maxAge: '1y' }));
 
-const crmDocDir = 'D:/nginx/nginx-1.28.0/html/dist/crm_docs';
+const crmDocDir = '/home/dell/workspace/resident-management-app/backend/nginx-1.28.0/html/dist/crm_docs';
 if (!fs.existsSync(crmDocDir)) {
     fs.mkdirSync(crmDocDir, { recursive: true });
 }
@@ -133,7 +133,7 @@ if (!fs.existsSync(localCrmDocDir)) {
 }
 app.use('/crm_docs', express.static(localCrmDocDir, { maxAge: '1y' }));
 
-const utilityDir = 'D:/nginx/nginx-1.28.0/html/dist/utility';
+const utilityDir = '/home/dell/workspace/resident-management-app/backend/nginx-1.28.0/html/dist/utility';
 if (!fs.existsSync(utilityDir)) {
     fs.mkdirSync(utilityDir, { recursive: true });
 }

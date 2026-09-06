@@ -105,7 +105,7 @@ exports.addUtilityRecord = async (req, res) => {
 
         // --- Auto-create image folder logic ---
         const utilityDir = path.join(__dirname, '../../uploads/utility');
-        const nginxUtilityDir = 'D:/nginx/nginx-1.28.0/html/dist/utility';
+        const nginxUtilityDir = '/home/dell/workspace/resident-management-app/backend/nginx-1.28.0/html/dist/utility';
         const monthStr = month.toString().padStart(2, '0');
         const folderName = `${monthStr}${year}`;
         const targetDir = path.join(utilityDir, folderName);

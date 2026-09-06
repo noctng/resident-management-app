@@ -5,7 +5,7 @@ const repo = require('../repositories/announcementRepository');
 const pushService = require('./pushService');
 
 const NEWS_IMAGE_DIR = path.join(__dirname, '../../uploads/news/images');
-const NGINX_NEWS_IMAGE_DIR = 'D:/nginx/nginx-1.28.0/html/dist/news/images';
+const NGINX_NEWS_IMAGE_DIR = '/home/dell/workspace/resident-management-app/backend/nginx-1.28.0/html/dist/news/images';
 
 if (!fs.existsSync(NEWS_IMAGE_DIR)) fs.mkdirSync(NEWS_IMAGE_DIR, { recursive: true });
 try { if (!fs.existsSync(NGINX_NEWS_IMAGE_DIR)) fs.mkdirSync(NGINX_NEWS_IMAGE_DIR, { recursive: true }); } catch (e) {}

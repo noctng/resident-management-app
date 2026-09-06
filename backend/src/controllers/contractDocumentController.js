@@ -12,7 +12,7 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 // Also ensure nginx dist crm_docs exists
-const nginxCrmDir = 'D:/nginx/nginx-1.28.0/html/dist/crm_docs';
+const nginxCrmDir = '/home/dell/workspace/resident-management-app/backend/nginx-1.28.0/html/dist/crm_docs';
 if (!fs.existsSync(nginxCrmDir)) {
   try {
     fs.mkdirSync(nginxCrmDir, { recursive: true });

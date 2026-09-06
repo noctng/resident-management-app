@@ -4,8 +4,8 @@ const path = require('path');
 const UPLOADS_BASE = path.join(__dirname, '../../uploads');
 const FEEDBACK_PICTURE_DIR = path.join(UPLOADS_BASE, 'picture_feedback');
 const CRM_DOC_DIR = path.join(UPLOADS_BASE, 'crm_docs');
-const NGINX_FEEDBACK_DIR = 'D:/nginx/nginx-1.28.0/html/dist/picture_feedback';
-const NGINX_CRM_DOC_DIR = 'D:/nginx/nginx-1.28.0/html/dist/crm_docs';
+const NGINX_FEEDBACK_DIR = '/home/dell/workspace/resident-management-app/backend/nginx-1.28.0/html/dist/picture_feedback';
+const NGINX_CRM_DOC_DIR = '/home/dell/workspace/resident-management-app/backend/nginx-1.28.0/html/dist/crm_docs';
 
 // Ensure directories exist on load
 [FEEDBACK_PICTURE_DIR, CRM_DOC_DIR].forEach((dir) => {

@@ -5,7 +5,7 @@ const { logActivity } = require('../utils/logger');
 const service = require('../services/configService');
 
 const DOC_DIR = path.join(__dirname, '../../uploads/documents');
-const NGINX_DOC_DIR = 'D:/nginx/nginx-1.28.0/html/dist/documents';
+const NGINX_DOC_DIR = '/home/dell/workspace/resident-management-app/backend/nginx-1.28.0/html/dist/documents';
 if (!fs.existsSync(DOC_DIR)) fs.mkdirSync(DOC_DIR, { recursive: true });
 if (!fs.existsSync(NGINX_DOC_DIR)) fs.mkdirSync(NGINX_DOC_DIR, { recursive: true });
 
