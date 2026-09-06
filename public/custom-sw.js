@@ -13,8 +13,8 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: data.body || '',
-    icon: data.icon || '/pwa-192x192.png',
-    badge: '/pwa-192x192.png',
+    icon: data.icon || '/pwa-192x192.svg',
+    badge: '/pwa-192x192.svg',
     tag: data.tag || 'default',
     vibrate: [200, 100, 200],
     data: { url: data.url || data.data?.url || '/' },
