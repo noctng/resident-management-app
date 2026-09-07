@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
+const { save, remove } = require('../services/objectStorageService');
 
 // Setup storage directory
 const uploadDir = path.join(__dirname, '../../uploads/crm_docs');
@@ -21,16 +22,7 @@ if (!fs.existsSync(nginxCrmDir)) {
   }
 }
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + crypto.randomBytes(4).toString('hex');
-    const ext = path.extname(file.originalname).toLowerCase() || '.pdf';
-    cb(null, 'scan-' + uniqueSuffix + ext);
-  },
-});
+const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
   const allowed = ['.pdf', '.png', '.jpg', '.jpeg', '.webp'];
@@ -122,18 +114,16 @@ exports.uploadDocument = async (req, res) => {
     let mimeType = 'application/pdf';
 
     if (req.file) {
-      fileUrl = '/api/crm/documents/file/' + req.file.filename;
-      fileSize = req.file.size;
-      mimeType = req.file.mimetype;
+      const stored = await save({
+        buffer: req.file.buffer,
+        originalName: req.file.originalname,
+        mimeType: req.file.mimetype,
+        prefix: 'crm_docs',
+      });
 
-      // Copy to nginx dir if exists
-      if (fs.existsSync(nginxCrmDir)) {
-        try {
-          fs.copyFileSync(req.file.path, path.join(nginxCrmDir, req.file.filename));
-        } catch (e) {
-          console.warn('Nginx sync copy warning:', e.message);
-        }
-      }
+      fileUrl = stored.url;
+      fileSize = stored.size;
+      mimeType = stored.mimeType;
     } else if (req.body.file_url) {
       fileUrl = req.body.file_url;
       fileSize = req.body.file_size || 1024 * 500;
@@ -206,16 +196,17 @@ exports.deleteDocument = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Không tìm thấy tài liệu' });
     }
 
-    // Try deleting physical file
-    if (doc.file_url && doc.file_url.startsWith('/crm_docs/')) {
+    // Try deleting physical file from both old and new storage paths
+    if (doc.file_url) {
       const filename = path.basename(doc.file_url);
-      const localPath = path.join(uploadDir, filename);
-      if (fs.existsSync(localPath)) {
-        try { fs.unlinkSync(localPath); } catch (e) {}
-      }
-      const nginxPath = path.join(nginxCrmDir, filename);
-      if (fs.existsSync(nginxPath)) {
-        try { fs.unlinkSync(nginxPath); } catch (e) {}
+      const candidates = [
+        path.join(uploadDir, filename),
+        path.join(nginxCrmDir, filename),
+      ];
+      for (const p of candidates) {
+        if (fs.existsSync(p)) {
+          try { fs.unlinkSync(p); } catch (e) {}
+        }
       }
     }
 
