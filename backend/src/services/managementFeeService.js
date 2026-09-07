@@ -6,6 +6,7 @@
 const repo = require('../repositories/managementFeeRepository');
 const feeConfigRepo = require('../repositories/feeConfigRepository');
 const notificationService = require('../services/notificationService');
+const { createNotificationRecord } = require('../services/notificationService');
 
 function httpError(message, status) {
     const e = new Error(message);
@@ -290,24 +291,16 @@ async function updatePaymentStatus(id, body, user) {
             })
             .catch(console.error);
 
-        try {
-            await prisma.notifications.create({
-                data: {
-                    type: 'payment_confirmation',
-                    recipient: fee.apartment_id,
-                    payload: {
-                        title: 'Thanh toán phí quản lý thành công',
-                        body: `Căn hộ ${aptCode} đã thanh toán phí quản lý tháng ${fee.month}/${fee.year}`,
-                        url: '/resident',
-                        tag: `mgmt-fee-paid-${fee.id}`,
-                    },
-                    status: 'pending',
-                    attempts: 0,
-                },
-            });
-        } catch (err) {
-            console.error('[NotificationService] create record error:', err.message);
-        }
+        await createNotificationRecord({
+            type: 'payment_confirmation',
+            recipient: { apartmentId: fee.apartment_id },
+            payload: {
+                title: 'Thanh toán phí quản lý thành công',
+                body: `Căn hộ ${aptCode} đã thanh toán phí quản lý tháng ${fee.month}/${fee.year}`,
+                url: '/resident',
+                tag: `mgmt-fee-paid-${fee.id}`,
+            },
+        });
     }
 
     return fee;

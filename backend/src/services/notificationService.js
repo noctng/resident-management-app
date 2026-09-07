@@ -146,4 +146,4 @@ async function sendPaymentThankYou({ apartmentId, amount, month, year, paymentMe
     }
 }
 
-module.exports = { sendPaymentThankYou };
+module.exports = { sendPaymentThankYou, createNotificationRecord };
