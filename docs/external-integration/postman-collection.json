@@ -1,0 +1,52 @@
+{
+  "info": {
+    "name": "Resident App External Amenity Integration",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "name": "baseUrl",
+      "value": "http://localhost:3002"
+    },
+    {
+      "name": "apiKey",
+      "value": "change_me_external_api_key"
+    }
+  ],
+  "item": [
+    {
+      "name": "Active Amenity Usage",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/external/amenity/active",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "external", "amenity", "active"]
+        }
+      }
+    },
+    {
+      "name": "All Amenity History",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/external/amenity/history",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "external", "amenity", "history"]
+        }
+      }
+    }
+  ]
+}
