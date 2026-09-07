@@ -57,11 +57,20 @@ Hệ thống tuân thủ chặt chẽ nguyên tắc RBAC (Role-Based Access Cont
 *   **Quản lý thi công**: Ghi nhận hồ sơ sửa chữa hoàn thiện căn hộ và theo dõi danh sách nhà thầu.
     *(Xem hình minh họa 22-admin-ThiCong.png)*
 
-### 8. Phân Hệ Kinh Doanh & CRM (Sales & Contract Lifecycle)
-*   **Phân hệ CRM**: Quản lý giỏ hàng, thông tin Leads, danh sách đặt chỗ và tiến độ hợp đồng HĐMB.
-    *(Xem hình minh họa 21-admin-KinhDoanhCRM.png)*
-*   **Báo cáo KPI**: Biểu đồ báo cáo phân tích hiệu suất và KPI điều hành.
-    *(Xem hình minh họa 22-admin-BoCoKPIiuHnh.png)*
+### 8. Hướng Dẫn Chi Tiết Các Hạng Mục Phân Hệ Kinh Doanh (CRM & Sales)
+*   **CRM Dashboard**: Thống kê số lượng Lead, doanh số bán hàng, và hiệu suất chi tiết.
+*   **Sales Matrix**: Bản đồ giỏ hàng căn hộ theo trạng thái thời gian thực (Màu sắc chỉ trạng thái trống, cọc, giữ chỗ, HĐMB).
+*   **Product Inventory**: Thông số kỹ thuật căn hộ, diện tích, đơn giá và phân khu mở bán.
+*   **Lead Kanban**: Quản lý phễu Lead qua bảng kéo thả trực quan.
+*   **Cart & Booking**: Quy trình tạo booking giữ chỗ có thời hạn 24 giờ.
+*   **Deposit List**: Kiểm soát phiếu đặt cọc và đối soát tiền cọc của kế toán.
+*   **Contract Lifecycle**: Danh sách và chi tiết tiến độ thanh toán (10 đợt chuẩn) của HĐMB, tệp scan, phụ lục.
+*   **Overdue Payments**: Quản lý nợ quá hạn của khách mua bất động sản.
+*   **Approval Queue**: Hàng đợi phê duyệt vượt hạn mức chiết khấu của Sales, duyệt chuyển nhượng HĐMB.
+*   **Commission Page**: Quản lý tính hoa hồng tự động cho nhân viên kinh doanh và đại lý môi giới.
+*   **Property Transfer**: Chi tiết hồ sơ chuyển nhượng HĐMB và kế thừa lịch thanh toán gốc.
+*   **Handover Management**: Kiểm soát biên bản bàn giao và Snag list kỹ thuật.
+    *(Xem hình minh họa 21-admin-KinhDoanhCRM.png và 22-admin-BoCoKPIiuHnh.png)*
 
 ---
 
