@@ -1,6 +1,6 @@
 const cron = require('node-cron');
 const prisma = require('../config/prisma');
-const { sendPushToApartment } = require('../services/pushService');
+const { enqueue } = require('../queues/notificationQueue');
 
 // Track which bookings we've already sent reminders for (in-memory, resets on restart)
 const notifiedUpcomingBookings = new Set();
@@ -65,11 +65,15 @@ async function checkUpcomingAmenityBookings() {
                     : `Lượt đặt ${amenityLabel}${aptCode} sẽ bắt đầu lúc ${timeStr} (còn ~${minutesUntil} phút). Mã đặt: #${booking.booking_code}.`;
 
             try {
-                await sendPushToApartment(booking.apartment_id, {
-                    title: `⏰ Sắp đến giờ: ${amenityLabel}`,
-                    body,
-                    url: '/?tab=amenities',
-                    tag: `amenity-start-${booking.id}`,
+                await enqueue({
+                    type: 'announcement',
+                    recipient: { apartmentId: booking.apartment_id },
+                    payload: {
+                        title: `⏰ Sắp đến giờ: ${amenityLabel}`,
+                        body,
+                        url: '/?tab=amenities',
+                        tag: `amenity-start-${booking.id}`,
+                    },
                 });
 
                 notifiedUpcomingBookings.add(booking.id);
@@ -134,11 +138,15 @@ async function checkExpiringAmenityBookings() {
                     : `Lượt đặt ${amenityLabel}${aptCode} sẽ kết thúc lúc ${timeStr} (còn ~${minutesRemaining} phút). Vui lòng chuẩn bị thu dọn.`;
 
             try {
-                await sendPushToApartment(booking.apartment_id, {
-                    title: `⏳ Sắp hết giờ: ${amenityLabel}`,
-                    body,
-                    url: '/?tab=amenities',
-                    tag: `amenity-end-${booking.id}`,
+                await enqueue({
+                    type: 'announcement',
+                    recipient: { apartmentId: booking.apartment_id },
+                    payload: {
+                        title: `⏳ Sắp hết giờ: ${amenityLabel}`,
+                        body,
+                        url: '/?tab=amenities',
+                        tag: `amenity-end-${booking.id}`,
+                    },
                 });
 
                 notifiedExpiringBookings.add(booking.id);

@@ -289,6 +289,25 @@ async function updatePaymentStatus(id, body, user) {
                 paymentDate: payment_date || new Date(),
             })
             .catch(console.error);
+
+        try {
+            await prisma.notifications.create({
+                data: {
+                    type: 'payment_confirmation',
+                    recipient: fee.apartment_id,
+                    payload: {
+                        title: 'Thanh toán phí quản lý thành công',
+                        body: `Căn hộ ${aptCode} đã thanh toán phí quản lý tháng ${fee.month}/${fee.year}`,
+                        url: '/resident',
+                        tag: `mgmt-fee-paid-${fee.id}`,
+                    },
+                    status: 'pending',
+                    attempts: 0,
+                },
+            });
+        } catch (err) {
+            console.error('[NotificationService] create record error:', err.message);
+        }
     }
 
     return fee;

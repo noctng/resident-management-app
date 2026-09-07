@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 const repo = require('../repositories/announcementRepository');
-const pushService = require('./pushService');
+const { enqueue } = require('../queues/notificationQueue');
 
 const NEWS_IMAGE_DIR = path.join(__dirname, '../../uploads/news/images');
 const NGINX_NEWS_IMAGE_DIR = '/home/dell/workspace/resident-management-app/backend/nginx-1.28.0/html/dist/news/images';
@@ -92,11 +92,15 @@ async function publish(id) {
   if (!existing) { const e = new Error('Không tìm thấy bài viết'); e.status = 404; throw e; }
   const updated = await repo.setPublishState(id, true);
   const categoryLabel = { general: 'Thông báo', event: 'Sự kiện', notice: 'Lưu ý', urgent: '🚨 Khẩn cấp' };
-  pushService.sendPushToAllResidents({
-    title: `📰 ${categoryLabel[existing.category] || 'Tin tức mới'}`,
-    body: existing.title + (existing.summary ? ` — ${existing.summary.slice(0, 80)}` : ''),
-    url: '/?tab=news',
-    tag: `news-${existing.id}`,
+  enqueue({
+    type: 'announcement',
+    broadcast: true,
+    payload: {
+      title: `📰 ${categoryLabel[existing.category] || 'Tin tức mới'}`,
+      body: existing.title + (existing.summary ? ` — ${existing.summary.slice(0, 80)}` : ''),
+      url: '/?tab=news',
+      tag: `news-${existing.id}`,
+    },
   }).catch(console.error);
   return updated;
 }

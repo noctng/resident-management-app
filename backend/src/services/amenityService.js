@@ -1,6 +1,6 @@
 const repo = require('../repositories/amenityRepository');
 const { generateRandomId } = require('../utils/helpers');
-const pushService = require('./pushService');
+const { enqueue } = require('../queues/notificationQueue');
 
 // Map entity (snake_case từ Prisma) → DTO (camelCase trả frontend).
 // Giữ NGUYÊN shape của formatter `f` trong controller cũ.
@@ -59,14 +59,16 @@ async function createAmenityBooking(dto) {
   });
 
   // Push notification to apartment (fire-and-forget)
-  pushService
-    .sendPushToApartment(apartmentId, {
+  enqueue({
+    type: 'announcement',
+    recipient: { apartmentId },
+    payload: {
       title: 'Đặt lịch tiện ích thành công',
       body: `Mã đặt lịch: ${bookingCode} - ${amenity} ngày ${usageDate}`,
       url: '/resident',
       tag: `amenity-${created.id}`,
-    })
-    .catch(console.error);
+    },
+  }).catch(console.error);
 
   return toDTO(created);
 }
@@ -113,14 +115,16 @@ async function updateBookingStatus(id, status, actor) {
   // Push notification for status change
   const statusLabels = { CONFIRMED: 'đã xác nhận', CANCELLED: 'đã hủy', USED: 'đã sử dụng' };
   const label = statusLabels[updatedBooking.status] || updatedBooking.status;
-  pushService
-    .sendPushToApartment(updatedBooking.apartment_id, {
+  enqueue({
+    type: 'announcement',
+    recipient: { apartmentId: updatedBooking.apartment_id },
+    payload: {
       title: 'Cập nhật đặt lịch tiện ích',
       body: `Đặt lịch ${updatedBooking.booking_code} ${label}`,
       url: '/resident',
       tag: `amenity-status-${updatedBooking.id}`,
-    })
-    .catch(console.error);
+    },
+  }).catch(console.error);
 
   return toDTO(updatedBooking);
 }

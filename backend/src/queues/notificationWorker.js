@@ -23,15 +23,15 @@ async function processOne() {
           await sendEmail(emailTo, subject, html);
         }
 
-        if (event.payload.pushToApartmentId) {
-          await sendPushToApartment(event.payload.pushToApartmentId, {
+        if (event.recipient?.apartmentId) {
+          await sendPushToApartment(event.recipient.apartmentId, {
             title: event.payload.title || 'Thông báo',
             body: event.payload.body || '',
             url: event.payload.url || '/',
             tag: event.payload.tag || 'notification',
           });
-        } else if (event.payload.userId) {
-          await sendPushToUser(event.payload.userId, {
+        } else if (event.recipient?.userId) {
+          await sendPushToUser(event.recipient.userId, {
             title: event.payload.title || 'Thông báo',
             body: event.payload.body || '',
             url: event.payload.url || '/',

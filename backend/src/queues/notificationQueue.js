@@ -18,9 +18,11 @@ async function enqueue(event) {
     createdAt: Date.now(),
     attempts: 0,
     maxAttempts: event.maxAttempts || 3,
+    broadcast: !!event.broadcast,
   };
 
-  const dedupeKey = `${dedupePrefix}${payload.type}:${payload.recipient?.userId || ''}:${payload.payload.tag || ''}`;
+  const dedupeKey =
+    `${dedupePrefix}${payload.type}:${payload.broadcast ? 'all' : (payload.recipient?.userId || payload.recipient?.apartmentId || '')}:${payload.payload.tag || ''}`;
   const exists = await redis.set(dedupeKey, 1, 'EX', 60 * 60, 'NX');
 
   if (!exists) {

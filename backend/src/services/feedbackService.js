@@ -1,7 +1,7 @@
 const repo = require('../repositories/feedbackRepository');
 const { generateRandomId } = require('../utils/helpers');
 const fileHelpers = require('../utils/fileHelpers');
-const pushService = require('./pushService');
+const { enqueue } = require('../queues/notificationQueue');
 
 // Map entity (snake_case từ Prisma) → DTO (camelCase trả frontend).
 // Giữ NGUYÊN shape của formatter `ff` trong controller cũ.
@@ -62,13 +62,17 @@ async function resolveFeedback(id, dto, files, userId) {
   });
 
   // Push notification to apartment residents (fire-and-forget)
-  pushService.sendPushToApartment(updated.apartment_id, {
-    title: '📢 Phản ánh của bạn đã được xử lý',
-    body: updated.admin_response_content
-      ? `BQL: "${updated.admin_response_content.slice(0, 100)}"`
-      : `Phản ánh về "${updated.content.slice(0, 60)}" đã được BQL giải quyết xong.`,
-    url: '/?tab=feedback',
-    tag: `feedback-${updated.id}`,
+  enqueue({
+    type: 'announcement',
+    recipient: { apartmentId: updated.apartment_id },
+    payload: {
+      title: '📢 Phản ánh của bạn đã được xử lý',
+      body: updated.admin_response_content
+        ? `BQL: "${updated.admin_response_content.slice(0, 100)}"`
+        : `Phản ánh về "${updated.content.slice(0, 60)}" đã được BQL giải quyết xong.`,
+      url: '/?tab=feedback',
+      tag: `feedback-${updated.id}`,
+    },
   }).catch(console.error);
 
   return mapToDTO(updated);
