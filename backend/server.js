@@ -54,7 +54,8 @@ const { getPricingConfig } = require('./src/utils/pricing');
 
 // --- Middleware ---
 const { authenticateToken } = require('./src/middleware/authMiddleware');
-const { securityHeaders, apiLimiter, authLimiter } = require('./src/middleware/securityMiddleware');
+const { securityHeaders, authLimiter, apiLimiter } = require('./src/middleware/securityMiddleware');
+const { redisPing, isAllowed } = require('./src/middleware/redisRateLimiter');
 
 const app = express();
 const port = process.env.PORT || 3002;
@@ -67,9 +68,31 @@ app.use(compression());
 // Apply Security Headers (Helmet)
 app.use(securityHeaders);
 
-// Apply Rate Limiting
-app.use('/api/auth/login', authLimiter); // Strict limit for login
-app.use('/api', apiLimiter); // General limit for API
+// Redis-backed sliding window rate limiter (Chapter 4: Rate Limiter)
+// - Sliding window log over Redis sorted set
+// - Gracefully falls back to in-memory express-rate-limit if Redis is unavailable
+async function rateLimitByRoute(req, res, next, route, windowMs, max) {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown';
+  const result = await isAllowed({ ip, route, windowMs, max });
+
+  if (!result.allowed) {
+    res.setHeader('Retry-After', result.retryAfterMs ? String(Math.ceil(result.retryAfterMs / 1000)) : '60');
+    return res.status(429).json({ message: 'Too many requests, please try again later.' });
+  }
+
+  next();
+}
+
+app.use('/api/auth/login', async (req, res, next) => {
+  await rateLimitByRoute(req, res, next, 'auth-login', 15 * 60 * 1000, 20);
+});
+
+app.use('/api', async (req, res, next) => {
+  await rateLimitByRoute(req, res, next, 'api-default', 1 * 60 * 1000, 200);
+});
+
+// If Redis is unavailable, old in-memory limiters are not used here to avoid double-limiting.
+// The async Redis limiter already falls back internally when Redis is unreachable.
 
 // CORS configuration
 const corsEnv = process.env.CORS_ALLOWED_ORIGINS || '*';
@@ -215,6 +238,16 @@ app.use('/news/images', express.static(newsUploadDir, { maxAge: '30d' }));
 app.use('/documents', express.static(documentsUploadDir, { maxAge: '1d' }));
 app.use('/crm_docs', express.static(crmDocsDir, { maxAge: '7d' }));
 app.use('/uploads', express.static(uploadsBase, { maxAge: '7d' }));
+
+// --- Health Check ---
+app.get('/health', async (req, res) => {
+  const redisOk = await redisPing();
+  res.json({
+    status: 'ok',
+    redis: redisOk,
+    timestamp: new Date().toISOString(),
+  });
+});
 
 // --- Chat Proxy Route ---
 app.post('/api/chat-proxy', authenticateToken, async (req, res) => {
