@@ -8,6 +8,7 @@ const {
     updatePricingConfig,
 } = require('../utils/pricing');
 const { sendEmail } = require('../services/emailService');
+const { createNotificationRecord } = require('../services/notificationService');
 const { logActivity } = require('../utils/logger');
 const { getRenderedContent } = require('../services/templateService');
 const { generateQRCodeURL, formatUtilityTransferContent } = require('../services/vietQRService');
@@ -931,6 +932,17 @@ exports.updatePaymentStatus = async (req, res) => {
                 paymentMethod: 'Chuyển khoản',
                 paymentDate: updatedRecord.paid_date || new Date(),
             }).catch(console.error);
+
+            createNotificationRecord({
+                type: 'payment_confirmation',
+                recipient: { apartmentId: updatedRecord.apartment_id },
+                payload: {
+                    title: 'Thanh toán điện nước thành công',
+                    body: `Căn hộ ${record.apartments.code} đã thanh toán hóa đơn tháng ${updatedRecord.month}/${updatedRecord.year}`,
+                    url: '/?tab=utilities',
+                    tag: `utility-paid-${updatedRecord.id}`,
+                },
+            }).catch((err) => console.error('[NotificationService] enqueue error:', err.message));
         }
 
         res.json(svc.formatUtilityRecord(updatedRecord));

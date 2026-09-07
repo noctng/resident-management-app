@@ -4,6 +4,7 @@ const { generateRandomId } = require('../utils/helpers');
 const { saveFile, saveFileWithExactName } = require('../utils/fileHelpers');
 const { logActivity } = require('../utils/logger');
 const { sendEmail } = require('../services/emailService');
+const { createNotificationRecord } = require('../services/notificationService');
 const { getRenderedContent } = require('../services/templateService');
 const svc = require('../services/contractService');
 
@@ -469,6 +470,16 @@ exports.sendPaymentReminder = async (req, res) => {
       : `<p>Vui lòng thanh toán khoản tiền ${Number(payment.amount).toLocaleString('vi-VN')} VNĐ trước ngày ${new Date(payment.due_date).toLocaleDateString('vi-VN')}</p>`;
 
     const result = await sendEmail(customer.email, subject, html);
+    await createNotificationRecord({
+      type: 'payment_reminder',
+      recipient: { userId: customer.id },
+      payload: {
+        title: 'Nhắc thanh toán hợp đồng',
+        body: `Đợt ${payment.installment} - Hợp đồng ${payment.contracts.contract_code}`,
+        url: '/resident',
+        tag: `payment-reminder-${payment.id}`,
+      },
+    });
     await logActivity(
       req.user,
       'GỬI_EMAIL',

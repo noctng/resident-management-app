@@ -1,7 +1,7 @@
 const { sendEmail } = require('../services/emailService');
 const { getRenderedContent } = require('../services/templateService');
 const { generateQRCodeURL, formatUtilityTransferContent } = require('../services/vietQRService');
-const { sendPushToApartment } = require('../services/pushService');
+const { createNotificationRecord } = require('../services/notificationService');
 const { logActivity } = require('../utils/logger');
 const svc = require('../services/unifiedBillingService');
 
@@ -44,15 +44,16 @@ exports.updateCombinedPaymentStatus = async (req, res) => {
     const result = await svc.updateCombinedPaymentStatus({ apartment_id, month, year, status }, req.user);
 
     if (result.status === 'PAID' && result.totalPaid > 0) {
-      const { sendPaymentThankYou } = require('../services/notificationService');
-      sendPaymentThankYou({
-        apartmentId: apartment_id,
-        amount: result.totalPaid,
-        month: parseInt(month),
-        year: parseInt(year),
-        paymentMethod: 'Chuyển khoản (Tổng hợp)',
-        paymentDate: new Date(),
-      }).catch(console.error);
+      await createNotificationRecord({
+        type: 'payment_confirmation',
+        recipient: { apartmentId: apartment_id },
+        payload: {
+          title: 'Thanh toán hóa đơn tổng hợp thành công',
+          body: `Căn hộ đã thanh toán hóa đơn tháng ${month}/${year}`,
+          url: '/resident',
+          tag: `unified-paid-${apartment_id}-${month}-${year}`,
+        },
+      });
     }
 
     res.json({ message: result.message, status: result.status });
