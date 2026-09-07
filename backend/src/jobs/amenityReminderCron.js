@@ -35,7 +35,7 @@ async function checkUpcomingAmenityBookings() {
                     lte: windowEnd,
                 },
                 status: {
-                    in: ['CONFIRMED', 'PENDING'],
+                    in: ['CONFIRMED', 'PENDING', 'confirmed', 'pending'],
                 },
             },
             include: {
@@ -108,7 +108,7 @@ async function checkExpiringAmenityBookings() {
                     lte: windowEnd,
                 },
                 status: {
-                    in: ['CONFIRMED', 'USED', 'PENDING'],
+                    in: ['CONFIRMED', 'USED', 'PENDING', 'confirmed', 'used', 'pending'],
                 },
             },
             include: {
