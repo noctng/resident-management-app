@@ -1,6 +1,7 @@
 const repo = require('../repositories/amenityRepository');
 const { generateRandomId } = require('../utils/helpers');
 const { enqueue } = require('../queues/notificationQueue');
+const { pushAmenityBookingToPartner } = require('../services/externalIntegrationService');
 
 // Map entity (snake_case từ Prisma) → DTO (camelCase trả frontend).
 // Giữ NGUYÊN shape của formatter `f` trong controller cũ.
@@ -70,6 +71,9 @@ async function createAmenityBooking(dto) {
     },
   }).catch(console.error);
 
+  // Notify external partner when enabled
+  pushAmenityBookingToPartner(toDTO(created)).catch(() => {});
+
   return toDTO(created);
 }
 
@@ -126,6 +130,9 @@ async function updateBookingStatus(id, status, actor) {
     },
   }).catch(console.error);
 
+  // Notify external partner when enabled
+  pushAmenityBookingToPartner(toDTO(updatedBooking)).catch(() => {});
+
   return toDTO(updatedBooking);
 }
 
@@ -152,6 +159,10 @@ async function updateAmenityBooking(id, dto) {
   if (endTime !== undefined) updateData.end_time = new Date(`${baseDate}T${endTime}`);
 
   const updatedBooking = await repo.updateUsage(id, updateData);
+
+  // Notify external partner when enabled
+  pushAmenityBookingToPartner(toDTO(updatedBooking)).catch(() => {});
+
   return toDTO(updatedBooking);
 }
 
