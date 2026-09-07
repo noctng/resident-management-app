@@ -192,6 +192,7 @@ app.use('/api/approvals', approvalRoutes); // Approval workflows
 app.use('/api/vehicles', vehicleRoutes); // Vehicle management
 app.use('/api', residentRoutes); // Residents CRUD + Resident Accounts (Tài khoản cư dân)
 app.use('/api/push', pushRoutes); // Push notifications
+app.use('/api/notifications', require('./src/routes/notificationRoutes'));
 app.use('/api/webhooks', webhookRoutes); // Webhooks (SePay, etc.)
 app.use('/api/webhook', webhookRoutes); // Webhooks singular alias
 app.use('/api/vnpt-invoice', vnptInvoiceRoutes); // VNPT E-Invoice
