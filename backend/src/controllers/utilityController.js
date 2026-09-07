@@ -105,32 +105,23 @@ exports.addUtilityRecord = async (req, res) => {
         }
 
         // --- Auto-create image folder logic ---
-        const utilityDir = path.join(__dirname, '../../uploads/utility');
-        const nginxUtilityDir = '/home/dell/workspace/resident-management-app/backend/nginx-1.28.0/html/dist/utility';
         const monthStr = month.toString().padStart(2, '0');
         const folderName = `${monthStr}${year}`;
-        const targetDir = path.join(utilityDir, folderName);
-        const nginxTargetDir = path.join(nginxUtilityDir, folderName);
-
-        if (!fs.existsSync(targetDir)) {
-            fs.mkdirSync(targetDir, { recursive: true });
-        }
-        if (!fs.existsSync(nginxTargetDir)) {
-            try { fs.mkdirSync(nginxTargetDir, { recursive: true }); } catch (e) {}
-        }
         // ---------------------------------------
 
-        // If file is uploaded, save it
+        // If file is uploaded, save it via object storage helper
+        let imageUrl = '';
         if (req.file) {
             const meterType = req.body.meterType || 'electricity';
             const prefix = meterType === 'water' ? 'W' : 'E';
-            const fileName = `${prefix}-${apt.code}-${monthStr}${year}.jpg`;
-            const filePath = path.join(targetDir, fileName);
-            fs.writeFileSync(filePath, req.file.buffer);
-            try {
-                fs.writeFileSync(path.join(nginxTargetDir, fileName), req.file.buffer);
-            } catch (e) {}
-            console.log(`Saved meter image: ${filePath}`);
+            const stored = await save({
+                buffer: req.file.buffer,
+                originalName: `${prefix}-${apt.code}-${folderName}.jpg`,
+                mimeType: req.file.mimetype || 'image/jpeg',
+                prefix: `utility/${folderName}`,
+            });
+            imageUrl = stored.url;
+            console.log(`Saved meter image via objectStorage: ${imageUrl}`);
         }
 
         const ec = newElectricityReading - oe;
