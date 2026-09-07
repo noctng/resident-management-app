@@ -53,7 +53,7 @@ const phaseRoutes = require('./src/routes/phaseRoutes');
 const { getPricingConfig } = require('./src/utils/pricing');
 
 // --- Middleware ---
-const { authenticateToken } = require('./src/middleware/authMiddleware');
+const { authenticateToken, isAdmin } = require('./src/middleware/authMiddleware');
 const { securityHeaders, authLimiter, apiLimiter } = require('./src/middleware/securityMiddleware');
 const { redisPing, isAllowed } = require('./src/middleware/redisRateLimiter');
 
@@ -165,7 +165,9 @@ app.use('/utility', express.static(utilityDir, { maxAge: '1y' }));
 // --- API Routes ---
 // External integration API: API-key auth only, no internal JWT
 const externalIntegrationRoutes = require('./src/routes/externalIntegrationRoutes');
+const paymentScheduleRoutes = require('./src/routes/paymentScheduleRoutes');
 app.use('/api/external', externalIntegrationRoutes);
+app.use('/api/payment-schedules', paymentScheduleRoutes);
 
 // RBAC GĐ2 (mở rộng): centralized auto-enforcement — chạy SAU authenticateToken
 const { autoRbac } = require('./src/middleware/rbacAuto');

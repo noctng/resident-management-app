@@ -1,238 +1,104 @@
 const prisma = require('../config/prisma');
-const { generateRandomId } = require('../utils/helpers');
+const repo = require('../repositories/paymentScheduleRepository');
+const earlyPaymentRepo = require('../repositories/earlyPaymentRepository');
+const { logActivity } = require('../utils/logger');
 
-/**
- * Payment Schedule Service
- * Handles automatic payment schedule generation and late fee calculations
- */
-
-/**
- * Generate milestone-based payment schedule
- * @param {string} contractId
- * @param {Array} milestones - [{name, percentage, dueDate}]
- * @param {number} totalValue
- */
-async function generateMilestoneBasedSchedule(contractId, milestones, totalValue) {
-    const scheduleId = `sched_${generateRandomId()}`;
-
-    // Create schedule record
-    await prisma.payment_schedules.create({
-        data: {
-            id: scheduleId,
-            contract_id: contractId,
-            schedule_name: 'Milestone-based Schedule',
-            policy_type: 'MILESTONE_BASED',
-            late_fee_rate: 0.05, // 0.05% per day default
-            grace_period_days: 7,
-        },
-    });
-
-    // Create payment records
-    const payments = milestones.map((milestone, index) => ({
-        id: `pay_${generateRandomId()}`,
-        contract_id: contractId,
-        payment_schedule_id: scheduleId,
-        installment: index + 1,
-        description: milestone.name,
-        due_date: new Date(milestone.dueDate),
-        amount: ((totalValue * milestone.percentage) / 100).toFixed(2),
-        paid_amount: 0,
-        status: 'PENDING',
-        auto_calculated: true,
-    }));
-
-    await prisma.contract_payments.createMany({
-        data: payments,
-    });
-
-    return { scheduleId, paymentsCreated: payments.length };
+async function listByContract(contractId) {
+  return repo.listByContract(contractId);
 }
 
-/**
- * Generate time-based payment schedule
- * @param {string} contractId
- * @param {number} totalValue
- * @param {number} numberOfInstallments
- * @param {Date} startDate
- * @param {number} intervalMonths
- */
-async function generateTimeBasedSchedule(
-    contractId,
-    totalValue,
-    numberOfInstallments,
-    startDate,
-    intervalMonths = 1
-) {
-    const scheduleId = `sched_${generateRandomId()}`;
+async function markSchedulePaid(paymentId, opts = {}) {
+  const payment = await earlyPaymentRepo.getPaymentById(paymentId);
+  if (!payment) {
+    const err = new Error('Không tìm thấy đợt thanh toán');
+    err.status = 404;
+    throw err;
+  }
 
-    await prisma.payment_schedules.create({
-        data: {
-            id: scheduleId,
-            contract_id: contractId,
-            schedule_name: `${numberOfInstallments}-installment Schedule`,
-            policy_type: 'TIME_BASED',
-            late_fee_rate: 0.05,
-            grace_period_days: 7,
-        },
-    });
+  const paidAmount = opts.paidAmount !== undefined ? Number(opts.paidAmount) : 0;
+  const totalScheduled = Number(payment.amount || 0);
 
-    const amountPerInstallment = (totalValue / numberOfInstallments).toFixed(2);
-    const payments = [];
+  if (paidAmount <= 0) {
+    const err = new Error('Số tiền thanh toán không hợp lệ');
+    err.status = 400;
+    throw err;
+  }
 
-    for (let i = 0; i < numberOfInstallments; i++) {
-        const dueDate = new Date(startDate);
-        dueDate.setMonth(dueDate.getMonth() + i * intervalMonths);
+  const paymentData = {
+    paid_amount: paidAmount,
+    paid_at: opts.paidAt || new Date(),
+    payment_method: opts.paymentMethod || 'MANUAL',
+    transaction_ref: opts.transactionRef || null,
+    status: 'PAID',
+  };
 
-        payments.push({
-            id: `pay_${generateRandomId()}`,
-            contract_id: contractId,
-            payment_schedule_id: scheduleId,
-            installment: i + 1,
-            description: `Installment ${i + 1}/${numberOfInstallments}`,
-            due_date: dueDate,
-            amount: amountPerInstallment,
-            paid_amount: 0,
-            status: 'PENDING',
-            auto_calculated: true,
-        });
-    }
+  const updated = await earlyPaymentRepo.runTransaction(async (tx) => {
+    await earlyPaymentRepo.updatePaymentInTx(tx, paymentId, paymentData);
+    return tx.contract_payments.findUnique({ where: { id: paymentId } });
+  });
 
-    await prisma.contract_payments.createMany({
-        data: payments,
-    });
-
-    return { scheduleId, paymentsCreated: payments.length };
+  return {
+    id: paymentId,
+    scheduleName: payment.description,
+    amount: totalScheduled,
+    paid_amount: paidAmount,
+    status: updated.status,
+    payment_method: updated.payment_method,
+    paid_at: updated.paid_at,
+  };
 }
 
-/**
- * Calculate late fee for a payment
- * @param {Object} payment
- * @param {Date} currentDate
- */
-async function calculateLateFee(payment, currentDate = new Date()) {
-    if (payment.status !== 'OVERDUE' && payment.status !== 'PENDING') {
-        return 0;
-    }
+async function reconcilePayment(paymentId, opts = {}) {
+  const amount = Number(opts.amount || 0);
+  const referenceCode = String(opts.referenceCode || '').trim();
 
-    const dueDate = new Date(payment.due_date);
-    if (currentDate <= dueDate) {
-        return 0;
-    }
+  if (!referenceCode || amount <= 0) {
+    const err = new Error('Thiếu thông tin đối soát: amount/referenceCode');
+    err.status = 400;
+    throw err;
+  }
 
-    // Get schedule to check grace period
-    const schedule = await prisma.payment_schedules.findUnique({
-        where: { id: payment.payment_schedule_id },
-    });
+  const payment = await earlyPaymentRepo.getPaymentById(paymentId);
+  if (!payment) {
+    const err = new Error('Không tìm thấy đợt thanh toán');
+    err.status = 404;
+    throw err;
+  }
 
-    const gracePeriod = schedule?.grace_period_days || 0;
-    const lateFeeRate = schedule?.late_fee_rate || 0.05;
+  const remaining = Number(payment.amount || 0) - Number(payment.paid_amount || 0);
+  if (remaining <= 0) {
+    const err = new Error('Đợt thanh toán đã thanh toán đủ');
+    err.status = 400;
+    throw err;
+  }
 
-    // Calculate days overdue after grace period
-    const daysOverdue = Math.floor((currentDate - dueDate) / (1000 * 60 * 60 * 24));
-    const chargeableDays = Math.max(0, daysOverdue - gracePeriod);
+  const matchedAmount = Math.min(remaining, amount);
+  const paymentData = {
+    paid_amount: Number(payment.paid_amount || 0) + matchedAmount,
+    paid_at: opts.transactionDate || new Date(),
+    payment_method: opts.gateway ? `Ngân hàng (${opts.gateway})` : 'Ngân hàng (SePay)',
+    transaction_ref: referenceCode,
+    status: Number(payment.paid_amount || 0) + matchedAmount >= Number(payment.amount || 0) ? 'PAID' : 'PENDING',
+  };
 
-    if (chargeableDays === 0) {
-        return 0;
-    }
+  const updated = await earlyPaymentRepo.runTransaction(async (tx) => {
+    await earlyPaymentRepo.updatePaymentInTx(tx, paymentId, paymentData);
+    return tx.contract_payments.findUnique({ where: { id: paymentId } });
+  });
 
-    // Calculate late fee: outstanding amount * rate * days
-    const outstandingAmount = parseFloat(payment.amount) - parseFloat(payment.paid_amount);
-    const lateFee = outstandingAmount * (lateFeeRate / 100) * chargeableDays;
-
-    return parseFloat(lateFee.toFixed(2));
-}
-
-/**
- * Update all overdue payments (run as cron job)
- */
-async function updateOverduePayments() {
-    const currentDate = new Date();
-
-    // Find all pending payments past due date
-    const overduePayments = await prisma.contract_payments.findMany({
-        where: {
-            status: 'PENDING',
-            due_date: {
-                lt: currentDate,
-            },
-        },
-        include: {
-            payment_schedules: true,
-        },
-    });
-
-    const updates = [];
-
-    for (const payment of overduePayments) {
-        const dueDate = new Date(payment.due_date);
-        const daysOverdue = Math.floor((currentDate - dueDate) / (1000 * 60 * 60 * 24));
-        const lateFee = await calculateLateFee(payment, currentDate);
-
-        updates.push(
-            prisma.contract_payments.update({
-                where: { id: payment.id },
-                data: {
-                    status: 'OVERDUE',
-                    days_overdue: daysOverdue,
-                    late_fee: lateFee,
-                },
-            })
-        );
-    }
-
-    await Promise.all(updates);
-
-    return { updated: updates.length };
-}
-
-/**
- * Get payment summary for a contract
- * @param {string} contractId
- */
-async function getContractPaymentSummary(contractId) {
-    const payments = await prisma.contract_payments.findMany({
-        where: { contract_id: contractId },
-        orderBy: { installment: 'asc' },
-    });
-
-    const summary = {
-        totalScheduled: 0,
-        totalPaid: 0,
-        totalOutstanding: 0,
-        totalLateFees: 0,
-        pendingCount: 0,
-        overdueCount: 0,
-        paidCount: 0,
-        paymentPercentage: 0,
-    };
-
-    payments.forEach((payment) => {
-        const amount = parseFloat(payment.amount);
-        const paidAmount = parseFloat(payment.paid_amount);
-        const lateFee = parseFloat(payment.late_fee || 0);
-
-        summary.totalScheduled += amount;
-        summary.totalPaid += paidAmount;
-        summary.totalOutstanding += amount - paidAmount;
-        summary.totalLateFees += lateFee;
-
-        if (payment.status === 'PENDING') summary.pendingCount++;
-        if (payment.status === 'OVERDUE') summary.overdueCount++;
-        if (payment.status === 'PAID') summary.paidCount++;
-    });
-
-    summary.paymentPercentage =
-        summary.totalScheduled > 0
-            ? ((summary.totalPaid / summary.totalScheduled) * 100).toFixed(2)
-            : 0;
-
-    return summary;
+  return {
+    id: paymentId,
+    scheduleName: payment.description,
+    amount: Number(payment.amount || 0),
+    paid_amount: Number(updated.paid_amount),
+    status: updated.status,
+    gateway: opts.gateway || 'SePay',
+    referenceCode,
+  };
 }
 
 module.exports = {
-    generateMilestoneBasedSchedule,
-    generateTimeBasedSchedule,
-    calculateLateFee,
-    updateOverduePayments,
-    getContractPaymentSummary,
+  listByContract,
+  markSchedulePaid,
+  reconcilePayment,
 };

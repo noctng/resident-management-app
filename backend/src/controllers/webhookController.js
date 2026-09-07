@@ -116,6 +116,7 @@ exports.handleSepayWebhook = async (req, res) => {
 
         let utilityUpdated = null;
         let managementFeeUpdated = null;
+        let paymentScheduleUpdated = null;
         const txDate = transactionDate ? new Date(transactionDate) : new Date();
 
         if (matchedApartment) {
