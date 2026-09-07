@@ -5,7 +5,7 @@ const repo = require('../repositories/unifiedBillingRepository');
 const { sendEmail } = require('../services/emailService');
 const { getRenderedContent } = require('../services/templateService');
 const { generateQRCodeURL, formatUtilityTransferContent } = require('../services/vietQRService');
-const { sendPushToApartment } = require('../services/pushService');
+const { createNotificationRecord } = require('../services/notificationService');
 const { logActivity } = require('../utils/logger');
 
 function buildManagementFeeRows(managementFee) {
@@ -116,10 +116,16 @@ exports.sendCombinedBillNotification = async (req, res) => {
     await logActivity(req.user, 'GỬI_EMAIL', 'UNIFIED_BILL', apartment.code, `Combined Bill ${monthYear}`, `Sent to ${successCount} residents`);
     res.json({ message: `Đã gửi email thành công cho ${successCount} cư dân.` });
 
-    sendPushToApartment(apartment_id, {
-      title: 'Hóa đơn mới', body: `Hóa đơn ${monthYear} đã được gửi. Nhấn để xem chi tiết.`,
-      url: '/resident', tag: `bill-${apartment_id}-${month}-${year}`,
-    }).catch(console.error);
+    await createNotificationRecord({
+        type: 'utility_bill',
+        recipient: { apartmentId: apartment_id },
+        payload: {
+            title: 'Hóa đơn mới',
+            body: `Hóa đơn ${monthYear} đã được gửi. Nhấn để xem chi tiết.`,
+            url: '/resident',
+            tag: `bill-${apartment_id}-${month}-${year}`,
+        },
+    });
   } catch (error) {
     console.error('Error sending combined bill notification:', error);
     res.status(500).json({ error: 'Failed to send notification' });
