@@ -188,6 +188,8 @@ app.use('/api/contracts', earlyPaymentRoutes); // Early payment routes (nested u
 app.use('/api/config', configRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/reports', reportRoutes);
+const salesKpiRoutes = require('./src/routes/salesKpiRoutes');
+app.use('/api/reports/sales', salesKpiRoutes); // Sales Conversion Funnel & Employee KPI Reports (B.10)
 app.use('/api/fee-config', feeConfigRoutes);
 app.use('/api/management-fees', managementFeeRoutes);
 app.use('/api/debt-reminders', debtReminderRoutes);
