@@ -10,5 +10,7 @@ router.get('/', auth, propertyTransferController.getTransfers);
 router.get('/:id', auth, propertyTransferController.getTransferDetail);
 router.post('/', auth, propertyTransferController.createTransfer);
 router.get('/apartment-chain/:apartmentId', auth, propertyTransferController.getApartmentTransferChain);
+router.post('/:id/inherit-installments', auth, propertyTransferController.inheritInstallments);
+router.post('/calculate-fees', auth, propertyTransferController.calculateFees);
 
 module.exports = router;

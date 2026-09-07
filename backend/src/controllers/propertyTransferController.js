@@ -1,8 +1,8 @@
 const service = require('../services/propertyTransferService');
 const prisma = require('../config/prisma');
 
-// Controller giữ lại 2 endpoint xử lý business logic
-// Các handler gọi service, KHÔNG import prisma trực tiếp (ngoại trừ transaction)
+// Controller giữ lại các endpoint xử lý business logic
+// Các handler gọi service, KHÔNG import prisma trực tiếp (ngoại trừ query)
 
 exports.checkEligibility = async (req, res) => {
   try {
@@ -118,6 +118,29 @@ exports.getApartmentTransferChain = async (req, res) => {
     });
   } catch (err) {
     console.error('Lỗi lấy cây lịch sử chuyển nhượng:', err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+exports.inheritInstallments = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await service.inheritInstallments(id, prisma);
+    res.json({ success: true, ...result });
+  } catch (err) {
+    console.error('Lỗi kế thừa lịch thanh toán:', err);
+    const status = err.status || 500;
+    res.status(status).json({ success: false, message: err.message || 'Lỗi kế thừa lịch thanh toán' });
+  }
+};
+
+exports.calculateFees = async (req, res) => {
+  try {
+    const { contract_value, total_paid } = req.body;
+    const fees = service.calculateTransferFees(contract_value, total_paid);
+    res.json({ success: true, fees });
+  } catch (err) {
+    console.error('Lỗi tính phí chuyển nhượng:', err);
     res.status(500).json({ success: false, message: err.message });
   }
 };
