@@ -37,7 +37,11 @@ async function createFeedback(dto, files) {
   const { residentId, apartmentId, content } = dto;
 
   const id = `feedback_${generateRandomId()}`;
-  const imageData = (files || []).map((f, i) => fileHelpers.saveImg(f, id, i, 'pic'));
+  const imageData = [];
+  for (const f of files || []) {
+    const filename = await fileHelpers.saveImg(f, id, imageData.length, 'pic');
+    imageData.push(filename);
+  }
 
   const created = await repo.create({
     id,
@@ -51,7 +55,11 @@ async function createFeedback(dto, files) {
 }
 
 async function resolveFeedback(id, dto, files, userId) {
-  const adminResponseImageData = (files || []).map((f, i) => fileHelpers.saveImg(f, id, i, 'res'));
+  const adminResponseImageData = [];
+  for (const f of files || []) {
+    const filename = await fileHelpers.saveImg(f, id, adminResponseImageData.length, 'res');
+    adminResponseImageData.push(filename);
+  }
 
   const updated = await repo.update(id, {
     status: 'RESOLVED',

@@ -1,11 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+const { save, remove } = require('../services/objectStorageService');
 
 const UPLOADS_BASE = path.join(__dirname, '../../uploads');
+
+// Keep legacy paths for read fallback and delete cleanup
 const FEEDBACK_PICTURE_DIR = path.join(UPLOADS_BASE, 'picture_feedback');
 const CRM_DOC_DIR = path.join(UPLOADS_BASE, 'crm_docs');
-const NGINX_FEEDBACK_DIR = '/home/dell/workspace/resident-management-app/backend/nginx-1.28.0/html/dist/picture_feedback';
-const NGINX_CRM_DOC_DIR = '/home/dell/workspace/resident-management-app/backend/nginx-1.28.0/html/dist/crm_docs';
 
 // Ensure directories exist on load
 [FEEDBACK_PICTURE_DIR, CRM_DOC_DIR].forEach((dir) => {
@@ -14,37 +15,34 @@ const NGINX_CRM_DOC_DIR = '/home/dell/workspace/resident-management-app/backend/
     }
 });
 
-const saveImg = (f, id, i, t) => {
-    const n = `${id}-${t}${String(i + 1).padStart(2, '0')}.${f.mimetype.split('/')[1] || 'png'}`;
-    fs.writeFileSync(path.join(FEEDBACK_PICTURE_DIR, n), f.buffer);
-    try {
-        if (fs.existsSync(NGINX_FEEDBACK_DIR)) {
-            fs.writeFileSync(path.join(NGINX_FEEDBACK_DIR, n), f.buffer);
-        }
-    } catch (e) {}
-    return n;
+const saveImg = async (f, id, i, t) => {
+    const stored = await save({
+        buffer: f.buffer,
+        originalName: `${id}-${t}${String(i + 1).padStart(2, '0')}.${(f.mimetype || 'image/png').split('/')[1] || 'png'}`,
+        mimeType: f.mimetype || 'image/png',
+        prefix: 'picture_feedback',
+    });
+    return stored.filename;
 };
 
-const saveFile = (file, prefix) => {
-    const ext = path.extname(file.originalname) || '';
-    const filename = `${prefix}_${Date.now()}${ext}`;
-    fs.writeFileSync(path.join(CRM_DOC_DIR, filename), file.buffer);
-    try {
-        if (fs.existsSync(NGINX_CRM_DOC_DIR)) {
-            fs.writeFileSync(path.join(NGINX_CRM_DOC_DIR, filename), file.buffer);
-        }
-    } catch (e) {}
-    return filename;
+const saveFile = async (file, prefix) => {
+    const stored = await save({
+        buffer: file.buffer,
+        originalName: file.originalname || `${prefix}_${Date.now()}`,
+        mimeType: file.mimetype || 'application/octet-stream',
+        prefix: 'crm_docs',
+    });
+    return stored.filename;
 };
 
-const saveFileWithExactName = (file, filename) => {
-    fs.writeFileSync(path.join(CRM_DOC_DIR, filename), file.buffer);
-    try {
-        if (fs.existsSync(NGINX_CRM_DOC_DIR)) {
-            fs.writeFileSync(path.join(NGINX_CRM_DOC_DIR, filename), file.buffer);
-        }
-    } catch (e) {}
-    return filename;
+const saveFileWithExactName = async (file, filename) => {
+    const stored = await save({
+        buffer: file.buffer,
+        originalName: filename,
+        mimeType: file.mimetype || 'application/octet-stream',
+        prefix: 'crm_docs',
+    });
+    return stored.filename;
 };
 
 module.exports = {
@@ -53,4 +51,5 @@ module.exports = {
     saveImg,
     saveFile,
     saveFileWithExactName,
+    remove,
 };

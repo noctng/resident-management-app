@@ -10,16 +10,19 @@ const NGINX_NEWS_IMAGE_DIR = '/home/dell/workspace/resident-management-app/backe
 if (!fs.existsSync(NEWS_IMAGE_DIR)) fs.mkdirSync(NEWS_IMAGE_DIR, { recursive: true });
 try { if (!fs.existsSync(NGINX_NEWS_IMAGE_DIR)) fs.mkdirSync(NGINX_NEWS_IMAGE_DIR, { recursive: true }); } catch (e) {}
 
-function saveImage(base64String, fileId) {
+async function saveImage(base64String, fileId) {
   if (!base64String || !base64String.startsWith('data:')) return null;
   const matches = base64String.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
   if (!matches) return null;
   const ext = matches[1].includes('png') ? 'png' : matches[1].includes('gif') ? 'gif' : 'jpg';
-  const filename = `${fileId}.${ext}`;
   const buf = Buffer.from(matches[2], 'base64');
-  fs.writeFileSync(path.join(NEWS_IMAGE_DIR, filename), buf);
-  try { fs.writeFileSync(path.join(NGINX_NEWS_IMAGE_DIR, filename), buf); } catch (e) {}
-  return `/news/images/${filename}`;
+  const stored = await save({
+    buffer: buf,
+    originalName: `${fileId}.${ext}`,
+    mimeType: matches[1],
+    prefix: 'news/images',
+  });
+  return stored.url;
 }
 
 async function listPublished({ limit, offset }) {
@@ -44,12 +47,12 @@ async function listAll() {
 
 async function create(dto, userId) {
   const postId = crypto.randomUUID();
-  const coverUrl = dto.cover_image_base64 ? saveImage(dto.cover_image_base64, `cover-${postId}`) : null;
+  const coverUrl = dto.cover_image_base64 ? await saveImage(dto.cover_image_base64, `cover-${postId}`) : null;
   const mediaUrls = [];
-  (dto.media_base64_list || []).forEach((b64, idx) => {
-    const url = saveImage(b64, `media-${postId}-${idx}`);
+  for (const [idx, b64] of (dto.media_base64_list || []).entries()) {
+    const url = await saveImage(b64, `media-${postId}-${idx}`);
     if (url) mediaUrls.push(url);
-  });
+  }
   const post = await repo.create({
     id: postId,
     title: dto.title,
@@ -68,13 +71,13 @@ async function create(dto, userId) {
 async function update(id, dto, existing) {
   let coverUrl = existing.cover_image;
   if (dto.cover_image_base64 && dto.cover_image_base64.startsWith('data:')) {
-    coverUrl = saveImage(dto.cover_image_base64, `cover-${id}-${Date.now()}`);
+    coverUrl = await saveImage(dto.cover_image_base64, `cover-${id}-${Date.now()}`);
   }
   let mediaUrls = Array.isArray(dto.keep_media_urls) ? dto.keep_media_urls : existing.media_urls;
-  (dto.media_base64_list || []).forEach((b64, idx) => {
-    const url = saveImage(b64, `media-${id}-${Date.now()}-${idx}`);
+  for (const [idx, b64] of (dto.media_base64_list || []).entries()) {
+    const url = await saveImage(b64, `media-${id}-${Date.now()}-${idx}`);
     if (url) mediaUrls.push(url);
-  });
+  }
   return repo.update(id, {
     title: dto.title ?? existing.title,
     content: dto.content ?? existing.content,

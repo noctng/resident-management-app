@@ -236,7 +236,7 @@ exports.uploadContractDocument = async (req, res) => {
     // Format: [ContractCode]-xxxx (xxxx = sequence)
     const customFilename = `${contract.contract_code}-${sequence}${ext}`;
 
-    const filename = saveFileWithExactName(file, customFilename);
+    const filename = await saveFileWithExactName(file, customFilename);
     const docId = `cdoc_${generateRandomId()}`;
 
     const newDoc = await prisma.contract_documents.create({
