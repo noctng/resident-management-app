@@ -1,5 +1,6 @@
 const prisma = require('../config/prisma');
 const { logActivity } = require('../utils/logger');
+const { enqueue } = require('../queues/notificationQueue');
 
 /**
  * Helper to normalize string for search (lowercase, remove accents, trim)
@@ -180,15 +181,18 @@ exports.handleSepayWebhook = async (req, res) => {
 
                         // Send push notification to resident
                         try {
-                            const { sendPushToApartment } = require('../services/pushService');
-                            await sendPushToApartment(matchedApartment.id, {
-                                title: '🎉 Thanh toán Điện Nước thành công!',
-                                body: `Căn hộ ${matchedApartment.code} đã thanh toán thành công hóa đơn Điện Nước Tháng ${targetUtility.month}/${targetUtility.year} (${amount.toLocaleString('vi-VN')} đ).`,
-                                url: '/?tab=utilities',
-                                tag: `utility-paid-${targetUtility.id}`,
+                            await enqueue({
+                                type: 'utility_bill',
+                                recipient: { apartmentId: matchedApartment.id },
+                                payload: {
+                                    title: '🎉 Thanh toán Điện Nước thành công!',
+                                    body: `Căn hộ ${matchedApartment.code} đã thanh toán thành công hóa đơn Điện Nước Tháng ${targetUtility.month}/${targetUtility.year} (${amount.toLocaleString('vi-VN')} đ).`,
+                                    url: '/?tab=utilities',
+                                    tag: `utility-paid-${targetUtility.id}`,
+                                },
                             });
                         } catch (pushErr) {
-                            console.error('Push notification error:', pushErr);
+                            console.error('Push notification enqueue error:', pushErr);
                         }
                     }
                 } catch (err) {
@@ -241,15 +245,18 @@ exports.handleSepayWebhook = async (req, res) => {
 
                         // Send push notification to resident
                         try {
-                            const { sendPushToApartment } = require('../services/pushService');
-                            await sendPushToApartment(matchedApartment.id, {
-                                title: '🎉 Thanh toán Hóa Đơn Tổng Hợp thành công!',
-                                body: `Căn hộ ${matchedApartment.code} đã thanh toán thành công hóa đơn Tháng ${targetFee.month}/${targetFee.year} (${amount.toLocaleString('vi-VN')} đ).`,
-                                url: '/?tab=unified',
-                                tag: `fee-paid-${targetFee.id}`,
+                            await enqueue({
+                                type: 'announcement',
+                                recipient: { apartmentId: matchedApartment.id },
+                                payload: {
+                                    title: '🎉 Thanh toán Hóa Đơn Tổng Hợp thành công!',
+                                    body: `Căn hộ ${matchedApartment.code} đã thanh toán thành công hóa đơn Tháng ${targetFee.month}/${targetFee.year} (${amount.toLocaleString('vi-VN')} đ).`,
+                                    url: '/?tab=unified',
+                                    tag: `fee-paid-${targetFee.id}`,
+                                },
                             });
                         } catch (pushErr) {
-                            console.error('Push notification error:', pushErr);
+                            console.error('Push notification enqueue error:', pushErr);
                         }
                     }
                 } catch (err) {

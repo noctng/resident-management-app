@@ -3,6 +3,22 @@ const { sendPushToApartment } = require('./pushService');
 const { sendEmail } = require('./emailService');
 const { getRenderedContent } = require('./templateService');
 
+async function createNotificationRecord({ type, recipient, payload }) {
+  try {
+    await prisma.notifications.create({
+      data: {
+        type,
+        recipient: recipient?.userId ? String(recipient.userId) : recipient?.apartmentId ? String(recipient.apartmentId) : null,
+        payload,
+        status: 'pending',
+        attempts: 0,
+      },
+    });
+  } catch (err) {
+    console.error('[NotificationService] createNotificationRecord error:', err.message);
+  }
+}
+
 /**
  * Send payment confirmation (Push + Email) thank you notifications to residents.
  * Automatically ensures PAYMENT_CONFIRMATION email template exists in DB.
@@ -114,6 +130,17 @@ async function sendPaymentThankYou({ apartmentId, amount, month, year, paymentMe
                 console.error(`[NotificationService] Email send error for ${resident.email}:`, err.message);
             }
         }
+
+        await createNotificationRecord({
+            type: 'payment_confirmation',
+            recipient: { apartmentId, userId: targetResidents[0]?.id },
+            payload: {
+                title: 'Thanh toán thành công',
+                body: `Cảm ơn cư dân căn hộ ${apartment.code} đã thanh toán số tiền ${amountStr} cho hóa đơn kỳ ${monthYear}.`,
+                url: '/resident',
+                tag: `payment-thankyou-${apartmentId}-${month}-${year}`,
+            },
+        });
     } catch (err) {
         console.error('[NotificationService] Service execution error:', err);
     }
