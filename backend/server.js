@@ -214,6 +214,8 @@ app.use('/api/crm/sales-contracts', salesContractRoutes); // Standard 18 Article
 app.use('/api/crm/handover', handoverBridgeRoutes); // Handover, Snag List & Operations Bridge
 app.use('/api/crm/pricebooks', pricebookRoutes); // Pricebook Versions & Unit Pricing (B.9.1)
 app.use('/api/crm/promotions', promotionRoutes); // Promotional Campaigns & Discounts (B.9.2)
+const approvalLimitRoutes = require('./src/routes/approvalLimitRoutes');
+app.use('/api/crm/approval-limits', approvalLimitRoutes); // Approval Limits & Discount Overrides (B.9)
 app.use('/api/crm/commissions', commissionRoutes); // Commissions & Broker Payouts (B.9.3)
 app.use('/api/crm/transfers', propertyTransferRoutes); // Property Transfer Management (B.7)
 app.use('/api/crm/documents', contractDocumentRoutes); // Hard-copy Scanned PDF Documents (B.5/B.7)
