@@ -239,14 +239,25 @@ app.use('/documents', express.static(documentsUploadDir, { maxAge: '1d' }));
 app.use('/crm_docs', express.static(crmDocsDir, { maxAge: '7d' }));
 app.use('/uploads', express.static(uploadsBase, { maxAge: '7d' }));
 
-// --- Health Check ---
+// --- Health & Metrics (Chapter 20) ---
+const { getHealth, getMetrics } = require('./src/middleware/healthMetrics');
+
 app.get('/health', async (req, res) => {
-  const redisOk = await redisPing();
-  res.json({
-    status: 'ok',
-    redis: redisOk,
-    timestamp: new Date().toISOString(),
-  });
+  try {
+    const data = await getHealth();
+    res.status(data.status === 'ok' ? 200 : 503).json(data);
+  } catch (err) {
+    res.status(503).json({ status: 'error', message: err.message, timestamp: new Date().toISOString() });
+  }
+});
+
+app.get('/metrics', authenticateToken, isAdmin, async (req, res) => {
+  try {
+    const data = await getMetrics();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi lấy metrics', error: err.message });
+  }
 });
 
 // --- Chat Proxy Route ---
@@ -295,14 +306,20 @@ app.post('/api/chat-proxy', authenticateToken, async (req, res) => {
     }
 });
 
-// --- Cron Jobs ---
+// --- Jobs ---
 const { scheduleDebtReminders, scheduleStatusUpdate } = require('./src/jobs/debtReminderCron');
 const { scheduleDailyAlerts, scheduleOverdueCheck } = require('./src/jobs/alertCron');
 const { scheduleAmenityReminders } = require('./src/jobs/amenityReminderCron');
+const { startWorker } = require('./src/queues/notificationWorker');
 
 if (process.env.NODE_ENV !== 'test') {
     app.listen(port, () => {
         console.log(`Backend server is running on http://localhost:${port}`);
+
+        // Start background notification worker (Chapter 10: Notification System)
+        const worker = startWorker();
+        process.on('SIGTERM', () => worker.stop());
+        process.on('SIGINT', () => worker.stop());
 
         // Start cron jobs
         scheduleDebtReminders();
